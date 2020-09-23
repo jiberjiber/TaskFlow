@@ -250,6 +250,7 @@ export default function MiniDrawer() {
 							</ListItemIcon>
 							<ListItemText primary={"Admin"} />
 						</ListItem>
+						<Divider />
 						<ListItem button key={"allmail"}>
 							<ListItemIcon>
 								<MailIcon />
