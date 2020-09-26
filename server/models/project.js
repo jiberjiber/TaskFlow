@@ -1,4 +1,5 @@
 const mongoose= require('mongoose');
+const moment = require('moment');
 
 // //testing schema on this file
 // mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/googlebooks")
@@ -15,40 +16,76 @@ const ProjectSchema= new mongoose.Schema({
         type:String,
         required:true
     },
+    authorId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Manager'
+    },
     description:{
         type:String,
         trim: true,
         required:true
     },
     scope:[{
-        type:String
-    }],
-    detailedScope:[{
-        type:String
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Scope'
     }],
     isComplete:{
         type:Boolean,
-        default:false
+        default:false,
     },
     dueDate:{
-        type:Date
+        type:String,
+        required:true
     },
-    dateSaved:{
+    lastUpdated: {
+        type:String,
+    },
+    timeRemaining:{
+        type:String
+    },
+    projectCreated:{
+        type:String,
+    },
+    dateCreated:{
         type:Date,
         default:Date.now
-    },
-    lastUpdated: Date,
+    }
 
 });
 
 
 //setting custom methods to be called when updating the project
-ProjectSchema.methods.lastUpdatedDate = function() {
-    this.lastUpdated = Date.now();
+
+//taking the date string an format it for moment
+ProjectSchema.methods.projectCreatedOn = function() {
+    
+    this.projectCreated = moment().format('MMMM Do YYYY');
   
-    return this.lastUpdated;
+    return this.projectCreated;
+  };
+
+  ProjectSchema.methods.dueDateOn = function() {
+    this.dueDate = moment(this.dueDate,'MMMM Do YYYY').format('MMMM Do YYYY');
+  
+    return this.dueDate;
   };
 
 
 
+  ProjectSchema.methods.timeRemainingOn = function() {
+      
+    this.timeRemaining = moment(this.dueDate,'MMMM Do YYYY').fromNow();
+  
+    return this.timeRemaining;
+  };
+
+  ProjectSchema.methods.lastUpdatedDateOn = function() {
+    this.lastUpdated = moment().format('MMMM Do YYYY');
+  
+    return this.lastUpdated;
+  };
+
   const Project = mongoose.model("Project", ProjectSchema);
+
+   
+exports.Project = Project;
