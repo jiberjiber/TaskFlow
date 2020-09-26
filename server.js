@@ -27,8 +27,10 @@ if (mongoDataBase === "production") {
 app.use(routes);
 
 //Connect to Mongo DB
-
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/management", {
+//crossing out mongo so we can use our local db when testing
+let mongo;
+// process.env.MONGODB_URI
+mongoose.connect(mongo || "mongodb://localhost/management", {
     useNewUrlParser: true,
     useFindAndModify: false,
      useUnifiedTopology: true 

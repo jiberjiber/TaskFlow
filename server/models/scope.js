@@ -2,7 +2,7 @@ const mongoose= require('mongoose');
 const moment = require('moment');
 
 const ScopeSchema= new mongoose.Schema({
-    title:{
+    scopeName:{
         type:String,
         trim: true,
         required:true

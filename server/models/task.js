@@ -1,8 +1,8 @@
 const mongoose= require('mongoose');
 const moment = require('moment');
 
-const ScopeSchema= new mongoose.Schema({
-    title:{
+const TaskSchema= new mongoose.Schema({
+    task:{
         type:String,
         trim: true,
         required:true
@@ -20,24 +20,61 @@ const ScopeSchema= new mongoose.Schema({
         trim: true,
         required:true
     },
-    dateSaved:{
+    isComplete:{
+        type:Boolean,
+        default:false,
+    },
+    dueDate:{
+        type:String,
+        required:true
+    },
+    lastUpdated: {
+        type:String,
+    },
+    timeRemaining:{
+        type:String
+    },
+    taskCreated:{
+        type:String,
+    },
+    dateCreated:{
         type:Date,
         default:Date.now
-    },
-    lastUpdated: Date,
-    timeRemaining:{
-        type:Number
     }
+    
 
 });
 
-//setting custom methods to be called when updating the project
-ScopeSchema.methods.lastUpdatedDate = function() {
-    this.lastUpdated = Date.now();
+//setting custom methods to be called when updating the Task
+TaskSchema.methods.taskCreatedOn = function() {
+    
+    this.tasktCreated = moment().format('MMMM Do YYYY');
   
-    return this.lastUpdated;
+    return this.taskCreated;
+  };
+
+  TaskSchema.methods.dueDateOn = function() {
+    this.dueDate = moment(this.dueDate,'MMMM Do YYYY').format('MMMM Do YYYY');
+  
+    return this.dueDate;
   };
 
 
 
-//   const Scope = mongoose.model("Scope", ScopeSchema);
+  TaskSchema.methods.timeRemainingOn = function() {
+      
+    this.timeRemaining = moment(this.dueDate,'MMMM Do YYYY').fromNow();
+  
+    return this.timeRemaining;
+  };
+
+  TaskSchema.methods.lastUpdatedDateOn = function() {
+    this.lastUpdated = moment().format('MMMM Do YYYY');
+  
+    return this.lastUpdated;
+  };
+
+  const Task = mongoose.model("Task", TaskSchema);
+
+  exports.Task = Task;
+
