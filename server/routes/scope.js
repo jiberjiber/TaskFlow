@@ -5,20 +5,15 @@ const router = express.Router()
 
 
 router.post('/', async (req,res)=>{
-
-  
-    const newScope=new Project({
-title:req.body.title,
-creator:req.body.creator,
-authorId:req.body.author,
-description:req.body.description,
-dueDate:req.body.dueDate,
+    const newScope=new Scope({
+scopeName:req.body.scopeName,
+dueDate:req.body.dueDate
     })
     
-    newProject.scopeCreatedOn();
-    newProject.dueDateOn();
-    newProject.timeRemainingOn();
-    newProject.lastUpdatedDateOn();
+    newScope.scopeCreatedOn();
+    newScope.dueDateOn();
+    newScope.timeRemainingOn();
+    newScope.lastUpdatedDateOn();
     
     await newScope.save();
 

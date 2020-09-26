@@ -4,10 +4,12 @@ const router = require('express').Router();
 // const user= require('./user-route')
 const project= require('./project') 
 const scope= require('./scope')
+const task=require('./task')
 
 //if this route his hit use this route
 router.use('/api/project', project);
 router.use('/api/project/scope',scope)
+router.use('/api/project/scope/task',task)
 
 // If no API routes are hit, send the React app
 
