@@ -98,7 +98,7 @@ router.delete('/:id',async (req,res)=>{
 
     //deleting grandchild first (if any)
 if (findTasks.length>0){
-    findTasks.map(x =>{
+   await findTasks.map(x =>{
         Task.findByIdAndDelete(x._id);
         return;
     })
@@ -113,6 +113,8 @@ if (findScope){
 }else{
     res.status(400).send(`this scope id doesn't exist`)
 }
+
+// project removal upon delete
 
 })
 

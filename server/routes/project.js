@@ -137,7 +137,7 @@ if (allTasks.length>0){
 
 //need to find scope and delete that scope schema (if any)
 if(findScopes.length>0){
-    findScopes.map((x)=>{
+  await findScopes.map((x)=>{
 
         Scope.findByIdAndDelete(x._id);
         return;
