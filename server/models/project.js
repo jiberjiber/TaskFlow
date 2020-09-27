@@ -27,7 +27,9 @@ const ProjectSchema= new mongoose.Schema({
     },
     scope:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Scope'
+        ref:'Scope',
+        autopopulate: true,
+        required:true
     }],
     isComplete:{
         type:Boolean,
