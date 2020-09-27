@@ -1,23 +1,24 @@
 const express = require("express");
+const path = require("path");
+const logger = require("morgan");
 const mongoose = require("mongoose");
 const routes = require("./server/routes");
-const app = express();
-const path = require("path");
-
-
-require('dotenv').config()
+// const bodyParser = require("body-parser");
 const moment = require('moment');
-
+const compression = require("compression");
+require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
 
-
+const app = express();
 
 //Middleware
+app.use(logger("dev"));
+app.use(compression()); // For compressing the response body to increase the speed of the web app
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-let mongoDataBase=process.env.NODE_ENV 
+let mongoDataBase=process.env.NODE_ENV; 
 //Static assets 
 if (mongoDataBase === "production") {
     app.use(express.static("client/build"));
