@@ -116,7 +116,7 @@ const findScopes= await Project.findById(req.params.id).populate('scope').select
 //this gets me an array of task for each scope
 let allTasks=[]
 if(findScopes.length>0){
-    findScopes.map(x=>{
+   await findScopes.map(x=>{
         let theseTasks= Scope.findById(x._id).populate('task').select('_id')
         allTasks.push(theseTasks);
         return;
@@ -127,8 +127,8 @@ if(findScopes.length>0){
 
 //deleting grandchild first (if any)
 if (allTasks.length>0){
-    allTasks.map(x =>{
-        Task.findByIdAndDelete(x._id);
+   await allTasks.map(x =>{
+        Task.findByIdAndRemove(x._id);
         return;
     })
 
@@ -139,7 +139,7 @@ if (allTasks.length>0){
 if(findScopes.length>0){
   await findScopes.map((x)=>{
 
-        Scope.findByIdAndDelete(x._id);
+        Scope.findByIdAndRemove(x._id);
         return;
     })
 }
