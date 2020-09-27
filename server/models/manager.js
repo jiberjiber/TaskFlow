@@ -17,26 +17,22 @@ const ManagerSchema = new Schema({
     required: true,
   },
   isManager: {
-    //Manager || Team member
     type: Boolean,
     required: true,
     default: false,
   },
   password: {
-    //NEEDS VALIDATION
     type: String,
     lowercase: true,
     required: true,
   },
   email: {
-    //NEEDS VALIDATION
     type: String,
     lowercase: true,
     unique: true,
     required: true,
   },
-  profilePic: {
-    //NEEDS VALIDATION
+  profilePhotoUrl: {
     type: String,
   },
   projects: [
@@ -47,7 +43,6 @@ const ManagerSchema = new Schema({
   ],
   company: {
     type: mongoose.Schema.Types.ObjectId,
-    // required: true,
   },
   teams: [
     {
@@ -61,7 +56,7 @@ const ManagerSchema = new Schema({
   },
 });
 
-// //Model
+//Model
 const Manager = mongoose.model("Manager", ManagerSchema);
 
 module.exports = Manager;
