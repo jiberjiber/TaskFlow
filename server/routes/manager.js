@@ -13,8 +13,7 @@ router.post("/", async (req, res) => {
     email: req.body.email,
     profilePic: req.body.profilePic,
     company: req.body.company,
-    projects: req.body.projects,
-    teams: req.body.teams,
+    projects: req.body.projects
   });
 
   await newManager.save();

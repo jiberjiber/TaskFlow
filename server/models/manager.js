@@ -43,13 +43,8 @@ const ManagerSchema = new Schema({
   ],
   company: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "Company",
   },
-  teams: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
-    },
-  ],
   createdAt: {
     type: Date,
     default: Date.now,
