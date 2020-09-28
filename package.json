@@ -31,12 +31,16 @@
   "dependencies": {
     "axios": "^0.20.0",
     "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fawn": "^2.1.5",
     "if-env": "^1.0.4",
+    "joi": "^17.2.1",
     "moment": "^2.29.0",
+    "mongodb": "^3.6.2",
     "mongoose": "^5.10.7",
+    "morgan": "^1.10.0",
     "path": "^0.12.7"
   },
   "devDependencies": {
