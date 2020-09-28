@@ -64,6 +64,12 @@ ScopeSchema.methods.scopeCreatedOn = function() {
     return this.lastUpdated;
   };
 
+  ScopeSchema.methods.returnid = function(){
+      
+      return this._id
+  }
+
+
   const Scope = mongoose.model("Scope", ScopeSchema);
 
   exports.Scope = Scope;
