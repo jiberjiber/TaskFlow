@@ -1,40 +1,28 @@
-
 const mongoose = require("mongoose");
-
 
 const Schema = mongoose.Schema;
 
 //Schema
 const CompanySchema = new Schema({
-  companyName: {
+  name: {
     type: String,
     required: true,
+    unique: true,
   },
-  admins: [
+  admin: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Employee",
+  },
+  employees: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Manager",
+      ref: "Employee",
     },
   ],
-  employees: [ 
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Employee",
-      },
-    ],
-    managers: [ 
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Manager",
-      },
-    ],
-    
-  
+  url: String
 });
 
- //Model
+//Model
 const Company = mongoose.model("Company", CompanySchema);
-
-
 
 module.exports = Company;
