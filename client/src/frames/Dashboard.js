@@ -148,7 +148,7 @@ export default function MiniDrawer() {
 								</IconButton>
 							</Grid>
 							<Grid item>
-								<Button className={classes.appBarRight} color="inherit">
+								<Button className={classes.appBarRight} color="inherit" href="/">
 									Logout <ExitToAppOutlinedIcon />
 								</Button>
 							</Grid>
@@ -179,7 +179,7 @@ export default function MiniDrawer() {
 					</div>
 					<Divider />
 					<List>
-						<ListItem button key={"dashboard"} component="a" href="/">
+						<ListItem button key={"dashboard"} component="a" href="/home">
 							<ListItemIcon name="teams">
 								<DashboardOutlinedIcon />
 							</ListItemIcon>
