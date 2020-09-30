@@ -7,7 +7,7 @@ const scope = require("./scope");
 const task = require("./task");
 const employeeRoutes = require("./user");
 const companyRoutes = require("./company");
-const teamRoutes = require("./team");
+// const teamRoutes = require("./team");
 
 
 
@@ -20,7 +20,7 @@ router.use("/api/project", project);
 router.use("/api/project/scope/task", task);
 router.use("/api/employee", employeeRoutes);
 router.use("/api/company", companyRoutes);
-router.use("/api/team", teamRoutes);
+// router.use("/api/team", teamRoutes);
 
 
 
