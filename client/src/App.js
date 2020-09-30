@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 // eslint-disable-next-line
 import SignIn from "./pages/SignIn";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./frames/Dashboard";
 import "./App.css";
 import TeamOverview from "./pages/TeamOverview";
 import Admin from "./pages/Admin";
@@ -12,9 +12,14 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Dashboard />
-			<Route
+			<Route 
 				exact
 				path="/"
+				render={(props) => <SignIn {...props} />}
+			/>
+			<Route
+				exact
+				path="/home"
 				render={(props) => <TeamOverview {...props} projects={projectsArray} />}
 			/>
 			<Route
