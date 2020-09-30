@@ -19,7 +19,13 @@ const CompanySchema = new Schema({
       ref: "Employee",
     },
   ],
-  url: String
+  url: {
+    type: String
+  },
+  dateCreated: { 
+    type: Date,
+    default: Date.now
+  },
 });
 
 //Model
