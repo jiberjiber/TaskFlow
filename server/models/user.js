@@ -15,7 +15,7 @@ const employeeSchema = new Schema ({
         type: String,
         required: true,
       },
-      isManager: { //discriminator key
+      isManager: { 
         type: Boolean,
         required: true,
         default: false,
@@ -27,8 +27,7 @@ const employeeSchema = new Schema ({
       },
       email: {
         type: String,
-        lowercase: true, //TODO: unique
-        // unique: true,
+        lowercase: true,
         required: true,
       },
       projectsCreated: [
@@ -47,7 +46,7 @@ const employeeSchema = new Schema ({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
       },
-      createdAt: { 
+      dateCreated: { 
         type: Date,
         default: Date.now,
       },
