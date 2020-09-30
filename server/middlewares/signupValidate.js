@@ -1,4 +1,4 @@
-middlewareconst { body, validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const validateSignupData = () => {
   return [
     //firstName must be a string with at least 2 characters
