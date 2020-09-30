@@ -1,8 +1,9 @@
 module.exports = {
     Company: require("./company"),
-    Manager: require("./manager"),
+    Employee: require("./user"),
     Project: require("./project"),
     Scope: require("./scope"),
     Task: require("./task"),
+    Team: require("./team"),
   };
   
