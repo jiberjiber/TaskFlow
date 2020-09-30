@@ -47,7 +47,8 @@ data.map((key)=>{
     
     return array.push(key)
     })
-// console.log(array)
+
+    
     res.send(array) 
 })
 
