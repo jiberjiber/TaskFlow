@@ -22,7 +22,6 @@ const employeeSchema = new Schema ({
       },
       password: {
         type: String,
-        lowercase: true,
         required: true,
       },
       email: {

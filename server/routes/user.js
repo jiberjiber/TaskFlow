@@ -14,7 +14,7 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
   //TODO: validate response
   try {
     const data = req.body;
-    const getEmployee = await await Employee.findOne({ email: req.body.email });
+    const getEmployee = await Employee.findOne({ email: req.body.email });
     if (getEmployee) {
       return res
         .status(400)
@@ -27,12 +27,12 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
         isManager: data.isManager,
         password: data.password,
         email: data.email,
-        projectsCreated: data.projectsCreated,
-        projectsAssigned: data.projectsAssigned,
+        // projectsCreated: data.projectsCreated,
+        // projectsAssigned: data.projectsAssigned,
         company: data.company,
       });
-      console.log(newEmployee);
-      newEmployee.save();
+      // console.log(newEmployee);
+      await newEmployee.save();
       // res.send(newEmployee);
 
       //If new user is not a manager, add their information to their company's database
@@ -50,6 +50,7 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
           employee: "Employee created",
           newEmployee,
         });
+        console.log(newEmployee);
       }
     }
   } catch (err) {
@@ -123,12 +124,6 @@ router.get("/:id", (req, res) => {
       res.send(user);
     }
   });
-});
-
-//Log user out
-router.post("/logout", async (req, res) => {
-  //TODO: auth verification
-  //TODO: if user and auth match, await user.logout(token)
 });
 
 //Delete a user
