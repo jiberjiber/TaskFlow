@@ -5,6 +5,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import ProjectForm from "./forms/ProjectForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Select master blaster campaign settings', 'Create an ad group', 'Create an ad'];
+  return ['Create New Project', 'Create Tasks', 'Create and Assign Teams'];
 }
 
 function getStepContent(stepIndex) {

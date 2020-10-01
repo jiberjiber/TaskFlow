@@ -42,4 +42,10 @@ export default function CreateNewProject() {
             </CardContent>
         </Card>
                     
-    )}  
+    )} 
+    export function FormikStepper({ children, ...props}: FormikConfig<FormikValues>){
+        return (
+            <Formik {...props}>
+                <Form autoComplete="off">{children}</Form>
+            </Formik>
+        )}
