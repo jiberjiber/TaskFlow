@@ -23,6 +23,8 @@ dueDate:req.body.dueDate
    
     // console.log(newScope._id)
     await newScope.save();
+
+    
    const project= await Project.findByIdAndUpdate(req.body.projectId,
         {$push:{"scope":id}},{new: true}
         )
@@ -47,7 +49,8 @@ data.map((key)=>{
     
     return array.push(key)
     })
-// console.log(array)
+
+
     res.send(array) 
 })
 

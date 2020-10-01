@@ -1,3 +1,6 @@
+require('dotenv').config();
+const jwt=require('jsonwebtoken')
+const bcrypt= require('bcrypt')
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
@@ -14,43 +17,54 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
   //TODO: validate response
   try {
     const data = req.body;
-    const getEmployee = await await Employee.findOne({ email: req.body.email });
+    const getEmployee = await Employee.findOne({ email: req.body.email });
     if (getEmployee) {
       return res
         .status(400)
         .json({ email: "This email already exists. Please sign in instead." });
     } else {
-      const newEmployee = new Employee({
+      const employee = new Employee({
         firstName: data.firstName,
         lastName: data.lastName,
         username: data.username,
         isManager: data.isManager,
         password: data.password,
         email: data.email,
-        projectsCreated: data.projectsCreated,
-        projectsAssigned: data.projectsAssigned,
         company: data.company,
       });
-      console.log(newEmployee);
-      newEmployee.save();
+
+      let pass= employee.returnPassword()
+      const salt= await bcrypt.genSalt(10);
+      employee.password = await bcrypt.hash(pass, salt)
+
+
+      // console.log(newEmployee);
+      await employee.save()
       // res.send(newEmployee);
 
       //If new user is not a manager, add their information to their company's database
-      if (!newEmployee.isManager) {
-        Company.findOneAndUpdate({ _id: data.company }),
-          {
-            $addToSet: {
-              employees: {
-                user: newEmployee._id,
-                username: newEmployee.username,
-              },
-            },
-          };
-        res.status(200).json({
-          employee: "Employee created",
-          newEmployee,
-        });
-      }
+      //TODO:add a functions to add both managers and not managers
+      // if (!employee.isManager) {
+      //   Company.findOneAndUpdate({ _id: data.company }),
+      //     {
+      //       $addToSet: {
+      //         employees: {
+      //           user: employee._id,
+      //           username: employee.username,
+      //         },
+      //       },
+      //     };
+      //   res.status(200).json({
+      //     message: "Employee created",
+      //     employee,
+      //   });
+      // }
+      res.send({
+        name:employee.name,
+        email:employee.email,
+        _id:employee._id
+    })
+
     }
   } catch (err) {
     console.log(err);
@@ -58,35 +72,23 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
   }
 });
 
-//User login
-router.post("/login", validate, async (req, res) => {
+//User login         validate,
+router.post("/login", async (req, res) => {
   //TODO: auth verification
   //TODO: hash password
   //TODO: try...catch
   //TODO:add validateSignInData()
+  checkUser=await Employee.findOne({email:req.body.email});
+   if(!checkUser)return res.status(400).send("invalid email or password");
 
-  const { username, password } = req.body;
+  const validPassword= await bcrypt.compare(req.body.password, checkUser.password)
+   if (!validPassword) return res.status(400).send("invalid email or password");
 
-  //Check if request is valid
-  if (password && username) {
-    Employee.findOne({ email: email }, (err, userMatch) => {
-      if (!userMatch) {
-        res.status(401);
-        return res.send("Incorrect password or username. Please try again.");
-      } else {
-        //TODO: logic for validating user password
-        if (passwordMatces) {
-          //TODO: log user in
-        } else {
-          res.status(200);
-          return res.send("Aut");
-        }
-      }
-    });
-  } else {
-    res.status(403);
-    return res.send("Cannot log in user. Please try again");
-  }
+    const token=await checkUser.generateToken()
+
+   res.send(token)
+  
+
 });
 
 //Get all users

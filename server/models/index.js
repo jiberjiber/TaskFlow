@@ -1,6 +1,6 @@
 module.exports = {
     Company: require("./company"),
-    Employee: require("./user"),
+    Employee: require("./employee"),
     Project: require("./project"),
     Scope: require("./scope"),
     Task: require("./task"),

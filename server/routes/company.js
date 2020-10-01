@@ -13,13 +13,13 @@ router.post("/", validateCompanyData(), validate, (req, res) => {
     // Create a company
     const newCompany = new Company({
       name: data.name,
-      admin: data._id,
-      employees: [
-        //  data._id,
-      ],
-      url: data.url,
+      url: data.url
 
     });
+
+    // name: data.name,
+    //   admin: data._id,
+    //   url: data.url
     // console.log(req.body)
     newCompany.save();
 
