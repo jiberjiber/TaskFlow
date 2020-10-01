@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { useLocation, useParams } from "react-router-dom";
 import Axios from "axios";
 import {
@@ -11,7 +12,10 @@ import {
 	Grid,
 	Divider,
 	makeStyles,
+	AppBar,
+	Tabs,
 } from "@material-ui/core";
+import Tab from "@material-ui/core/Tab";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 function CircularProgressWithLabel(props) {
@@ -38,6 +42,39 @@ function CircularProgressWithLabel(props) {
 	);
 }
 
+function TabPanel(props) {
+	const { children, value, index, ...other } = props;
+
+	return (
+		<div
+			role="tabpanel"
+			hidden={value !== index}
+			id={`simple-tabpanel-${index}`}
+			aria-labelledby={`simple-tab-${index}`}
+			{...other}
+		>
+			{value === index && (
+				<Box p={3}>
+					<Typography>{children}</Typography>
+				</Box>
+			)}
+		</div>
+	);
+}
+
+TabPanel.propTypes = {
+	children: PropTypes.node,
+	index: PropTypes.any.isRequired,
+	value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+	return {
+		id: `simple-tab-${index}`,
+		"aria-controls": `simple-tabpanel-${index}`,
+	};
+}
+
 const useStyles = makeStyles((theme) => ({
 	headerDisplay: {
 		width: "fit-content",
@@ -54,13 +91,19 @@ const useStyles = makeStyles((theme) => ({
 	mainDisplayGrid: {
 		padding: "10%",
 	},
-	m50 :{
+	m50: {
 		margin: "50px",
 	},
 }));
 
 export default function ProjectInfo(props) {
 	const { id } = useParams();
+
+	const [value, setValue] = useState(0);
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+	};
+
 	const project = {};
 
 	const classes = useStyles();
@@ -95,7 +138,12 @@ export default function ProjectInfo(props) {
 					<CircularProgressWithLabel value={progress} />
 				</Grid>
 			</Grid>
-			<Grid container alignItems="flex-end" justify="space-evenly" className={classes.mainDisplayGrid}>
+			<Grid
+				container
+				alignItems="flex-start"
+				justify="space-evenly"
+				className={classes.mainDisplayGrid}
+			>
 				<List>
 					<ListItem>
 						<ListItemText primary="Project ID" secondary={`ID ${id}`} />
@@ -113,23 +161,28 @@ export default function ProjectInfo(props) {
 						<ListItemText primary="Due Date" secondary="October 10, 2020" />
 					</ListItem>
 				</List>
-				<List>
-					<ListItem>
-						<ListItemText primary="Project ID" secondary={`ID ${id}`} />
-					</ListItem>
-					<ListItem>
-						<ListItemText primary="Project Owner" secondary="Mike" />
-					</ListItem>
-					<ListItem>
-						<ListItemText
-							primary="Description"
-							secondary="This is about a management software"
-						/>
-					</ListItem>
-					<ListItem>
-						<ListItemText primary="Due Date" secondary="October 10, 2020" />
-					</ListItem>
-				</List>
+				<Box>
+					<AppBar position="static">
+						<Tabs
+							value="value"
+							onChange={handleChange}
+							aria-label="project-scope-tabs"
+						>
+							<Tab label="Front-End" {...a11yProps(0)} />
+							<Tab label="Back-End" {...a11yProps(1)} />
+							<Tab label="QA/Testing" {...a11yProps(2)} />
+						</Tabs>
+					</AppBar>
+					<TabPanel value="bungus" index={0}>
+						Front End Tasks
+					</TabPanel>
+					<TabPanel value="value" index={1}>
+						Back End Tasks
+					</TabPanel>
+					<TabPanel value="value" index={2}>
+						QA/Testing Tasks
+					</TabPanel>
+				</Box>
 			</Grid>
 		</Container>
 	);
