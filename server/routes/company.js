@@ -26,19 +26,6 @@ router.post("/", validateCompanyData(), validate, (req, res) => {
   }
 });
 
-//Get one company
-router.get("/:id", (req, res) => {
-  Company.findById(req.params.id)
-    .populate("employees")
-    .then((company) => {
-      if (!company) {
-        return res.status(400).json({ company: "No companies found." });
-      } else {
-        res.send(company);
-      }
-    });
-});
-
 // Get all companies
 router.get("/", (req, res) => {
   Company.find({})
@@ -48,6 +35,19 @@ router.get("/", (req, res) => {
         return res.status(400).json({ companies: "No companies found." });
       } else {
         res.send(companies);
+      }
+    });
+});
+
+//Get one company
+router.get("/:id", (req, res) => {
+  Company.findById(req.params.id)
+    .populate("employees")
+    .then((company) => {
+      if (!company) {
+        return res.status(400).json({ company: "No companies found." });
+      } else {
+        res.send(company);
       }
     });
 });
