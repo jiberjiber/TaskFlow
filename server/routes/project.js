@@ -12,7 +12,7 @@ const time= require("./timestamp");
 
 
 //create projects
-router.post('/', async (req,res)=>{
+router.post('/',auth, async (req,res)=>{
 
   
     const newProject=new Project({

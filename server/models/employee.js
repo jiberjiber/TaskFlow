@@ -1,60 +1,78 @@
-const mongoose= require('mongoose');
-const moment = require('moment');
+const mongoose = require("mongoose");
 const Joi = require('joi');
-// const config=require('config');
 const jwt=require('jsonwebtoken');
 const bcrypt= require('bcrypt')
-require('dotenv').config();
+const Schema = mongoose.Schema;
 
+const employeeSchema = new Schema ({
+    firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
+      username: { 
+        type: String,
+        required: true,
+      },
+      isManager: { 
+        type: Boolean,
+        required: true,
+        default: false,
+      },
+      password: {
+        type: String,
+        required: true
+      },
+      email: {
+        type: String,
+        lowercase: true,
+        required: true,
+      },
+      projectsCreated: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Project",
+        },
+      ],
+      projectsAssigned: [
+          {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Project"
+          }
+      ],
+      company: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+      },
+      dateCreated: { 
+        type: Date,
+        default: Date.now,
+      },
+})
 
-const employeeSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      minlength: 2,
-      maxlength: 50
-    },
-    email: {
-      type: String,
-      required: true,
-      minlength: 5,
-      maxlength: 255,
-      unique: true
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 5,
-      maxlength: 1024
-    },
-    isManager: Boolean
-  });
-
-  
-  employeeSchema.methods.returnPassword = function(){
+employeeSchema.methods.returnPassword = function(){
       
-    return this.password
-  }
-
-  employeeSchema.methods.generateToken = function(){
-
-    return jwt.sign({_id:this._id, isManager:this.isManager},process.env.SECRET)
-  
-  }
-
-  
-const Employee = mongoose.model("Employee", employeeSchema);
-
-function validateEmployee(user) {
-    const schema =Joi.object({
-      name: Joi.string().min(2).max(50).required(),
-      email: Joi.string().min(5).max(255).required().email(),
-      password: Joi.string().min(5).max(255).required(),
-      isManager:Joi.boolean()
-    });
-
-    return schema.validate(user);
+  return this.password
 }
 
-exports.Employee=Employee;
-exports.validate=validateEmployee;
+employeeSchema.methods.generateToken = function(){
+
+  return jwt.sign(
+    {_id:this._id,
+      firstName:this.firstName,
+      lastName:this.lastName,
+      username:this.username,
+      email:this.email,
+      isManager:this.isManager,
+      company:this.company},process.env.SECRET)
+
+}
+
+
+//Model
+const Employee = mongoose.model("Employee", employeeSchema);
+
+module.exports = Employee;

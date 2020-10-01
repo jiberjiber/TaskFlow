@@ -1,8 +1,8 @@
 const bcrypt= require('bcrypt')
-const {Project}= require('.././models/project');
-const {Scope}= require('.././models/scope');
-const {Task}= require('.././models/task');
-const {Employee, validate}=require('.././models/employee');
+const {Project}= require('../models/project');
+const {Scope}= require('../models/scope');
+const {Task}= require('../models/task');
+const {Employee, validate}=require('../models/employee');
 const mongoose=require('mongoose');
 const express= require('express');
 const router = express.Router();
@@ -19,7 +19,7 @@ router.post('/', async (req,res)=>{
 
    if(checkUser)return res.status(400).send("this email is already registered");
 
-   employee=await new Employee({
+ const employee=await new Employee({
        name: req.body.name,
        email:req.body.email,
        password:req.body.password,
