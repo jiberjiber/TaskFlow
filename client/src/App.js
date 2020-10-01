@@ -9,8 +9,6 @@ import Admin from "./pages/Admin";
 import ProjectInfo from "./pages/ProjectInfo";
 import projectsArray from "./projectsArray";
 
-const signedIn = false;
-
 function App() {
 	return (
 		<BrowserRouter>
