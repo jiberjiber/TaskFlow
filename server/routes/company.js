@@ -15,6 +15,10 @@ router.post("/", validateCompanyData(), validate, (req, res) => {
       name: data.name,
       url: data.url,
     });
+
+    // name: data.name,
+    //   admin: data._id,
+    //   url: data.url
     // console.log(req.body)
     newCompany.save();
 

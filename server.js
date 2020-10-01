@@ -1,3 +1,4 @@
+// const config=require('config')
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
@@ -5,8 +6,14 @@ const mongoose = require("mongoose");
 const routes = require("./server/routes");
 // const bodyParser = require("body-parser");
 const moment = require('moment');
+const Joi = require('joi');
 const compression = require("compression");
 require('dotenv').config();
+
+// if(!process.env.SECRET){
+//     console.error('JWT Priavte key not Defined');
+//     process.exit(1)
+//   }
 
 const PORT = process.env.PORT || 3001;
 

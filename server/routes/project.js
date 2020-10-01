@@ -1,6 +1,8 @@
 const {Project}= require('.././models/project');
 const {Scope}= require('.././models/scope');
 const {Task}= require('.././models/task');
+const auth=require('../middleware/auth')
+const manager=require('../middleware/managerAuth')
 const mongoose=require('mongoose');
 const express= require('express');
 const router = express.Router();
@@ -8,8 +10,9 @@ const Fawn = require("fawn");
 const moment = require('moment');
 const time= require("./timestamp");
 
+
 //create projects
-router.post('/', async (req,res)=>{
+router.post('/',auth, async (req,res)=>{
 
   
     const newProject=new Project({
@@ -24,7 +27,7 @@ dueDate:req.body.dueDate,
     newProject.dueDateOn();
     newProject.timeRemainingOn();
     newProject.lastUpdatedDateOn();
-    
+    // console.log(req.employee)
     await newProject.save();
 
     res.send(newProject)
