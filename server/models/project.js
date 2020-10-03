@@ -18,7 +18,7 @@ const ProjectSchema= new mongoose.Schema({
     },
     authorId:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Manager'
+        ref:'Employee'
     },
     description:{
         type:String,
@@ -27,8 +27,7 @@ const ProjectSchema= new mongoose.Schema({
     },
     scope:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Scope',
-        autopopulate:true
+        ref:'Scope'
     }],
     isComplete:{
         type:Boolean,

@@ -37,10 +37,10 @@ dueDate:req.body.dueDate,
 //get all projects
 router.get('/',[auth,manager],async (req,res)=>{
     
-    const { _id, firstName }=await req.employee;
+    const { _id }=await req.employee;
 
-const savedProjects= await Project.find({authorId:_id}).populate('scope').select().sort('dateCreated');
-
+// const savedProjects= await Project.find({authorId:_id}).populate('scope').select().sort('dateCreated');
+const savedProjects= await Project.find({authorId:_id}).select().sort('dateCreated');
 if(!savedProjects.length) return res.status(400).send('no projects saved yet');
 
 let data=savedProjects
@@ -51,7 +51,7 @@ let array=[]
 data.map((key)=>{
 time.dueDateOn(key);
 time.timeRemainingOn(key);
-time.nestedScoping(key);
+// time.nestedScoping(key);
 return array.push(key)
 })
 
@@ -65,7 +65,7 @@ res.send(array)
 //get one project
 router.get('/:id',auth,async (req,res)=>{
 
-    const getThisProject= await Project.find({_id:{$in:req.params.id}}).populate('scope').select()
+    const getThisProject= await Project.find({_id:{$in:req.params.id}}).populate('scope').select().sort('dateCreated')
     if (!getThisProject.length>0) return res.status(400).send(`item with this id doesn't exist`)
   
 // running throught each object of the array and passing in my timestamps methods to
@@ -76,6 +76,7 @@ if (data){
     data.map((key)=>{
         time.dueDateOn(key);
         time.timeRemainingOn(key);
+        time.nestedScoping(key);
         return array.push(key)
         })
 }

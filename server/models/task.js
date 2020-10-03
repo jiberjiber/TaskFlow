@@ -9,7 +9,7 @@ const TaskSchema= new mongoose.Schema({
     },
     authorId:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Manager'
+        ref:'Employee'
     },
     assignedTo:[{
         type:mongoose.Schema.Types.ObjectId,
