@@ -1,37 +1,57 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const { Company } = require("../models/index.js");
+const { Company } = require("../models/");
 const { validateCompanyData } = require("../middleware/companyValidation");
 const { validate } = require("../middleware/signupValidate");
+const auth = require("../middleware/auth");
+const manager = require("../middleware/managerAuth");
 
-router.post("/:create", validateCompanyData(), validate, (req, res) => {
-  const data = req.body;
-  console.log(data);
+router.post(
+  "/:create",
+  [auth, manager],
+  validateCompanyData(),
+  validate,
+  async (req, res) => {
+    try {
+      // Create a company
+      const data = req.body;
+      console.log(data);
+      const getCompany = await Company.findOne({ name: req.body.name });
+      if (getCompany) {
+        return res
+          .status(400)
+          .send(
+            "Company already exists. Please choose from the dropdown menu instead."
+          );
+      } else {
+        const creator = req.employee;
+        let employeeArr = [];
 
-  try {
-    // Create a company
-    const newCompany = new Company({
-      name: data.name,
-      url: data.url,
-    });
+        //Add company creator to the list of company employees
+        await employeeArr.push(creator);
 
-    // name: data.name,
-    //   admin: data._id,
-    //   url: data.url
-    // console.log(req.body)
-    newCompany.save();
+        const newCompany = new Company({
+          employees: employeeArr,
+          name: data.name,
+          url: data.url,
+          creator: creator._id,
+        });
 
-    res.send(newCompany);
-  } catch (err) {
-    console.log(err);
-    res.status(400);
-    return res.send("Company could not be created.");
+        newCompany.save();
+
+        res.send(newCompany);
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(400);
+      return res.send("Company could not be created.");
+    }
   }
-});
+);
 
 // Get all companies
-router.get("/", (req, res) => {
+router.get("/", [auth, manager], async (req, res) => {
   Company.find({})
     .populate("employees")
     .then((companies) => {
@@ -44,16 +64,15 @@ router.get("/", (req, res) => {
 });
 
 //Get one company
-router.get("/:id", (req, res) => {
-  Company.findById(req.params.id)
+router.get("/:id", [auth, manager], async (req, res) => {
+  const thisCompany = await Company.find({ _id: req.params.id })
     .populate("employees")
-    .then((company) => {
-      if (!company) {
-        return res.status(400).json({ company: "No companies found." });
-      } else {
-        res.send(company);
-      }
-    });
+    .sort("firstName");
+  if (!thisCompany) {
+    return res.status(400).json({ company: "No companies found." });
+  } else {
+    res.send(thisCompany);
+  }
 });
 
 module.exports = router;

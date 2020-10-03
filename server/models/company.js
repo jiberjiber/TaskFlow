@@ -9,6 +9,10 @@ const CompanySchema = new Schema({
     required: true,
     unique: true,
   },
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Employee"
+  },
   employees: [
     {
       type: mongoose.Schema.Types.ObjectId,
