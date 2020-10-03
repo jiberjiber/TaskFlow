@@ -10,7 +10,7 @@ try{
     //this verifiedtoken returns the data object set for gerating token - this is the payload from jwt
     req.employee= verifiedToken;
 
-    //req.employee = to id
+    //req.employee = to object data set up in the employee schema
     //use next to pass control to the next middleware function
     next()
 }catch(ex)

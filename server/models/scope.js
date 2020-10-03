@@ -9,7 +9,8 @@ const ScopeSchema= new mongoose.Schema({
     },
     task:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Task'
+        ref:'Task',
+        autopopulate:true
     }],
     isComplete:{
         type:Boolean,

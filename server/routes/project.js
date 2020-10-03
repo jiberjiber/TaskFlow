@@ -9,16 +9,17 @@ const router = express.Router();
 const Fawn = require("fawn");
 const moment = require('moment');
 const time= require("./timestamp");
+const { ObjectID } = require('mongodb');
 
 
 //create projects
-router.post('/',auth, async (req,res)=>{
+router.post('/',[auth,manager], async (req,res)=>{
 
-  
+ const { _id, firstName }=req.employee;
     const newProject=new Project({
 title:req.body.title,
-creator:req.body.creator,
-authorId:req.body.author,
+creator:firstName,
+authorId:_id,
 description:req.body.description,
 dueDate:req.body.dueDate,
     })
@@ -34,8 +35,11 @@ dueDate:req.body.dueDate,
 })
 
 //get all projects
-router.get('/',async (req,res)=>{
-const savedProjects= await Project.find().select().sort('dateCreated');
+router.get('/',[auth,manager],async (req,res)=>{
+    
+    const { _id, firstName }=await req.employee;
+
+const savedProjects= await Project.find({authorId:_id}).populate('scope').select().sort('dateCreated');
 
 if(!savedProjects.length) return res.status(400).send('no projects saved yet');
 
@@ -47,7 +51,7 @@ let array=[]
 data.map((key)=>{
 time.dueDateOn(key);
 time.timeRemainingOn(key);
-
+time.nestedScoping(key);
 return array.push(key)
 })
 
@@ -59,8 +63,9 @@ res.send(array)
 })
 
 //get one project
-router.get('/:id',async (req,res)=>{
-    const getThisProject= await Project.find({_id:{$in:req.params.id}}).select()
+router.get('/:id',auth,async (req,res)=>{
+
+    const getThisProject= await Project.find({_id:{$in:req.params.id}}).populate('scope').select()
     if (!getThisProject.length>0) return res.status(400).send(`item with this id doesn't exist`)
   
 // running throught each object of the array and passing in my timestamps methods to
