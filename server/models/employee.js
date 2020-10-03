@@ -8,14 +8,17 @@ const employeeSchema = new Schema({
   firstName: {
     type: String,
     required: true,
+    trim: true,
   },
   lastName: {
     type: String,
     required: true,
+    trim: true,
   },
   username: {
     type: String,
     required: true,
+    trim: true,
   },
   isManager: {
     type: Boolean,
@@ -25,11 +28,13 @@ const employeeSchema = new Schema({
   password: {
     type: String,
     required: true,
+    trim: true,
   },
   email: {
     type: String,
     lowercase: true,
     required: true,
+    trim: true,
   },
   projectsCreated: [
     {
@@ -71,6 +76,11 @@ employeeSchema.methods.generateToken = function () {
     process.env.SECRET
   );
 };
+
+//Method to get id for the current employee
+employeeSchema.methods.returnid = () => {
+    return this._id;
+}
 
 //Model
 const Employee = mongoose.model("Employee", employeeSchema);
