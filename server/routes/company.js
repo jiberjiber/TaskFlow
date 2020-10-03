@@ -2,10 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const { Company } = require("../models/index.js");
-const { validateCompanyData } = require("../middlewares/companyValidation");
-const { validate } = require("../middlewares/signupValidate");
+const { validateCompanyData } = require("../middleware/companyValidation");
+const { validate } = require("../middleware/signupValidate");
 
-router.post("/", validateCompanyData(), validate, (req, res) => {
+router.post("/:create", validateCompanyData(), validate, (req, res) => {
   const data = req.body;
   console.log(data);
 
