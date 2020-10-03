@@ -38,7 +38,17 @@ data.scope.map(x =>{
   return
 })
 }
-}
+},
+
+nestedTask: function(data){
+  if (data.task.length>1){
+  data.task.map(x =>{
+    this.dueDateOn(x);
+    this.timeRemainingOn(x);
+    return
+  })
+  }
+  }
 
 
 }

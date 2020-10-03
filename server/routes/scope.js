@@ -40,86 +40,102 @@ dueDate:req.body.dueDate
 //cannot use this call - just for testing
 router.get("/",[auth,manager], async (req,res)=>{
     
-    const savedScopes= await Scope.find().select().sort('dateCreated');
-    if (!savedScopes.length>0) return res.status(400).send('no scopes saved yet');
+//     const savedScopes= await Scope.find().select().sort('dateCreated');
+//     if (!savedScopes.length>0) return res.status(400).send('no scopes saved yet');
 
     
 
 
     
-    let data=savedScopes
+//     let data=savedScopes
 
-    let array=[];
-// running throught each object of the array and passing in my timestamps methods to
-//update the at each calls
-data.map((key)=>{
-    time.dueDateOn(key);
-    time.timeRemainingOn(key);
+//     let array=[];
+// // running throught each object of the array and passing in my timestamps methods to
+// //update the at each calls
+// data.map((key)=>{
+//     time.dueDateOn(key);
+//     time.timeRemainingOn(key);
     
-    return array.push(key)
-    })
+//     return array.push(key)
+//     })
 
 
-    res.send(array) 
+//     res.send(array) 
 })
 
-///this gets you one scope
+///cant use use... for testing only
 router.get('/:id',async (req,res)=>{
-    const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select();
+//     const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select();
+//     if (!getThisScope.length>0) return res.status(400).send(`item with this id doesn't exist`)
+// let data=getThisScope
+// let array=[]
+// if (data){
+//     data.map((key)=>{
+//         time.dueDateOn(key);
+//         time.timeRemainingOn(key);
+//         return array.push(key)
+//         })
+// }
+// // console.log(array)
+//     res.send(array)
+})
+
+//this gets you all the scopes with project id - this returns all scopes
+//for this project
+router.get('/one/:id',async (req,res)=>{
+
+    const getThisScope= await Scope.find({_id:{$in:req.params.id}}).populate('task').select().sort('dateCreated');
+    // const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select();
     if (!getThisScope.length>0) return res.status(400).send(`item with this id doesn't exist`)
+// console.log(getThisScope)
+
 let data=getThisScope
 let array=[]
 if (data){
     data.map((key)=>{
         time.dueDateOn(key);
         time.timeRemainingOn(key);
+        time.nestedTask(key)
         return array.push(key)
         })
 }
-// console.log(array)
+
     res.send(array)
 })
 
-//this gets you all the scopes with project id - this returns all scopes
-//for this project
-router.get('/all/:id',async (req,res)=>{
-
-    const getThisProject= await Project.findById(req.params.id).populate('scope').select().sort('dateCreated');
-    // const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select();
-    // if (!getThisScope.length>0) return res.status(400).send(`item with this id doesn't exist`)
-
-
-let data=[getThisProject]
-let array=[]
-if (data){
-    data.map((key)=>{
-        time.dueDateOn(key);
-        time.timeRemainingOn(key);
-        time.nestedScoping(key)
-        return array.push(key)
-        })
-}
-console.log(data)
-    res.send(array)
-})
-
-router.put('/:id',async(req,res)=>{
-const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select()
-if (!getThisScope.length>0) return res.status(400).send('The Scope with this id is not found')
-
-let data={
-    scopeName:req.body.scopeName,
-    dueDate:req.body.dueDate
-}
-
-time.dueDateOn(data);
-time.timeRemainingOn(data);
-time.lastUpdatedDateOn(data);
+router.put('/one/:id',async(req,res)=>{
 try{
+    //checking if scope exist
+    const checkThisScope= await Scope.find({_id:{$in:req.params.id}}).select()
+    if (!checkThisScope.length>0) return res.status(400).send('The Scope with this id is not found')
+    
+    let data={
+        scopeName:req.body.scopeName,
+        dueDate:req.body.dueDate
+    }
+    time.lastUpdatedDateOn(data)
+
+    //upating the scope with given data
 const updatedScope=await Scope.findByIdAndUpdate(req.params.id,data,{new:true});
 
-res.send(updatedScope)
+//getting the updated data/scope and updating dates
+const getThisScope= await Scope.find({_id:{$in:req.params.id}}).populate('task').select().sort('dateCreated');
 
+let myData=await getThisScope
+let array=[]
+if (myData){
+    myData.map((key)=>{
+        time.dueDateOn(key);
+        time.timeRemainingOn(key);
+        time.nestedTask(key)
+        return array.push(key)
+        })
+}
+
+
+    res.send(array)
+
+// res.send(updatedScope)
 }catch(ex){
     
     res.status(400).send(ex)
