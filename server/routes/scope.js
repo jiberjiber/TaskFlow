@@ -1,15 +1,17 @@
 const {Scope}= require('.././models/scope');
 const {Project}= require('.././models/project');
 const {Task}= require('.././models/task');
+const auth=require('../middleware/auth')
+const manager=require('../middleware/managerAuth')
 const mongoose=require('mongoose');
 const express= require('express');
 const router = express.Router()
 const time= require("./timestamp");
 
 
-router.post('/', async (req,res)=>{
+router.post('/',[auth,manager], async (req,res)=>{
 
-
+    const { _id}=req.employee;
     const newScope=new Scope({
 scopeName:req.body.scopeName,
 dueDate:req.body.dueDate
@@ -28,16 +30,23 @@ dueDate:req.body.dueDate
    const project= await Project.findByIdAndUpdate(req.body.projectId,
         {$push:{"scope":id}},{new: true}
         )
-
-    res.send(newScope)
+        
+    const getThisProject= await Project.findById(req.params.projectId).populate('scope').select().sort('dateCreated');
+    // res.send(newScope)
+    res.send(getThisProject)
 })
 
-router.get("/", async (req,res)=>{
 
-    const savedScopes= await Scope.find().select().sort('dateCreated');
+//cannot use this call - just for testing
+router.get("/",[auth,manager], async (req,res)=>{
     
+    const savedScopes= await Scope.find().select().sort('dateCreated');
     if (!savedScopes.length>0) return res.status(400).send('no scopes saved yet');
 
+    
+
+
+    
     let data=savedScopes
 
     let array=[];
@@ -54,6 +63,7 @@ data.map((key)=>{
     res.send(array) 
 })
 
+///this gets you one scope
 router.get('/:id',async (req,res)=>{
     const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select();
     if (!getThisScope.length>0) return res.status(400).send(`item with this id doesn't exist`)
@@ -67,6 +77,29 @@ if (data){
         })
 }
 // console.log(array)
+    res.send(array)
+})
+
+//this gets you all the scopes with project id - this returns all scopes
+//for this project
+router.get('/all/:id',async (req,res)=>{
+
+    const getThisProject= await Project.findById(req.params.id).populate('scope').select().sort('dateCreated');
+    // const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select();
+    // if (!getThisScope.length>0) return res.status(400).send(`item with this id doesn't exist`)
+
+
+let data=[getThisProject]
+let array=[]
+if (data){
+    data.map((key)=>{
+        time.dueDateOn(key);
+        time.timeRemainingOn(key);
+        time.nestedScoping(key)
+        return array.push(key)
+        })
+}
+console.log(data)
     res.send(array)
 })
 

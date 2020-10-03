@@ -28,8 +28,17 @@ lastUpdatedDateOn: function(data) {
     data.lastUpdated = moment().format('MMMM Do YYYY');
   
     return data.lastUpdated;
-  }
+  },
 
+nestedScoping: function(data){
+if (data.scope.length>1){
+data.scope.map(x =>{
+  this.dueDateOn(x);
+  this.timeRemainingOn(x);
+  return
+})
+}
+}
 
 
 }
