@@ -1,12 +1,14 @@
 const {Task}= require('.././models/task');
 const {Scope}= require('.././models/scope');
 const {Project}= require('.././models/project');
+const auth=require('../middleware/auth')
+const manager=require('../middleware/managerAuth')
 const mongoose=require('mongoose');
 const express= require('express');
 const router = express.Router();
 const time= require("./timestamp");
 
-router.post('/', async (req,res)=>{
+router.post('/',[auth,manager], async (req,res)=>{
 
   
     const newTask=new Task({
