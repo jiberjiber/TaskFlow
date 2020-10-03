@@ -9,9 +9,12 @@ const CompanySchema = new Schema({
     required: true,
     unique: true,
   },
-  admin: {
+  creator: {
+    type: String,
+  },
+  creatorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Employee",
+    ref: "Employee"
   },
   employees: [
     {

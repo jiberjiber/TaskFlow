@@ -1,51 +1,57 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const { Company } = require("../models/index.js");
-const { validateCompanyData } = require("../middlewares/companyValidation");
-const { validate } = require("../middlewares/signupValidate");
+const { Company } = require("../models/");
+const { validateCompanyData } = require("../middleware/companyValidation");
+const { validate } = require("../middleware/signupValidate");
+const auth = require("../middleware/auth");
+const manager = require("../middleware/managerAuth");
 
-router.post("/", validateCompanyData(), validate, (req, res) => {
-  const data = req.body;
-  console.log(data);
+router.post(
+  "/:create",
+  [auth, manager],
+  validateCompanyData(),
+  validate,
+  async (req, res) => {
+    try {
+      // Create a company
+      const data = req.body;
 
-  try {
-    // Create a company
-    const newCompany = new Company({
-      name: data.name,
-      url: data.url
-
-    });
-
-    // name: data.name,
-    //   admin: data._id,
-    //   url: data.url
-    // console.log(req.body)
-    newCompany.save();
-
-    res.send(newCompany);
-  } catch (err) {
-    console.log(err);
-    res.status(400);
-    return res.send("Company could not be created.");
-  }
-});
-
-//Get one company
-router.get("/:id", (req, res) => {
-  Company.findById(req.params.id)
-    .populate("employees")
-    .then((company) => {
-      if (!company) {
-        return res.status(400).json({ company: "No companies found." });
+      const getCompany = await Company.findOne({ name: data.name });
+      if (getCompany) {
+        return res
+          .status(400)
+          .send(
+            "Company already exists. Please choose from the dropdown menu instead."
+          );
       } else {
-        res.send(company);
+        const creator = req.employee;
+        let employeeArr = [];
+
+        //Add company creator to the list of company employees
+        await employeeArr.push(creator);
+
+        const newCompany = new Company({
+          employees: employeeArr,
+          name: data.name,
+          url: data.url,
+          creator: creator._id,
+        });
+
+       await newCompany.save();
+
+        res.send(newCompany);
       }
-    });
-});
+    } catch (err) {
+      console.log(err);
+      res.status(400);
+      return res.send("Company could not be created.");
+    }
+  }
+);
 
 // Get all companies
-router.get("/", (req, res) => {
+router.get("/", [auth, manager], async (req, res) => {
   Company.find({})
     .populate("employees")
     .then((companies) => {
@@ -55,6 +61,18 @@ router.get("/", (req, res) => {
         res.send(companies);
       }
     });
+});
+
+//Get one company
+router.get("/:id", [auth, manager], async (req, res) => {
+  const thisCompany = await Company.find({ _id: req.params.id })
+    .populate("employees")
+    .sort("firstName");
+  if (!thisCompany) {
+    return res.status(400).json({ company: "No companies found." });
+  } else {
+    res.send(thisCompany);
+  }
 });
 
 module.exports = router;

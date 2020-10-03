@@ -13,8 +13,8 @@ const task = require("./task");
 // const managerRoutes = require("./manager");
 const companyRoutes = require("./company");
 // const auth= require('./auth')
-const employeeRoutes = require("./user");
-// const teamRoutes = require("./team")
+const employeeRoutes = require("./employee");
+const teamRoutes = require("./team");
 
 
 
@@ -28,7 +28,7 @@ router.use("/api/project", project);
 router.use("/api/project/scope/task", task);
 router.use("/api/employee", employeeRoutes);
 router.use("/api/company", companyRoutes);
-// router.use("/api/team", teamRoutes);
+router.use("/api/team", teamRoutes);
 
 
 
