@@ -16,8 +16,8 @@ router.post(
     try {
       // Create a company
       const data = req.body;
-      console.log(data);
-      const getCompany = await Company.findOne({ name: req.body.name });
+
+      const getCompany = await Company.findOne({ name: data.name });
       if (getCompany) {
         return res
           .status(400)
@@ -38,7 +38,7 @@ router.post(
           creator: creator._id,
         });
 
-        newCompany.save();
+       await newCompany.save();
 
         res.send(newCompany);
       }

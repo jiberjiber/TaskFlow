@@ -10,6 +10,9 @@ const CompanySchema = new Schema({
     unique: true,
   },
   creator: {
+    type: String,
+  },
+  creatorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Employee"
   },
