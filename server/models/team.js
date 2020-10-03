@@ -4,7 +4,11 @@ const Schema = mongoose.Schema;
 
 const TeamSchema = new Schema({
   name: {
-    Type: String,
+    type: String,
+  },
+  owner: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Employee"
   },
   members: [
     {
@@ -12,6 +16,10 @@ const TeamSchema = new Schema({
       ref: "Employee",
     },
   ],
+  // assignedProject: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Team"
+  // },
   assignedProjects: [
     {
       type: mongoose.Schema.Types.ObjectId,
