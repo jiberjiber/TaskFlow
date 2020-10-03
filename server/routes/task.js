@@ -2,7 +2,7 @@ const {Task}= require('.././models/task');
 const {Scope}= require('.././models/scope');
 const {Project}= require('.././models/project');
 const auth=require('../middleware/auth')
-const manager=require('../middleware/managerAuth')
+const manager=require('../middleware/managerAuth') 
 const mongoose=require('mongoose');
 const express= require('express');
 const router = express.Router();
@@ -11,10 +11,10 @@ const time= require("./timestamp");
 router.post('/',[auth,manager], async (req,res)=>{
 
   
-    const newTask=new Task({
+const newTask=new Task({
 task:req.body.task,
 description:req.body.description,
-dueDate:req.body.dueDate,
+dueDate:req.body.dueDate
     })
     
     newTask.taskCreatedOn();
@@ -24,38 +24,57 @@ dueDate:req.body.dueDate,
     let id=await newTask.returnid()
 
     await newTask.save();
-    const scope=await Scope.findByIdAndUpdate(req.body.taskId,
+    const scope=await Scope.findByIdAndUpdate(req.body.scopeId,
         {$push:{"task":id}},{new: true}
         )
     
-
-    res.send(newTask)
+    const getThisScope= await Scope.findById(req.body.scopeId).populate('task').select().sort('dateCreated');
+    res.send(getThisScope)
 })
 
+//cannot use this call - just for testing
 router.get("/", async (req,res)=>{
-    const savedTasks= await Task.find().sort('dateCreated');
+//     const savedTasks= await Task.find().sort('dateCreated');
 
-    if(!savedTasks.length>0) return res.status(400).send('no task saved yet');
+//     if(!savedTasks.length>0) return res.status(400).send('no task saved yet');
 
-    let data=savedTasks
+//     let data=savedTasks
 
-    let array=[];
-    // running throught each object of the array and passing in my timestamps methods to
-//update due date at each calls
-data.map((key)=>{
-    time.dueDateOn(key);
-    time.timeRemainingOn(key);
+//     let array=[];
+//     // running throught each object of the array and passing in my timestamps methods to
+// //update due date at each calls
+// data.map((key)=>{
+//     time.dueDateOn(key);
+//     time.timeRemainingOn(key);
     
-    return array.push(key)
-    })
+//     return array.push(key)
+//     })
 
-    res.send(array) 
+//     res.send(array) 
 
 })
 
-
+///cant use ... for testing only
 router.get("/:id", async (req,res)=>{
-    const getThisTask= await Task.find({_id:{$in:req.params.id}}).select();
+//     const getThisTask= await Task.find({_id:{$in:req.params.id}}).select();
+//     if (!getThisTask.length>0) return res.status(400).send('no task with this id');
+
+//     let data=getThisTask
+
+//     let array=[]
+// if (data){
+//     data.map((key)=>{
+//         time.dueDateOn(key);
+//         time.timeRemainingOn(key);
+//         return array.push(key)
+//         })
+// }
+
+// res.send(array)
+})
+
+router.get("/one/:id", async (req,res)=>{
+    const getThisTask= await Task.find({_id:{$in:req.params.id}}).populate('assignedTo').select().sort('dateCreated');;
     if (!getThisTask.length>0) return res.status(400).send('no task with this id');
 
     let data=getThisTask
@@ -72,47 +91,57 @@ if (data){
 res.send(array)
 })
 
-router.put('/:id', async (req,res)=>{
-    const getThisTask= await Task.find({_id:{$in:req.params.id}}).select();
 
-    if (!getThisTask.length>0) return res.status(400).send('The Task with this id is not found');
+
+router.put('/one/:id', async (req,res)=>{
+    try{
+    const checkThisTask= await Task.find({_id:{$in:req.params.id}}).select();
+
+    if (!checkThisTask.length>0) return res.status(400).send('The Task with this id is not found');
 
     let data={
 task:req.body.task,
 description:req.body.description,
 dueDate:req.body.dueDate,
     }
-
-time.dueDateOn(data);
-time.timeRemainingOn(data);
 time.lastUpdatedDateOn(data);
-
-try{
+// time.dueDateOn(data);
+// time.timeRemainingOn(data);
 const updatedTask= await Task.findByIdAndUpdate(req.params.id,data,{new:true});
 
-res.send(updatedTask)
+const getThisTask= await Task.find({_id:{$in:req.params.id}}).populate('assignedTo').select().sort('dateCreated');
 
+let myData=await getThisTask
+let array=[]
+if (myData){
+    myData.map((key)=>{
+        time.dueDateOn(key);
+        time.timeRemainingOn(key);
+        return array.push(key)
+        })
+}
 
+    res.send(array)
 }catch(ex){
     res.status(400).send(ex)
 }
 
 })
 
-router.delete('/:id',async (req,res)=>{
-
+router.delete('/one/:id',async (req,res)=>{
+ 
     const findTask=await Task.findById(req.params.id).select('_id');
+    const findScope= await Scope.find({task:{$in:req.params.id}}).select();
+    // const findScope= await Scope.findById(req.body.scopeId).select('task -_id');
 
-    const findScope= await Scope.findById(req.body.scopeId).select('task -_id');
-
-   console.log(findTask)
-
-    if(findScope.task.length>0){
+    let scopeId=await findScope[0]._id
+    
+    if(findScope[0].task.length>0){
         let newArray=[];
 
         let taskId=req.params.id;
 
-        let array=findScope.task
+        let array=findScope[0].task
         await array.map((x)=>{
             if(x==taskId){
                 return
@@ -122,11 +151,15 @@ router.delete('/:id',async (req,res)=>{
             
             return newArray
         })
-        let replace= await Scope.update({_id:req.body.scopeId},{$set:{task:newArray}})
+        
+        let replace= await Scope.update({_id:scopeId},{$set:{task:newArray}})
     }
     if(findTask){
+        console.log(scopeId)
         await Task.findByIdAndRemove(findTask._id);
-        res.send("the task and all its elements have been deleted")
+        //sending scope with updated tasks
+        const updateScopeTask= await Scope.findById(scopeId).populate('task').select().sort('dateCreated');
+        res.send(updateScopeTask)
     }else{
         res.status(400).send(`this task id doesn't exist`)
     }
