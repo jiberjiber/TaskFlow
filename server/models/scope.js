@@ -9,7 +9,8 @@ const ScopeSchema= new mongoose.Schema({
     },
     task:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Task'
+        ref:'Task',
+        autopopulate:true
     }],
     isComplete:{
         type:Boolean,
@@ -63,6 +64,12 @@ ScopeSchema.methods.scopeCreatedOn = function() {
   
     return this.lastUpdated;
   };
+
+  ScopeSchema.methods.returnid = function(){
+      
+      return this._id
+  }
+
 
   const Scope = mongoose.model("Scope", ScopeSchema);
 

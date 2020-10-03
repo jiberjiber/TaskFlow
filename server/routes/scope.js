@@ -1,15 +1,17 @@
 const {Scope}= require('.././models/scope');
 const {Project}= require('.././models/project');
 const {Task}= require('.././models/task');
+const auth=require('../middleware/auth')
+const manager=require('../middleware/managerAuth')
 const mongoose=require('mongoose');
 const express= require('express');
 const router = express.Router()
 const time= require("./timestamp");
 
 
-router.post('/', async (req,res)=>{
+router.post('/',[auth,manager], async (req,res)=>{
 
-
+    const { _id}=req.employee;
     const newScope=new Scope({
 scopeName:req.body.scopeName,
 dueDate:req.body.dueDate
@@ -19,21 +21,32 @@ dueDate:req.body.dueDate
     newScope.dueDateOn();
     newScope.timeRemainingOn();
     newScope.lastUpdatedDateOn();
-    
+   let id=await newScope.returnid()
+   
+    // console.log(newScope._id)
     await newScope.save();
+
+    
    const project= await Project.findByIdAndUpdate(req.body.projectId,
-        {$push:{"scope":newScope._id}},{new: true}
+        {$push:{"scope":id}},{new: true}
         )
-// console.log(req.body.projectId)
-    res.send(newScope)
+        
+    const getThisProject= await Project.findById(req.params.projectId).populate('scope').select().sort('dateCreated');
+    // res.send(newScope)
+    res.send(getThisProject)
 })
 
-router.get('/', async (req,res)=>{
 
-    const savedScopes= await Scope.find().select().sort('-dateCreated');
-    console.log(savedScopes)
-    if (!savedScopes) return res.status(400).send('no scopes saved yet');
+//cannot use this call - just for testing
+router.get("/",[auth,manager], async (req,res)=>{
+    
+    const savedScopes= await Scope.find().select().sort('dateCreated');
+    if (!savedScopes.length>0) return res.status(400).send('no scopes saved yet');
 
+    
+
+
+    
     let data=savedScopes
 
     let array=[];
@@ -46,12 +59,14 @@ data.map((key)=>{
     return array.push(key)
     })
 
-    res.send(savedScopes) 
+
+    res.send(array) 
 })
 
+///this gets you one scope
 router.get('/:id',async (req,res)=>{
     const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select();
-
+    if (!getThisScope.length>0) return res.status(400).send(`item with this id doesn't exist`)
 let data=getThisScope
 let array=[]
 if (data){
@@ -65,9 +80,32 @@ if (data){
     res.send(array)
 })
 
+//this gets you all the scopes with project id - this returns all scopes
+//for this project
+router.get('/all/:id',async (req,res)=>{
+
+    const getThisProject= await Project.findById(req.params.id).populate('scope').select().sort('dateCreated');
+    // const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select();
+    // if (!getThisScope.length>0) return res.status(400).send(`item with this id doesn't exist`)
+
+
+let data=[getThisProject]
+let array=[]
+if (data){
+    data.map((key)=>{
+        time.dueDateOn(key);
+        time.timeRemainingOn(key);
+        time.nestedScoping(key)
+        return array.push(key)
+        })
+}
+console.log(data)
+    res.send(array)
+})
+
 router.put('/:id',async(req,res)=>{
 const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select()
-if (!getThisScope) return res.status(400).send(error.details[0].message)
+if (!getThisScope.length>0) return res.status(400).send('The Scope with this id is not found')
 
 let data={
     scopeName:req.body.scopeName,
@@ -83,7 +121,7 @@ const updatedScope=await Scope.findByIdAndUpdate(req.params.id,data,{new:true});
 res.send(updatedScope)
 
 }catch(ex){
-    console.log(ex)
+    
     res.status(400).send(ex)
 }
 
@@ -94,18 +132,40 @@ router.delete('/:id',async (req,res)=>{
         //this gets me one scope (id)
     const findScope= await Scope.findById(req.params.id).select('_id');
 //this gets me an array of tasks (children of scopes)
-    const findTasks=await Scope.findById(req.params.id).populate('task').select('_id');
-
+    const findTasks=await Scope.findById(req.params.id).populate('task').select('task -_id');
+    const findProject=await  Project.findById(req.body.projectId).select('scope -_id')
+    
+    
     //deleting grandchild first (if any)
-if (findTasks.length>0){
-   await findTasks.map(x =>{
-        Task.findByIdAndDelete(x._id);
+if (findTasks.task.length>0){
+    
+   findTasks.task.map(async (x)=>{
+    id= x._id
+    
+        await Task.findOneAndDelete({_id:id});
         return;
     })
 
 }
-// console.log(findScope._id)
-//deleting the scope schema
+
+//deleting the reference id from project 
+if (findProject.scope.length>0){
+    let newArray=[]
+    let scopeId=req.params.id;
+    let array=findProject.scope
+   await array.map((x)=>{
+        if(x== scopeId){
+            return
+        }else{
+            newArray.push(x)
+        }
+
+        return newArray
+    })
+
+    let replace= await Project.update({_id:req.body.projectId},{$set:{scope:newArray}})
+}
+
 if (findScope){
     await Scope.findByIdAndRemove(findScope._id)
 
