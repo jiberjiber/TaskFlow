@@ -9,7 +9,7 @@ const TaskSchema= new mongoose.Schema({
     },
     authorId:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Manager'
+        ref:'Employee'
     },
     assignedTo:[{
         type:mongoose.Schema.Types.ObjectId,
@@ -74,6 +74,10 @@ TaskSchema.methods.taskCreatedOn = function() {
     return this.lastUpdated;
   };
 
+  TaskSchema.methods.returnid = function(){
+      
+    return this._id
+}
   const Task = mongoose.model("Task", TaskSchema);
 
   exports.Task = Task;
