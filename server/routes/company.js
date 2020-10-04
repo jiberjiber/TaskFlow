@@ -7,50 +7,44 @@ const { validate } = require("../middleware/signupValidate");
 const auth = require("../middleware/auth");
 const manager = require("../middleware/managerAuth");
 
-router.post(
-  "/:create",
-  [auth, manager],
-  validateCompanyData(),
-  validate,
-  async (req, res) => {
-    try {
-      // Create a company
-      const data = req.body;
+router.post("/:create", validateCompanyData(), validate, async (req, res) => {
+  try {
+    // Create a company
+    const data = req.body;
 
-      const getCompany = await Company.findOne({ name: data.name });
-      if (getCompany) {
-        return res
-          .status(400)
-          .send(
-            "Company already exists. Please choose from the dropdown menu instead."
-          );
-      } else {
-        // const creator = req.employee;
-        // let employeeArr = [];
+    const getCompany = await Company.findOne({ name: data.name });
+    if (getCompany) {
+      return res
+        .status(400)
+        .send(
+          "Company already exists. Please choose from the dropdown menu instead."
+        );
+    } else {
+      // const creator = req.employee;
+      // let employeeArr = [];
 
-        // //Add company creator to the list of company employees
-        // await employeeArr.push(creator);
-        const { _id, firstName, lastName } = req.employee;
+      // //Add company creator to the list of company employees
+      // await employeeArr.push(creator);
+      const { _id, firstName, lastName } = req.employee;
 
-        const newCompany = new Company({
-          employees: data.employees,
-          name: data.name,
-          url: data.url,
-          owner: `${firstName} ${lastName}`,
-          ownerId: _id,
-        });
+      const newCompany = new Company({
+        employees: data.employees,
+        name: data.name,
+        url: data.url,
+        owner: `${firstName} ${lastName}`,
+        ownerId: _id,
+      });
 
-        await newCompany.save();
+      await newCompany.save();
 
-        res.send(newCompany);
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(400);
-      return res.send("Company could not be created.");
+      res.send(newCompany);
     }
+  } catch (err) {
+    console.log(err);
+    res.status(400);
+    return res.send("Company could not be created.");
   }
-);
+});
 
 // Get all companies
 router.get("/", [auth, manager], async (req, res) => {
