@@ -9,7 +9,6 @@ const manager = require("../middleware/managerAuth");
 
 router.post(
   "/:create",
-  [auth, manager],
   validateCompanyData(),
   validate,
   async (req, res) => {
@@ -30,14 +29,14 @@ router.post(
 
         // //Add company creator to the list of company employees
         // await employeeArr.push(creator);
-        const { _id, firstName, lastName } = req.employee;
+        // const { _id, firstName, lastName } = req.employee;
 
         const newCompany = new Company({
           employees: data.employees,
           name: data.name,
-          url: data.url,
-          owner: `${firstName} ${lastName}`,
-          ownerId: _id,
+          url: data.url
+          // owner: `${firstName} ${lastName}`,
+          // ownerId: _id,
         });
 
         await newCompany.save();
