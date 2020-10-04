@@ -3,8 +3,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -50,14 +48,16 @@ export default function SignIn() {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		console.log(form);
-		// Axios.post(`/api/login`, form)
-		// 	.then((response) => {
-		// 		console.log(response);
-		// 	})
-		// 	.catch((err) => {
-		// 		console.log(err);
-		// 	});
+		console.log('Form input:', form);
+		Axios.post(`/api/employee/login`, form)
+			.then((response) => {
+				localStorage.setItem('token', response.data);
+				window.location = "/";
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		
 	}
 
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
