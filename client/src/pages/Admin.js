@@ -1,4 +1,5 @@
 import React from "react";
+import Axios from 'axios';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -10,11 +11,8 @@ import { Divider, Fab } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
 import SettingsIcon from '@material-ui/icons/Settings';
 import LaunchIcon from '@material-ui/icons/Launch';
@@ -66,12 +64,26 @@ export default function Admin(props) {
 		setValue(newValue);
 	};
 
+	const createProject = () => {
+		Axios.post('/api/project', {
+			title: " management sofware",
+			description: "This is business",
+			dueDate: "November 25 2020"
+		})
+		.then((response) => {
+			console.log(response);
+		})
+		.catch(err => {
+			console.log(err);
+		});
+	}
+
 	return (
 		<div className={classes.root}>
 			<Grid className={classes.m25}>
 				<Grid item xs style={{ textAlign: "center" }}>
 					<Typography variant="h4">New Project</Typography>
-					<Tooltip title="Add">
+					<Tooltip title="Add" component="button" onClick={createProject}>
 						<Fab color="primary" className={classes.fab}>
 							<AddIcon />
 						</Fab>
@@ -102,7 +114,7 @@ export default function Admin(props) {
 					</TableHead>
 					<TableBody>
 						{props.projects.map((project) => (
-							<TableRow key={project.id}>
+							<StyledTableRow key={project.id}>
 								<StyledTableCell>
 									<Typography color="textPrimary">{project.id}</Typography>
 								</StyledTableCell>
@@ -134,7 +146,7 @@ export default function Admin(props) {
 										</IconButton>
 									</Tooltip>
 								</StyledTableCell>
-							</TableRow>
+							</StyledTableRow>
 						))}
 					</TableBody>
 				</Table>
