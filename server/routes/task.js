@@ -10,11 +10,12 @@ const time= require("./timestamp");
 
 router.post('/',[auth,manager], async (req,res)=>{
 
-  
+    const { _id}=req.employee;
 const newTask=new Task({
 task:req.body.task,
 description:req.body.description,
-dueDate:req.body.dueDate
+dueDate:req.body.dueDate,
+authorId:_id
     })
     
     newTask.taskCreatedOn();
@@ -155,7 +156,7 @@ router.delete('/one/:id',async (req,res)=>{
         let replace= await Scope.update({_id:scopeId},{$set:{task:newArray}})
     }
     if(findTask){
-        console.log(scopeId)
+        
         await Task.findByIdAndRemove(findTask._id);
         //sending scope with updated tasks
         const updateScopeTask= await Scope.findById(scopeId).populate('task').select().sort('dateCreated');
