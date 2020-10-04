@@ -15,11 +15,14 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+// eslint-disable-next-line
 import MailIcon from "@material-ui/icons/Mail";
 import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 import SupervisorAccountOutlinedIcon from "@material-ui/icons/SupervisorAccountOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
+// eslint-disable-next-line
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import {
 	Grid,
@@ -95,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function MiniDrawer() {
+export default function DashBoard(props) {
 
 	const classes = useStyles();
 
@@ -121,6 +124,11 @@ export default function MiniDrawer() {
 	const handleDrawerClose = () => {
 		setOpen(false);
 	};
+
+	const handleLogout = () => {
+		localStorage.removeItem('token');
+		window.location = '/login';
+	}
 
 	return (
 		<ThemeProvider theme={darkTheme}>
@@ -148,7 +156,10 @@ export default function MiniDrawer() {
 								</IconButton>
 							</Grid>
 							<Grid item>
-								<Button className={classes.appBarRight} color="inherit" href="/">
+								<Typography variant="h4">Welcome, {props.user.firstName}!</Typography>
+							</Grid>
+							<Grid item>
+								<Button className={classes.appBarRight} color="inherit" onClick={handleLogout}>
 									Logout <ExitToAppOutlinedIcon />
 								</Button>
 							</Grid>
@@ -179,7 +190,7 @@ export default function MiniDrawer() {
 					</div>
 					<Divider />
 					<List>
-						<ListItem button key={"dashboard"} component="a" href="/home">
+						<ListItem button key={"dashboard"} component="a" href="/">
 							<ListItemIcon name="teams">
 								<DashboardOutlinedIcon />
 							</ListItemIcon>
@@ -192,7 +203,7 @@ export default function MiniDrawer() {
 							<ListItemText primary={"Admin"} />
 						</ListItem>
 						<Divider />
-						<ListItem button key={"allmail"} component="a" href="/mail">
+						{/* <ListItem button key={"allmail"} component="a" href="/mail">
 							<ListItemIcon>
 								<MailIcon />
 							</ListItemIcon>
@@ -203,9 +214,9 @@ export default function MiniDrawer() {
 								<DeleteOutlineOutlinedIcon />
 							</ListItemIcon>
 							<ListItemText primary={"Trash"} />
-						</ListItem>
+						</ListItem> */}
 					</List>
-					<Divider />
+					{/* <Divider /> */}
 					<List>
 						<ListItem button key={"settings"} component="a" href="/settings">
 							<ListItemIcon>
