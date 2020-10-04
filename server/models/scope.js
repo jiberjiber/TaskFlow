@@ -28,6 +28,14 @@ const ScopeSchema= new mongoose.Schema({
     scopeCreated:{
         type:String,
     },
+    authorId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Employee'
+    },
+    assignedTo:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Employee'
+    }],
     dateCreated:{
         type:Date,
         default:Date.now

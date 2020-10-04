@@ -21,7 +21,7 @@ title:req.body.title,
 creator:firstName,
 authorId:_id,
 description:req.body.description,
-dueDate:req.body.dueDate,
+dueDate:req.body.dueDate
     })
     
     newProject.projectCreatedOn();
@@ -92,8 +92,6 @@ router.put('/:id',async(req,res)=>{
 
     let data={
     title:req.body.title,
-    creator:req.body.creator,
-    authorId:req.body.author,
     description:req.body.description,
     dueDate:req.body.dueDate,
 }
@@ -124,26 +122,24 @@ const findScopes= await Project.findById(req.params.id).populate('scope').select
 
 
 //this gets me an array of task for each scope
-let allTasks=[]
+
 if(findScopes.scope.length>0){
-    let array= await findScopes.scope
-  array.map(x=>{
-        let theseTasks= Scope.findById(x._id).populate('task').select('task _id')
-    
-        allTasks.push(theseTasks);
-        return;
-    })
+    // let allTasks=[]
    
-}
+    findScopes.scope.map(async(x)=>{
+    
+    let id= x._id
+        let theseTasks=await Scope.findById(id).populate('task').select('task -_id')
+        let theseTasksId=await theseTasks.task[0]._id
+        
+    //  removing task related to scope
 
-
-//1 deleting grandchild first (if any)
-if (allTasks.length>0){
- await  allTasks.map(async (x)=>{
-       await Task.findByIdAndRemove(x._id);
-        return;
+        await Task.findByIdAndRemove(theseTasksId)
+        
+        return ;
     })
-
+    
+    
 }
 
 
@@ -156,7 +152,6 @@ if(findScopes.scope.length>0){
     id= x._id
        await Scope.findOneAndDelete({_id:id});
         
-  
         return ;
     })
    
@@ -165,7 +160,9 @@ if(findScopes.scope.length>0){
 if (findProject){
     //3 deleting the project schema
     await Project.findByIdAndRemove(findProject._id)
-    res.send("the project and all its elements have been deleted")
+    const newProjectList=await Project.find({authorId:_id}).select().sort('dateCreated');
+    // res.send("the project and all its elements have been deleted")
+    res.send(newProjectList)
 }else{
     res.status(400).send(`this project id doesn't exist`)
 }
