@@ -110,18 +110,6 @@ export default function ProjectInfo(props) {
 	// Do calcs to find progress
 	let progress = 60;
 
-	// useEffect(() => {
-	// 	Axios.get(`/api/project/:${id}`)
-	// 		.then((response) => {
-	// 			console.log(response);
-	// 			project = response;
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// 	document.title = `WorkHub: ${project.title}`;
-	// });
-
 	return (
 		<Container>
 			<Grid
