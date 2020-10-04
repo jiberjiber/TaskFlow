@@ -18,7 +18,9 @@ const { Scope } = require("../models/scope.js");
 //Register new employee
 router.post("/register", validateSignupData(), validate, async (req, res) => {
   try {
-    const data = req.body;
+    // console.log(req.body)
+    const data = await req.body;
+    // if (!data.company) res.status(400).send("Company is required");
     const getEmployee = await Employee.findOne({ email: req.body.email });
     if (getEmployee) {
       return res
@@ -34,31 +36,36 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
         password: data.password,
         company: data.company,
       });
-
+      // await employee.save();
+      console.log(employee)
+      
       let employeeId = await employee.returnid();
+      await employee.save();
+      console.log(`Employee ID: ${employeeId}`)
       let pass = employee.returnPassword();
+      console.log(pass)
       const salt = await bcrypt.genSalt(10);
       employee.password = await bcrypt.hash(pass, salt);
 
-      await employee.save();
-
+    if(employeeId) {
       const employeeCompany = await Company.findByIdAndUpdate(
-        { _id: req.body.company },
-        { $push: { employees: employeeId } },
+        (req.body.company),
+        { $push: { "employees": employeeId } },
         { new: true }
       );
-      // console.log(`USERNAME: ${employee.username}`);
 
       await employeeCompany.save();
+      console.log(employeeCompany)
       res.send({
         firstName: employee.firstName,
         lastName: employee.lastName,
         email: employee.email,
         _id: employee._id,
         isManager: employee.isManager,
-        company: data.company,
+        company: employee.company,
+        members: employee.members
       });
-    }
+    }}
   } catch (err) {
     console.log(err);
     res.status(400).send(err);
@@ -66,7 +73,7 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
 });
 
 //User login
-router.post("/login", [auth,manager], async (req, res) => {
+router.post("/login", async (req, res) => {
   const checkUser = await Employee.findOne({ email: req.body.email });
   console.log(req.body);
   if (!checkUser) return res.status(400).send("iuser not registered ");
@@ -84,7 +91,7 @@ router.post("/login", [auth,manager], async (req, res) => {
 });
 
 //Get all users
-router.get("/", [auth,manager], async (req, res) => {
+router.get("/", [auth, manager], async (req, res) => {
   const employees = await Employee.find().select().sort("lastName");
 
   if (!employees) return res.status(400).send("No employees found.");
@@ -108,7 +115,7 @@ router.get("/", [auth,manager], async (req, res) => {
 });
 
 //Get user by id
-router.get("/:id", [auth,manager], async (req, res) => {
+router.get("/:id", [auth, manager], async (req, res) => {
   const getOneEmployee = await Employee.find({ _id: req.params.id }).select();
 
   if (!getOneEmployee)
@@ -117,5 +124,45 @@ router.get("/:id", [auth,manager], async (req, res) => {
   res.send(getOneEmployee);
 });
 
+
+
+//TODO:
+//Delete a user
+router.delete("/delete/:id", [auth,manager], async (req, res) => {
+  const user = await Employee.findById(req.params.id).select("_id");
+  //TODO: connect team with project
+  if (!user) return res.status(400).send("This user does not exist.");
+  // console.log("manager" + req.params.isManager)
+  if(user.isManager) {
+    const projects = await Project.find({ _id: { $in: {authorId: user.id} }}).select("_id");
+    if(!projects.length > 0 ) return console.log("User has no created projects.")
+
+  await projects.deleteMany({ authorId: user.id }, async (error, projectMatch) => {
+    if (error) return res.status(400).send(error);
+
+    const projectId = projectMatch._id;
+    console.log("Projects FOUND:" + projectMatch);
+
+
+    await Scope.deleteMany({ parentProject: projectId }, (err) => {
+      if (err) return res.status(400).send("Could not delete projects");
+      console.log("Projects deleted");
+    });
+  });
+}
+
+  // }
+  //TODO:find tasks and delete tasks
+
+  //TODO: find scopes and delete scopes
+
+  //TODO:find projects
+
+  //TODO:delete projects
+
+  //TODO: find and delete empl
+
+  // 
+});
 
 module.exports = router;
