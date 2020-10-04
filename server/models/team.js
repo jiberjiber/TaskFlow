@@ -24,7 +24,7 @@ const TeamSchema = new Schema({
   assignedProjects: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
+      ref: "Scope",
     },
   ],
   dateCreated: {
