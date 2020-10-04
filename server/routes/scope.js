@@ -14,7 +14,8 @@ router.post('/',[auth,manager], async (req,res)=>{
     const { _id}=req.employee;
     const newScope=new Scope({
 scopeName:req.body.scopeName,
-dueDate:req.body.dueDate
+dueDate:req.body.dueDate,
+authorId:_id
     })
     
     newScope.scopeCreatedOn();
@@ -144,19 +145,21 @@ if (myData){
 })
 
 /// route to delete the Scope schema and all the child elements(task)
-router.delete('/:id',async (req,res)=>{
+router.delete('/one/:id',async (req,res)=>{
         //this gets me one scope (id)
-    const findScope= await Scope.findById(req.params.id).select('_id');
+    const findScope= await Scope.findById(req.params.id).select();
 //this gets me an array of tasks (children of scopes)
     const findTasks=await Scope.findById(req.params.id).populate('task').select('task -_id');
-    const findProject=await  Project.findById(req.body.projectId).select('scope -_id')
+    const findProject=await  Project.find({scope:{$in:req.params.id}}).select()
     
+    let projectId=await findProject[0]._id
     
-    //deleting grandchild first (if any)
+   
+//deleting grandchild first (if any)
 if (findTasks.task.length>0){
     
    findTasks.task.map(async (x)=>{
-    id= x._id
+    let id= x._id
     
         await Task.findOneAndDelete({_id:id});
         return;
@@ -165,10 +168,10 @@ if (findTasks.task.length>0){
 }
 
 //deleting the reference id from project 
-if (findProject.scope.length>0){
+if (findProject[0].scope.length>0){
     let newArray=[]
     let scopeId=req.params.id;
-    let array=findProject.scope
+    let array=findProject[0].scope
    await array.map((x)=>{
         if(x== scopeId){
             return
@@ -178,19 +181,22 @@ if (findProject.scope.length>0){
 
         return newArray
     })
-
-    let replace= await Project.update({_id:req.body.projectId},{$set:{scope:newArray}})
+    
+    let replace= await Project.update({_id:projectId},{$set:{scope:newArray}})
 }
 
 if (findScope){
     await Scope.findByIdAndRemove(findScope._id)
 
-    res.send("the scope and all its elements have been deleted")
+    //sending back updated project with remaining scopes
+    const updatedProjScope= await Project.findById(projectId).populate('scope').select().sort('dateCreated'); 
+    // res.send("the scope and all its elements have been deleted")
+    res.send(updatedProjScope)
 }else{
     res.status(400).send(`this scope id doesn't exist`)
 }
 
-// project removal upon delete
+
 
 })
 

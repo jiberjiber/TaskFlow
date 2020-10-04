@@ -78,7 +78,7 @@ employeeSchema.methods.generateToken = function () {
 };
 
 //Method to get id for the current employee
-employeeSchema.methods.returnid = () => {
+employeeSchema.methods.returnid = function () {
     return this._id;
 }
 
