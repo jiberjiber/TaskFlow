@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+
 const Schema = mongoose.Schema;
 
 const employeeSchema = new Schema({
@@ -48,6 +49,10 @@ const employeeSchema = new Schema({
       ref: "Project",
     },
   ],
+  team: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Team",
+  },
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Company",
@@ -78,7 +83,7 @@ employeeSchema.methods.generateToken = function () {
 };
 
 //Method to get id for the current employee
-employeeSchema.methods.returnid = function () {
+employeeSchema.methods.returnid = function() {
     return this._id;
 }
 
