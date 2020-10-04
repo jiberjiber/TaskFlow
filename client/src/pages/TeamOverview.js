@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import Axios from 'axios';
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -57,10 +58,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TeamOverview(props) {
 	const classes = useStyles();
-	const [value, setValue] = React.useState(0);
+	const [value, setValue] = useState(0);
+	const [scopes, setScopes] = useState([]);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
+		const target = event.currentTarget.name;
+		Axios.get(`/api/project/${target}`)
+		.then((response) => {
+			setScopes(response.data[0].scope);
+		})
+		.catch(err => {
+			console.log('error', err);
+		});
+
 	};
 
 	return (
@@ -71,17 +82,20 @@ export default function TeamOverview(props) {
 					onChange={handleChange}
 					aria-label="project-tabs"
 				>
-					{props.projects.map((item) => (
-						<Tab label={item.title} {...a11yProps(item.id)} />
+					{props.projects.length>0 && props.projects.map((item, index) => (
+						<Tab label={item.title} name={item._id} {...a11yProps(index)} key={item._id} />
 					))}
 				</Tabs>
 			</AppBar>
-			{props.projects.map((project) => (
-				<TabPanel value={value} index={project.id}>
+			{props.projects.length>0 && props.projects.map((project, index) => (
+				<TabPanel value={value} index={index} key={project._id}>
 					<Grid container spacing={3}>
-						{project.teams.map((team) => (
-								<TeamCard title={team.title} content={team.content} />
+						{scopes.map((item) => (
+								<TeamCard title={item.scopeName} content={item.dueDate} key={item.projectId}/>
 						))}
+						{project.scope.length<1 && 
+							<Typography>This project has no scopes!</Typography>
+						}
 					</Grid>
 				</TabPanel>
 			))}
