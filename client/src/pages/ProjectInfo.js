@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useLocation, useParams } from "react-router-dom";
-import Axios from "axios";
+import { useParams } from "react-router-dom";
 import {
 	Container,
 	Box,
@@ -133,7 +132,7 @@ export default function ProjectInfo(props) {
 			>
 				<Typography variant="h2">Project Title</Typography>
 				<Divider orientation="vertical" flexItem />
-				<Grid direction="column" justify="space-around" alignItems="center">
+				<Grid container direction="column" justify="space-around" alignItems="center">
 					<Typography variant="body1">In Progress</Typography>
 					<CircularProgressWithLabel value={progress} />
 				</Grid>
