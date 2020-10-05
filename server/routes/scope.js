@@ -3,13 +3,21 @@ const {Project}= require('.././models/project');
 const {Task}= require('.././models/task');
 const auth=require('../middleware/auth')
 const manager=require('../middleware/managerAuth')
+const validation= require('./validation')
 const mongoose=require('mongoose');
 const express= require('express');
 const router = express.Router()
 const time= require("./timestamp");
+const Joi=require('joi')
 
 
 router.post('/',[auth,manager], async (req,res)=>{
+    
+    const {error}= validation.validScope(req.body);
+    if(error) return res.status(400).send('missing input or input field requirements not met')
+    
+   
+   const check=await validation.checkProjectDueDate()
 
     const { _id}=req.employee;
     const newScope=new Scope({
@@ -32,7 +40,7 @@ authorId:_id
         {$push:{"scope":id}},{new: true}
         )
         
-    const getThisProject= await Project.findById(req.params.projectId).populate('scope').select().sort('dateCreated');
+    const getThisProject= await Project.findById(req.body.projectId).populate('scope').select().sort('dateCreated');
     // res.send(newScope)
     res.send(getThisProject)
 })
@@ -104,8 +112,11 @@ if (data){
     res.send(array)
 })
 
-router.put('/one/:id',async(req,res)=>{
+router.put('/one/:id',async(req,res)=>{    
 try{
+
+    const {error}= validation.validScope(req.body);
+    if(error) return res.status(400).send('missing input or input field requirements not met')
     //checking if scope exist
     const checkThisScope= await Scope.find({_id:{$in:req.params.id}}).select()
     if (!checkThisScope.length>0) return res.status(400).send('The Scope with this id is not found')
@@ -189,9 +200,9 @@ if (findScope){
     await Scope.findByIdAndRemove(findScope._id)
 
     //sending back updated project with remaining scopes
-    const updatedProjScope= await Project.findById(projectId).populate('scope').select().sort('dateCreated'); 
-    // res.send("the scope and all its elements have been deleted")
-    res.send(updatedProjScope)
+    // const updatedProjScope= await Project.findById(projectId).populate('scope').select().sort('dateCreated'); 
+    res.send("the scope and all its elements have been deleted")
+    // res.send(updatedProjScope)
 }else{
     res.status(400).send(`this scope id doesn't exist`)
 }

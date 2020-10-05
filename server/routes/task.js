@@ -3,12 +3,15 @@ const {Scope}= require('.././models/scope');
 const {Project}= require('.././models/project');
 const auth=require('../middleware/auth')
 const manager=require('../middleware/managerAuth') 
+const validation= require('./validation')
 const mongoose=require('mongoose');
 const express= require('express');
 const router = express.Router();
 const time= require("./timestamp");
 
 router.post('/',[auth,manager], async (req,res)=>{
+    const {error}= validation.validTask(req.body);
+    if(error) return res.status(400).send('missing input or input field requirements not met')
 
     const { _id}=req.employee;
 const newTask=new Task({
@@ -96,6 +99,8 @@ res.send(array)
 
 router.put('/one/:id', async (req,res)=>{
     try{
+        const {error}= validation.validTask(req.body);
+        if(error) return res.status(400).send('missing input or input field requirements not met')
     const checkThisTask= await Task.find({_id:{$in:req.params.id}}).select();
 
     if (!checkThisTask.length>0) return res.status(400).send('The Task with this id is not found');
@@ -159,8 +164,9 @@ router.delete('/one/:id',async (req,res)=>{
         
         await Task.findByIdAndRemove(findTask._id);
         //sending scope with updated tasks
-        const updateScopeTask= await Scope.findById(scopeId).populate('task').select().sort('dateCreated');
-        res.send(updateScopeTask)
+        // const updateScopeTask= await Scope.findById(scopeId).populate('task').select().sort('dateCreated');
+        // res.send(updateScopeTask)
+        res.send('this task and related field was deleted')
     }else{
         res.status(400).send(`this task id doesn't exist`)
     }
