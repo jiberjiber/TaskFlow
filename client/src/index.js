@@ -5,11 +5,17 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
+<<<<<<< HEAD
     <div>
       <App />
       </div>,
     
   
+=======
+  <React.StrictMode>
+	  <App />
+  </React.StrictMode>,
+>>>>>>> 7a94e4afb2a53862aebbe632ebd7b3cd5081be9e
   document.getElementById('root')
 );
 

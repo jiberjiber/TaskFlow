@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -15,6 +13,7 @@ import Container from "@material-ui/core/Container";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Copyright from '../components/Copyright';
+import Axios from "axios";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +39,27 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
 	const classes = useStyles();
 
+	const [form, setForm] = useState();
+
+	const handleFormChange = (event) => {
+		const { name, value } = event.target;
+		setForm({...form, [name]:value});
+	}
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		console.log('Form input:', form);
+		Axios.post(`/api/employee/login`, form)
+			.then((response) => {
+				localStorage.setItem('token', response.data);
+				window.location = "/";
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		
+	}
+
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
 	const darkTheme = React.useMemo(
@@ -63,7 +83,7 @@ export default function SignIn() {
 				<Typography component="h1" variant="h5">
 					Sign in
 				</Typography>
-				<form className={classes.form} noValidate>
+				<form className={classes.form} noValidate onSubmit={handleSubmit}>
 					<TextField
 						variant="outlined"
 						margin="normal"
@@ -73,6 +93,7 @@ export default function SignIn() {
 						label="Email Address"
 						name="email"
 						autoComplete="email"
+						onChange={handleFormChange}
 						autoFocus
 					/>
 					<TextField
@@ -85,11 +106,12 @@ export default function SignIn() {
 						type="password"
 						id="password"
 						autoComplete="current-password"
+						onChange={handleFormChange}
 					/>
-					<FormControlLabel
+					{/* <FormControlLabel
 						control={<Checkbox value="remember" color="primary" />}
 						label="Remember me"
-					/>
+					/> */}
 					<Button
 						type="submit"
 						fullWidth
