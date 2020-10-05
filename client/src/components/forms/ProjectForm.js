@@ -1,43 +1,105 @@
-import React from 'react';
-import {Box, Card, CardContent, Typography} from '@material-ui/core';
-import {Formik, Form, Field, ErrorMessage } from "formik";
-import {TextField} from "formik-material-ui"
+import React, {useState} from 'react';
+import axios from 'axios';
+import { Box, Card, CardContent, Typography } from '@material-ui/core';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { TextField } from "formik-material-ui"
 import styles from './styles.css'
 
-//create new project form component
-function ProjectForm (props) {
+
+
+//new project form component
+const ProjectForm = () =>{
+
+const [ProjectForm, setProjectForm] = useState({
+    title:"",
+    description:"Test",
+    dueDate:"Test"
+    
+})
+const [errors,setErrors] = useState({})
+//const [formFeedback,setFormFeedback] = useState({})
+
+function handleFormChange (e){
+    //console.log(e.target.value);
+    const {name, value}=e.target;
+    //setProjectForm([name]=e.target.value)
+    //e.target.value = setProjectForm({...ProjectForm, [name]: value})
+    setProjectForm({...ProjectForm,[name]:value});
+    // ////setFormFeedback(false)
+    console.log({name,value})
+}
+
+
+
+const onFormSubmit = (event)=>{
+    event.preventDefault()
+
+    // const errors=validate();
+    // setErrors({...errors || {}})
+    if (errors){
+        return
+    }
+    else{
+    // console.log(form)
+    //we will run an axios 
+    axios({
+        method: 'post',
+        url: '',
+        data: {
+         //form data props
+        }
+      });
+      const clearState={
+      title:"",
+      description:"",
+      dueDate:""}
+    
+   setProjectForm({...clearState})
+    
+    //setFormFeedback(true)
+    }
+    }
     
     return (
-		<div styles={styles} className="forms">
-        <Card>
-        <CardContent>
-        <Formik initialValues= {{
-                title:"",
-                //creator: get from sign in
-                description:"",
-                dueDate:"",
-                //create major tasks
-                scopeName:"",
-                dueDateTask:"",
-                //create team
-                
-                }}
-                //onSubmit send to backend
-                onSubmit={({ setSubmitting }) => {
-                    // alert("Project is Created");
-                    // setSubmitting(false);
-                  }}>
-                <Form className="Project"> 
-                <Typography className={styles.header}variant="h5">Title of Project</Typography>
-                <Field className="Field" variant="outlined" name="title"  component={TextField}/>
-                <Field className="Field" variant="outlined" name="description"  component={TextField} label="Describe Your Project Objective"/>
-                <Field className="Field" variant="outlined" name="dueDate"  component={TextField} label="Enter your deadline"/>
-                
-                </Form>
-            </Formik>
-        </CardContent>
-        </Card>
+        <div styles={styles} className="forms">
+            <Card>
+                <CardContent>
+                    <form>
+                        <div className="form-group">
+                            <label>Title of Project</label>
+                            <input
+                            onChange={handleFormChange}
+                            name="Title"
+                            value={ProjectForm.title}
+                            className="form-control"/>
+                        </div>
+                        <div className="form-group">
+                            <label>Project Objective</label>
+                            <small className="form-text text-muted">Please give a brief description of the goal of your project</small>
+                            <textarea 
+                            onChange={handleFormChange}
+                            name="description"
+                            value={ProjectForm.description} 
+                            className="form-control" 
+                            rows={3} defaultValue={""} />
+                        </div>
+                        <div className="form-group date" data-provide="datepicker">
+                            <label>Due Date for Project</label>
+                            <input 
+                            onChange={handleFormChange}
+                            name="dueDate" 
+                            value={ProjectForm.dueDate}
+                            className="form-control" />
+                            {/* <input class="datepicker" data-date-format="mm/dd/yyyy"></input>
+                            <div className="input-group-addon">
+                                <span className="glyphicon glyphicon-th" />
+                            </div> */}
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
-    )}
+    )
+}
 
 export default ProjectForm
