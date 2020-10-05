@@ -43,12 +43,6 @@ const employeeSchema = new Schema({
       ref: "Project",
     },
   ],
-  projectsAssigned: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
-    },
-  ],
   team: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Team",
