@@ -37,16 +37,16 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
         company: data.company,
       });
       // await employee.save();
-      console.log(employee)
+     
       
       let employeeId = await employee.returnid();
-      await employee.save();
-      console.log(`Employee ID: ${employeeId}`)
+     
+      
       let pass = employee.returnPassword();
-      console.log(pass)
+     
       const salt = await bcrypt.genSalt(10);
       employee.password = await bcrypt.hash(pass, salt);
-
+      await employee.save();
     if(employeeId) {
       const employeeCompany = await Company.findByIdAndUpdate(
         (req.body.company),

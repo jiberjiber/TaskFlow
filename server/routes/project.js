@@ -3,6 +3,7 @@ const {Scope}= require('.././models/scope');
 const {Task}= require('.././models/task');
 const auth=require('../middleware/auth')
 const manager=require('../middleware/managerAuth')
+const validation= require('./validation')
 const mongoose=require('mongoose');
 const express= require('express');
 const router = express.Router();
@@ -14,6 +15,10 @@ const { ObjectID } = require('mongodb');
 
 //create projects
 router.post('/',[auth,manager], async (req,res)=>{
+    const {error}= validation.validCreateProject(req.body);
+    if(error) return res.status(400).send('missing input or input field requirements not met')
+    
+
 
  const { _id, firstName }=req.employee;
     const newProject=new Project({
@@ -30,8 +35,8 @@ dueDate:req.body.dueDate
     newProject.lastUpdatedDateOn();
     // console.log(req.employee)
     await newProject.save();
-
-    res.send(newProject)
+const projects= await Project.find({authorId:_id}).select().sort('dateCreated');
+    res.send(projects)
 })
 
 //get all projects
@@ -87,6 +92,9 @@ if (data){
 
 //update one project
 router.put('/:id',async(req,res)=>{
+    const {error}= validation.validCreateProject(req.body);
+    if(error) return res.status(400).send('missing input or input field requirements not met')
+
     const getThisProject= await Project.find({_id:{$in:req.params.id}}).select()
     if (!getThisProject) return res.status(400).send('The project with this id is not found')
 
@@ -161,8 +169,8 @@ if (findProject){
     //3 deleting the project schema
     await Project.findByIdAndRemove(findProject._id)
     const newProjectList=await Project.find({authorId:_id}).select().sort('dateCreated');
-    // res.send("the project and all its elements have been deleted")
-    res.send(newProjectList)
+    res.send("the project and all its elements have been deleted")
+    // res.send(newProjectList)
 }else{
     res.status(400).send(`this project id doesn't exist`)
 }
