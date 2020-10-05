@@ -15,4 +15,5 @@ const validateCompanyData = () => {
 
 module.exports = {
   validateCompanyData,
+  validate
 };
