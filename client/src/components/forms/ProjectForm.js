@@ -69,7 +69,7 @@ const onFormSubmit = (event)=>{
                             <label>Title of Project</label>
                             <input
                             onChange={handleFormChange}
-                            name="Title"
+                            name="title"
                             value={ProjectForm.title}
                             className="form-control"/>
                         </div>

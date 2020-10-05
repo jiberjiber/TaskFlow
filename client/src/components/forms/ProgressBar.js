@@ -1,3 +1,7 @@
+//this file handles rendering the progression of 
+//making a new project ( by filling out 3 forms)
+//it renders next and back buttons as well as a
+//cancel button to return to the dashboard
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
@@ -5,7 +9,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import ProjectForm from "./forms/ProjectForm";
+import ProjectForm from "./ProjectForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Create New Project', 'Create Tasks', 'Create and Assign Teams'];
+  return ['Create New Project', 'Create Teams', 'Create and Assign Tasks'];
 }
 
 function getStepContent(stepIndex) {

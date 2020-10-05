@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Formik } from "formik";
 import  ProjectForm  from "./ProjectForm";
+import TeamForm from"./TeamForm"
 import TasksForm from './TasksForm'
 import Paper from "@material-ui/core/Paper";
 import styles from "./styles.css"
@@ -20,7 +21,7 @@ class FormWrapper extends Component {
          <Paper elevation={1} className={classes.paper}>
            
            <Formik
-             render={props => <TeamsForm {...props} />}
+             render={props => <TeamForm {...props} />}
            />
          </Paper>
        </div>
