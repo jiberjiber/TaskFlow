@@ -14,6 +14,7 @@ const manager = require("../middleware/managerAuth");
 const isManager = require("../middleware/managerAuth");
 const { Project } = require("../models/project.js");
 const { Scope } = require("../models/scope.js");
+const { Task } = require("../models/task.js");
 
 //Register new employee
 router.post("/register", validateSignupData(), validate, async (req, res) => {
@@ -35,37 +36,36 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
         email: data.email,
         password: data.password,
         company: data.company,
+        team: data.team,
       });
       // await employee.save();
-      console.log(employee)
-      
+
       let employeeId = await employee.returnid();
-      await employee.save();
-      console.log(`Employee ID: ${employeeId}`)
+
       let pass = employee.returnPassword();
-      console.log(pass)
+
       const salt = await bcrypt.genSalt(10);
       employee.password = await bcrypt.hash(pass, salt);
-
-    if(employeeId) {
-      const employeeCompany = await Company.findByIdAndUpdate(
-        (req.body.company),
-        { $push: { "employees": employeeId } },
-        { new: true }
-      );
-
-      await employeeCompany.save();
-      console.log(employeeCompany)
-      res.send({
-        firstName: employee.firstName,
-        lastName: employee.lastName,
-        email: employee.email,
-        _id: employee._id,
-        isManager: employee.isManager,
-        company: employee.company,
-        members: employee.members
-      });
-    }}
+      await employee.save();
+      if (employeeId) {
+        const employeeCompany = await Company.findByIdAndUpdate(
+          req.body.company,
+          { $push: { employees: employeeId } },
+          { new: true }
+        );
+        await employeeCompany.save();
+        console.log(employeeCompany);
+        res.send({
+          firstName: employee.firstName,
+          lastName: employee.lastName,
+          email: employee.email,
+          _id: employee._id,
+          isManager: employee.isManager,
+          company: employee.company,
+          members: employee.members,
+        });
+      }
+    }
   } catch (err) {
     console.log(err);
     res.status(400).send(err);
@@ -75,28 +75,29 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
 //User login
 router.post("/login", async (req, res) => {
   const checkUser = await Employee.findOne({ email: req.body.email });
-  console.log(req.body);
-  if (!checkUser) return res.status(400).send("iuser not registered ");
+  console.log(req.body, checkUser);
 
+  if (!checkUser) return res.status(400).send("User is not registered.");
   const validPassword = await bcrypt.compare(
     req.body.password,
     checkUser.password
   );
-  if (!validPassword) return res.status(400).send("invalid email or password");
-
+  if (!validPassword) return res.status(400).send("Invalid email or password.");
   const token = await checkUser.generateToken();
-
   res.send(token);
   console.log(token);
 });
 
 //Get all users
 router.get("/", [auth, manager], async (req, res) => {
-  const employees = await Employee.find().select().sort("lastName");
+  const { _id } = req.employee;
+  const allEmployees = await Company.find({ employees: { $in: _id } })
+    .select()
+    .populate("employees");
 
-  if (!employees) return res.status(400).send("No employees found.");
+  if (!allEmployees) return res.status(400).send("No employees found.");
 
-  let employeeData = employees;
+  let employeeData = allEmployees;
   let employeeArr = [];
 
   employeeData.map((employee) => {
@@ -106,8 +107,8 @@ router.get("/", [auth, manager], async (req, res) => {
       employee.isManager,
       employee.email,
       employee.projectsCreated,
-      employee.projectsAssigned,
-      employee.company;
+      employee.company,
+      employee.team;
 
     return employeeArr.push(employee);
   });
@@ -124,45 +125,7 @@ router.get("/:id", [auth, manager], async (req, res) => {
   res.send(getOneEmployee);
 });
 
-
-
 //TODO:
 //Delete a user
-router.delete("/delete/:id", [auth,manager], async (req, res) => {
-  const user = await Employee.findById(req.params.id).select("_id");
-  //TODO: connect team with project
-  if (!user) return res.status(400).send("This user does not exist.");
-  // console.log("manager" + req.params.isManager)
-  if(user.isManager) {
-    const projects = await Project.find({ _id: { $in: {authorId: user.id} }}).select("_id");
-    if(!projects.length > 0 ) return console.log("User has no created projects.")
-
-  await projects.deleteMany({ authorId: user.id }, async (error, projectMatch) => {
-    if (error) return res.status(400).send(error);
-
-    const projectId = projectMatch._id;
-    console.log("Projects FOUND:" + projectMatch);
-
-
-    await Scope.deleteMany({ parentProject: projectId }, (err) => {
-      if (err) return res.status(400).send("Could not delete projects");
-      console.log("Projects deleted");
-    });
-  });
-}
-
-  // }
-  //TODO:find tasks and delete tasks
-
-  //TODO: find scopes and delete scopes
-
-  //TODO:find projects
-
-  //TODO:delete projects
-
-  //TODO: find and delete empl
-
-  // 
-});
 
 module.exports = router;
