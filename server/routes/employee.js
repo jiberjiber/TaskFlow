@@ -54,7 +54,6 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
           { new: true }
         );
         await employeeCompany.save();
-        console.log(employeeCompany);
         res.send({
           firstName: employee.firstName,
           lastName: employee.lastName,
@@ -127,5 +126,53 @@ router.get("/:id", [auth, manager], async (req, res) => {
 
 //TODO:
 //Delete a user
+router.delete("/delete/:id", [auth, manager], async (req, res) => {
+  const { _id, firstName, lastName } = req.employee;
+  const userToDelete = await Employee.findById(req.params.id);
+  const userId = userToDelete._id;
+  try {
+
+    if (!userToDelete) return res.status(400).send("This user does not exist.");
+    if (userToDelete.isManager) {
+      await Task.deleteMany({ authorId: userId }, (err) => {
+        err
+          ? res.status(400).send(err)
+          : Scope.deleteMany({ authorId: userId }, (err) => {
+              err
+                ? res.status(400).send(err)
+                : Project.deleteMany({ authorId: userId }, (err) => {
+                    err
+                      ? res.status(400).send(err)
+                      : console.log(
+                          `Successfully deleted projects created by ${userId}`
+                        );
+                  });
+            });
+      });
+      await Employee.findByIdAndRemove({ _id: userId }, (err) => {
+        err
+          ? res.status(400).send(err)
+          : res
+              .status(200)
+              .send(`User with id ${userId} was deleted successfully.`);
+      });
+      return res
+        .status(200)
+        .send(`User with id ${userId} was deleted successfully.`);
+    } else {
+      await Employee.findByIdAndRemove({ _id: userId }, (err) => {
+        err
+          ? res.status(400).send(err)
+          : res
+              .status(200)
+              .send(`User with id ${userId} was deleted successfully.`);
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400);
+    return res.send("Employee could not be deleted.");
+  }
+});
 
 module.exports = router;
