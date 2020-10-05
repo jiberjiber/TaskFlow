@@ -1,3 +1,29 @@
+<<<<<<< HEAD
+import React from 'react';
+// eslint-disable-next-line
+import SignIn from './pages/SignIn';
+import Dashboard from './pages/Dashboard';
+import './App.css';
+import { Container } from '@material-ui/core';
+//import Createform from './pages/CreateNew';
+//import ProjectForm from './components/forms/ProjectForm';
+import ProgressBar from './components/forms/ProgressBar'
+import ProjectForm from './components/forms/ProjectForm';
+import FormWrapper from './components/forms/FormWrapper';
+import TasksForm from './components/forms/TasksForm';
+import TeamForm from './components/forms/TeamForm'
+
+function App() {
+  return (
+	  <Container>
+		  
+		  <FormWrapper>
+		  	<TeamForm/>
+		  </FormWrapper>
+		  
+	  </Container>
+  );
+=======
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import jwtDecode from 'jwt-decode';
@@ -74,6 +100,7 @@ function App() {
 			</Route>
 		</BrowserRouter>
 	);
+>>>>>>> 7a94e4afb2a53862aebbe632ebd7b3cd5081be9e
 }
 
 export default App;
