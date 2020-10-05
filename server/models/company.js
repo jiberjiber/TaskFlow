@@ -9,10 +9,11 @@ const CompanySchema = new Schema({
     required: true,
     unique: true,
   },
-  creator: {
-    type: String,
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Employee"
   },
-  creatorId: {
+  ownerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Employee"
   },
