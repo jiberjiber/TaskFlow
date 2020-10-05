@@ -11,7 +11,6 @@ router.post("/:create", validateCompanyData(), validate, async (req, res) => {
   try {
     // Create a company
     const data = req.body;
-
     const getCompany = await Company.findOne({ name: data.name });
     if (getCompany) {
       return res
@@ -20,23 +19,12 @@ router.post("/:create", validateCompanyData(), validate, async (req, res) => {
           "Company already exists. Please choose from the dropdown menu instead."
         );
     } else {
-      // const creator = req.employee;
-      // let employeeArr = [];
-
-      // //Add company creator to the list of company employees
-      // await employeeArr.push(creator);
-      const { _id, firstName, lastName } = req.employee;
-
       const newCompany = new Company({
         employees: data.employees,
         name: data.name,
         url: data.url,
-        owner: `${firstName} ${lastName}`,
-        ownerId: _id,
       });
-
       await newCompany.save();
-
       res.send(newCompany);
     }
   } catch (err) {
@@ -47,8 +35,9 @@ router.post("/:create", validateCompanyData(), validate, async (req, res) => {
 });
 
 // Get all companies
-router.get("/", [auth, manager], async (req, res) => {
+router.get("/", async (req, res) => {
   Company.find({})
+    .sort("name")
     .populate("employees")
     .then((companies) => {
       if (!companies) {
