@@ -1,19 +1,18 @@
 const { body, validationResult } = require("express-validator");
-
 const { validate } = require("./signupValidate");
 
-const validateCompanyData = () => {
+const validateTeamData = () => {
   return [
     //Company name cannot be blank
     body("name")
       .trim()
       .exists()
-      .isLength({ min: 1, max: 50 })
-      .withMessage("Please enter a valid company name."),
+      .isLength({ min: 3, max: 50 })
+      .withMessage("Please enter a valid team name."),
   ];
 };
 
 module.exports = {
-  validateCompanyData,
-  validate
+  validateTeamData,
+  validate,
 };

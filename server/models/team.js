@@ -9,12 +9,16 @@ const TeamSchema = new Schema({
     trim: true,
   },
   owner: {
-  type: String,
+    type: String,
   },
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Employee",
-    },
+  },
+  company: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Employee",
+  },
   members: [
     {
       type: mongoose.Schema.Types.ObjectId,

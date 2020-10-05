@@ -5,6 +5,7 @@ const validateSignupData = () => {
     body("firstName")
       .trim()
       .exists()
+      .isAlphanumeric()
       .isLength({ min: 2, max: 50 })
       .withMessage("Please enter a valid name."),
 
@@ -12,6 +13,7 @@ const validateSignupData = () => {
     body("lastName")
       .trim()
       .exists()
+      .isAlphanumeric()
       .isLength({ min: 1, max: 50 })
       .withMessage("Please enter a valid name."),
 
@@ -20,13 +22,15 @@ const validateSignupData = () => {
       .trim()
       .exists()
       .isAlphanumeric()
-      .withMessage("Username cannot contin special characters.")
+      .withMessage("Username cannot contain special characters.")
       .isLength({ min: 3, max: 50 })
       .withMessage("Username must be at least 3 characters long."),
+
     // password must be at least 5 chars long
     body("password")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters long"),
+
     // Check for correct email syntax
     body("email")
       .isEmail()
@@ -35,6 +39,7 @@ const validateSignupData = () => {
       .withMessage("Please enter a valid email"),
   ];
 };
+
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
