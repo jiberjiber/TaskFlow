@@ -12,21 +12,11 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.20.0",
-<<<<<<< HEAD
-    "formik": "^2.1.5",
-    "formik-material-ui": "^3.0.0",
-    "formik-material-ui-pickers": "0.0.11",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3",
-    "yup": "^0.29.3"
-=======
     "jwt-decode": "^3.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router": "^5.2.0",
     "react-scripts": "3.4.3"
->>>>>>> 7a94e4afb2a53862aebbe632ebd7b3cd5081be9e
   },
   "scripts": {
     "start": "react-scripts start",

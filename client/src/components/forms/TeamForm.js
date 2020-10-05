@@ -26,12 +26,9 @@ const TeamForm = props => {
         });
     }
     function handleFormChange (e){
-        //console.log(e.target.value);
         const {name, value}=e.target;
-        //setProjectForm([name]=e.target.value)
-        //e.target.value = setProjectForm({...ProjectForm, [name]: value})
         setTeamForm({...TeamForm,[name]:value});
-        // ////setFormFeedback(false)
+        //setFormFeedback(false)
         console.log({name,value})
     }
 
