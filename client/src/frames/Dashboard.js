@@ -99,7 +99,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DashBoard(props) {
-
 	const classes = useStyles();
 
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -126,9 +125,9 @@ export default function DashBoard(props) {
 	};
 
 	const handleLogout = () => {
-		localStorage.removeItem('token');
-		window.location = '/login';
-	}
+		localStorage.removeItem("token");
+		window.location = "/login";
+	};
 
 	return (
 		<ThemeProvider theme={darkTheme}>
@@ -156,10 +155,16 @@ export default function DashBoard(props) {
 								</IconButton>
 							</Grid>
 							<Grid item>
-								<Typography variant="h4">Welcome, {props.user.firstName}!</Typography>
+								<Typography variant="h4">
+									Welcome, {props.user.firstName}!
+								</Typography>
 							</Grid>
 							<Grid item>
-								<Button className={classes.appBarRight} color="inherit" onClick={handleLogout}>
+								<Button
+									className={classes.appBarRight}
+									color="inherit"
+									onClick={handleLogout}
+								>
 									Logout <ExitToAppOutlinedIcon />
 								</Button>
 							</Grid>
@@ -194,14 +199,17 @@ export default function DashBoard(props) {
 							<ListItemIcon name="teams">
 								<DashboardOutlinedIcon />
 							</ListItemIcon>
-							<ListItemText primary={"Dashboard"}/>
+							<ListItemText primary={"Dashboard"} />
 						</ListItem>
-						<ListItem button key={"admin"} component="a" href="/admin">
-							<ListItemIcon>
-								<SupervisorAccountOutlinedIcon />
-							</ListItemIcon>
-							<ListItemText primary={"Admin"} />
-						</ListItem>
+						{props.user.isManager && (
+							<ListItem button key={"admin"} component="a" href="/admin">
+								<ListItemIcon>
+									<SupervisorAccountOutlinedIcon />
+								</ListItemIcon>
+								<ListItemText primary={"Admin"} />
+							</ListItem>
+						)}
+
 						<Divider />
 						{/* <ListItem button key={"allmail"} component="a" href="/mail">
 							<ListItemIcon>
