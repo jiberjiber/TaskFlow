@@ -1,0 +1,15 @@
+.Project {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px
+}
+.Field {
+margin-top: 15px;
+margin-bottom:15px;
+}
+.container {
+    max-width: "200px"
+  }
+ 
