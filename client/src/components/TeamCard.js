@@ -6,13 +6,13 @@ export default function TeamCard(props) {
 		<Grid item xs={4}>
 			<Card>
 				<CardContent>
-					<Typography variant="h3" color="textSecondary" gutterBottom>
+					<Typography variant="h3" gutterBottom>
 						{props.title}
 					</Typography>
-					<Typography variant="p">{props.content}</Typography>
+					<Typography variant="caption">Due Date: {props.content}</Typography>
 				</CardContent>
 				<CardActions>
-					<Button variant="outlined" size="small">View Team</Button>
+					<Button variant="contained" size="small">View Team</Button>
 				</CardActions>
 			</Card>
 		</Grid>
