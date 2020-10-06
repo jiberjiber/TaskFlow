@@ -154,11 +154,7 @@ export default function DashBoard(props) {
 									<MenuIcon />
 								</IconButton>
 							</Grid>
-							<Grid item>
-								<Typography variant="h4">
-									Welcome, {props.user.firstName}!
-								</Typography>
-							</Grid>
+							
 							<Grid item>
 								<Button
 									className={classes.appBarRight}
