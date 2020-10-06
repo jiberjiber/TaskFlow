@@ -98,12 +98,11 @@ const useStyles = makeStyles((theme) => ({
 export default function ProjectInfo(props) {
 	const { id } = useParams();
 
+	// eslint-disable-next-line
 	const [value, setValue] = useState(0);
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
-
-	const project = {};
 
 	const classes = useStyles();
 
