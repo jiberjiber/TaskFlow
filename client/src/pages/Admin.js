@@ -85,7 +85,7 @@ export default function Admin(props) {
 			<Grid className={classes.m25}>
 				<Grid item xs style={{ textAlign: "center" }}>
 					<Typography variant="h4">New Project</Typography>
-					<Tooltip title="Add" component="button" onClick={createProject}>
+					<Tooltip title="Add" component="button" href="/admin/new" onClick={createProject}>
 						<Fab color="primary" className={classes.fab}>
 							<AddIcon />
 						</Fab>
