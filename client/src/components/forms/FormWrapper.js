@@ -21,7 +21,7 @@ class FormWrapper extends Component {
          <Paper elevation={1} className={classes.paper}>
            
            <Formik
-             render={props => <TeamForm {...props} />}
+             render={props => <ProjectForm {...props} />}
            />
          </Paper>
        </div>
