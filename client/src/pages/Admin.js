@@ -58,8 +58,10 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function Admin(props) {
 	const classes = useStyles();
+	// eslint-disable-next-line
 	const [value, setValue] = React.useState(0);
 
+	// eslint-disable-next-line
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
