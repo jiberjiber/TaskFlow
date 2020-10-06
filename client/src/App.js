@@ -8,8 +8,9 @@ import TeamOverview from "./pages/TeamOverview";
 import Admin from "./pages/Admin";
 import ProjectInfo from "./pages/ProjectInfo";
 import projectsArray from "./projectsArray";
-import Error from './pages/Error';
-import EmployeeOverview from './pages/EmployeeOverview';
+import Error from "./pages/Error";
+import EmployeeOverview from "./pages/EmployeeOverview";
+import CreateNew from "./pages/CreateNew";
 import "./App.css";
 
 function App() {
@@ -42,11 +43,11 @@ function App() {
 		if (window.location.pathname !== "/login") {
 			decodeToken();
 		}
-	// eslint-disable-next-line
+		// eslint-disable-next-line
 	}, []);
 
 	function getProjects() {
-			Axios.get("/api/project")
+		Axios.get("/api/project")
 			.then((response) => {
 				setProjects(response.data);
 				console.log(response.data);
@@ -78,6 +79,20 @@ function App() {
 					<div>
 						<Dashboard user={user} />
 						<Admin projects={projectsArray} />
+					</div>
+				)}
+				{!user.isManager && (
+					<div>
+						<Dashboard user={user} />
+						<Error />
+					</div>
+				)}
+			</Route>
+			<Route exact path="/admin/new">
+				{user.isManager && (
+					<div>
+						<Dashboard user={user} />
+						<CreateNew />
 					</div>
 				)}
 				{!user.isManager && (
