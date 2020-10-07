@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Card, CardContent } from '@material-ui/core';
+import { Card, CardContent, Container } from '@material-ui/core';
 import styles from './styles.css'
 
 
@@ -41,6 +41,7 @@ const ProjectForm = () => {
                  description:ProjectForm.description,
                  dueDate:ProjectForm.dueDate,
             })
+            //pull data from this response
                 .then(function (response) {
                     console.log(response);
                 })
@@ -64,6 +65,7 @@ const ProjectForm = () => {
         <div styles={styles} className="forms">
             <Card styles={{marginLeft: 100}}>
                 <CardContent>
+                    <Container>
                     <form >
                         <div className="form-group">
                             <label>Title of Project</label>
@@ -97,6 +99,7 @@ const ProjectForm = () => {
                         </div>
                         <button onClick={onFormSubmit} className="btn btn-primary">Submit Project</button>
                     </form>
+                    </Container>
                 </CardContent>
             </Card>
         </div>
