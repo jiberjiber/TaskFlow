@@ -6,6 +6,7 @@ import SignIn from "./pages/SignIn";
 import Dashboard from "./frames/Dashboard";
 import TeamOverview from "./pages/TeamOverview";
 import Admin from "./pages/Admin";
+import CreateNew from "./pages/CreateNew"
 import ProjectInfo from "./pages/ProjectInfo";
 import projectsArray from "./projectsArray";
 import Error from "./pages/Error";
@@ -102,12 +103,17 @@ function App() {
 					</div>
 				)}
 			</Route>
+			<Route exact path="/create">
+				<Dashboard user={user}/>
+				<CreateNew/>
+			</Route>
 			<Route exact path="/project/:id">
 				<Dashboard user={user} />
 				<ProjectInfo />
 			</Route>
 		</BrowserRouter>
 	);
+
 }
 
 export default App;

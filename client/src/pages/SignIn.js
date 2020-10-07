@@ -48,7 +48,7 @@ export default function SignIn() {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		console.log('Form input:', form);
+		//console.log('Form input:', form);
 		Axios.post(`/api/employee/login`, form)
 			.then((response) => {
 				localStorage.setItem('token', response.data);

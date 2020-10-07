@@ -48,12 +48,12 @@ const TeamForm = props => {
                     <select class="custom-select"multiple>
                     <label>Please select team members</label>
                     <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                    <option value={TeamForm.members}>{selectMultiple}</option>
+                    <option onClick={selectMultiple} value="1">One</option>
+                    <option onClick={selectMultiple} value="2">Two</option>
+                    <option onClick={selectMultiple} value="3">Three</option>
+                    <option onClick={selectMultiple} value={TeamForm.members}></option>
                 </select>
-                <button className="btn btn-primary">Create Team!</button>
+                <button onClick={handleSubmit} className="btn btn-primary">Create Team!</button>
             </form>
         </div>
     )
