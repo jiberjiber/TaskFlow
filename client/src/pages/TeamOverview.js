@@ -47,9 +47,9 @@ const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
 		position: "fixed",
-		left: "72px",
+		left: "3.5%",
 		top: "64px",
-		width: "100%",
+		right: "0px",
 	},
 	appBarBG: {
 		backgroundColor: "#333333",
@@ -90,6 +90,8 @@ export default function TeamOverview(props) {
 					value={value}
 					onChange={handleChange}
 					aria-label="project-tabs"
+					variant="scrollable"
+					scrollButtons="auto"
 				>
 					{props.projects.length>0 && props.projects.map((item, index) => (
 						<Tab label={item.title} name={item._id} {...a11yProps(index)} key={item._id} />
