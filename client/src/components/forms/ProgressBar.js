@@ -10,6 +10,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ProjectForm from "./ProjectForm";
+import TeamForm from "./TeamForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,15 +26,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Create New Project', 'Create Teams', 'Create and Assign Tasks'];
+  return ['ProjectForm', 'TeamForm', 'Create and Assign Tasks'];
 }
 
 function getStepContent(stepIndex) {
   switch (stepIndex) {
     case 0:
-      return 'Create New Project';
+      return (<ProjectForm/>);
     case 1:
-      return 'Create Tasks';
+      return (<TeamForm/>);
     case 2:
       return 'Create and Assign Teams';
     default:
@@ -45,7 +46,7 @@ export default function HorizontalLabelPositionBelowStepper() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
-
+//NEXT BUTTON
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };

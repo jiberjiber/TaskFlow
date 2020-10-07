@@ -1,98 +1,101 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Box, Card, CardContent, Typography } from '@material-ui/core';
+import { Card, CardContent } from '@material-ui/core';
 import styles from './styles.css'
 
 
-
 //new project form component
-const ProjectForm = () =>{
+const ProjectForm = () => {
 
-const [ProjectForm, setProjectForm] = useState({
-    title:"",
-    description:"Test",
-    dueDate:"Test"
-    
-})
-const [errors,setErrors] = useState({})
-//const [formFeedback,setFormFeedback] = useState({})
+    const [ProjectForm, setProjectForm] = useState({
+        title: "",
+        description: "",
+        dueDate: ""
 
-function handleFormChange (e){
-    //console.log(e.target.value);
-    const {name, value}=e.target;
-    //setProjectForm([name]=e.target.value)
-    //e.target.value = setProjectForm({...ProjectForm, [name]: value})
-    setProjectForm({...ProjectForm,[name]:value});
-    // ////setFormFeedback(false)
-    console.log({name,value})
-}
+    })
+    const [errors, setErrors] = useState({})
+    const [formFeedback, setFormFeedback] = useState(false)
 
+    function handleFormChange(e) {
+        //console.log(e.currentTarget.name)
+        const { name, value } = e.currentTarget;
+        setProjectForm({ ...ProjectForm, [name]: value });
+        setFormFeedback(false)
 
-
-const onFormSubmit = (event)=>{
-    event.preventDefault()
-
-    // const errors=validate();
-    // setErrors({...errors || {}})
-    if (errors){
-        return
     }
-    else{
-    // console.log(form)
-    //we will run an axios 
-    axios({
-        method: 'post',
-        url: '',
-        data: {
-         //form data props
-        }
-      });
-      const clearState={
-      title:"",
-      description:"",
-      dueDate:""}
-    
-   setProjectForm({...clearState})
-    
-    //setFormFeedback(true)
+
+
+
+    const onFormSubmit = (event) => {
+        event.preventDefault()
+        console.log(ProjectForm)
+        // if (errors) {
+        //     console.log(errors)
+        //     return
+        // }
+        // else {
+            
+            //we will run an axios post request
+            axios.post('/api/project', {
+                 title:ProjectForm.title,
+                 description:ProjectForm.description,
+                 dueDate:ProjectForm.dueDate,
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            
+            const clearState = {
+                title: "",
+                description: "",
+                dueDate: ""
+            }
+
+            setProjectForm({ ...clearState })
+
+            setFormFeedback(true)
+        
     }
-    }
-    
+
     return (
         <div styles={styles} className="forms">
-            <Card>
+            <Card styles={{marginLeft: 100}}>
                 <CardContent>
-                    <form>
+                    <form >
                         <div className="form-group">
                             <label>Title of Project</label>
                             <input
-                            onChange={handleFormChange}
-                            name="title"
-                            value={ProjectForm.title}
-                            className="form-control"/>
+                                onChange={handleFormChange}
+                                name="title"
+                                value={ProjectForm.title}
+                                className="form-control" />
                         </div>
                         <div className="form-group">
                             <label>Project Objective</label>
                             <small className="form-text text-muted">Please give a brief description of the goal of your project</small>
-                            <textarea 
-                            onChange={handleFormChange}
-                            name="description"
-                            value={ProjectForm.description} 
-                            className="form-control" 
-                            rows={3} defaultValue={""} />
+                            <input
+                                onChange={handleFormChange}
+                                name="description"
+                                value={ProjectForm.description}
+                                className="form-control"
+                                rows={3}/>
                         </div>
                         <div className="form-group date" data-provide="datepicker">
-                            <label>Due Date for Project</label>
-                            <input 
-                            onChange={handleFormChange}
-                            name="dueDate" 
-                            value={ProjectForm.dueDate}
-                            className="form-control" />
+                            <label>Due Date for Project(Please Format as "MM/DD/YYYY")</label>
+                            <input
+                                onChange={handleFormChange}
+                                name="dueDate"
+                                value={ProjectForm.dueDate}
+                                className="form-control" />
                             {/* <input class="datepicker" data-date-format="mm/dd/yyyy"></input>
                             <div className="input-group-addon">
                                 <span className="glyphicon glyphicon-th" />
                             </div> */}
                         </div>
+                        <button onClick={onFormSubmit} className="btn btn-primary">Submit Project</button>
                     </form>
                 </CardContent>
             </Card>
