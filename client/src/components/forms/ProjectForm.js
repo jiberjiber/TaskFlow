@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Card, CardContent } from '@material-ui/core';
 import styles from './styles.css'
 
+
 //new project form component
 const ProjectForm = () => {
 
@@ -32,7 +33,7 @@ const ProjectForm = () => {
         //     return
         // }
         // else {
-
+            
             //we will run an axios post request
             axios.post('/api/project', {
                 data: ProjectForm
@@ -43,11 +44,7 @@ const ProjectForm = () => {
                 .catch(function (error) {
                     console.log(error);
                 });
-            // axios({
-            //     method: 'post',
-            //     url: '/api/project',
-            //     data: ProjectForm
-            //   });
+            
             const clearState = {
                 title: "",
                 description: "",
@@ -62,9 +59,9 @@ const ProjectForm = () => {
 
     return (
         <div styles={styles} className="forms">
-            <Card>
+            <Card styles={{marginLeft: 100}}>
                 <CardContent>
-                    <form>
+                    <form >
                         <div className="form-group">
                             <label>Title of Project</label>
                             <input
@@ -81,10 +78,10 @@ const ProjectForm = () => {
                                 name="description"
                                 value={ProjectForm.description}
                                 className="form-control"
-                                rows={3} defaultValue={""} />
+                                rows={3}/>
                         </div>
                         <div className="form-group date" data-provide="datepicker">
-                            <label>Due Date for Project</label>
+                            <label>Due Date for Project(Please Format as "MM/DD/YYYY")</label>
                             <input
                                 onChange={handleFormChange}
                                 name="dueDate"
