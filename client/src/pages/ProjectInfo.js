@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import {
@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import Tab from "@material-ui/core/Tab";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Axios from "axios";
 
 function CircularProgressWithLabel(props) {
 	return (
@@ -100,11 +101,22 @@ export default function ProjectInfo(props) {
 
 	// eslint-disable-next-line
 	const [value, setValue] = useState(0);
+	const [project, setProject] = useState({});
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
 
 	const classes = useStyles();
+
+	useEffect(()=> {
+		Axios.get('/api/project/' + id)
+		.then(response => {
+			console.log(response.data);
+		})
+		.catch(err => {
+			console.log(err);
+		});
+	},[])
 
 	// Do calcs to find progress
 	let progress = 60;
