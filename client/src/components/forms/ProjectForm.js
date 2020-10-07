@@ -17,7 +17,8 @@ const ProjectForm = () => {
     const [formFeedback, setFormFeedback] = useState(false)
 
     function handleFormChange(e) {
-        const { name, value } = e.target;
+        //console.log(e.currentTarget.name)
+        const { name, value } = e.currentTarget;
         setProjectForm({ ...ProjectForm, [name]: value });
         setFormFeedback(false)
 
@@ -27,7 +28,7 @@ const ProjectForm = () => {
 
     const onFormSubmit = (event) => {
         event.preventDefault()
-
+        console.log(ProjectForm)
         // if (errors) {
         //     console.log(errors)
         //     return
@@ -36,7 +37,9 @@ const ProjectForm = () => {
             
             //we will run an axios post request
             axios.post('/api/project', {
-                data: ProjectForm
+                 title:ProjectForm.title,
+                 description:ProjectForm.description,
+                 dueDate:ProjectForm.dueDate,
             })
                 .then(function (response) {
                     console.log(response);
