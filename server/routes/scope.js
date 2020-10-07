@@ -1,6 +1,7 @@
 const {Scope}= require('.././models/scope');
 const {Project}= require('.././models/project');
 const {Task}= require('.././models/task');
+const { Team } = require("../models");
 const auth=require('../middleware/auth')
 const manager=require('../middleware/managerAuth')
 const validation= require('./validation')
@@ -16,9 +17,11 @@ router.post('/',[auth,manager], async (req,res)=>{
     const {error}= validation.validScope(req.body);
     if(error) return res.status(400).send('missing input or input field requirements not met')
     
-   
-   const check=await validation.checkProjectDueDate()
-
+   //checkdudates
+  const thisProject= await Project.findById(req.body.projectId).select('dueDate -_id')
+  
+//   const check=await validation.checkProjectDueDate(req.body.dueDate,thisProject.dueDate)
+//     if(check) return res.status(403).send('scope due date should be within the project timeframe')
     const { _id}=req.employee;
     const newScope=new Scope({
 scopeName:req.body.scopeName,
@@ -211,5 +214,16 @@ if (findScope){
 
 })
 
+router.post('/toteam',[auth,manager], async (req,res)=>{
+
+    const getTeam= await Team.findById(req.body.teamId).select()
+    if (!getTeam) return res.status(400).send(`this team doesn't exist`)
+
+    const findScope= await Scope.find({_id:req.body.scopeId}).select();
+    if (!findScope) return res.status(400).send(`this scope doesn't exist`)
+
+    const assignedScope= await Team.findByIdAndUpdate(req.body.teamId,{$push:{"assignedScope":req.body.scopeId}},{new: true})
+    res.send(`scope added to ${getTeam.name}`)
+})
 
 module.exports = router;

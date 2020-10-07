@@ -36,14 +36,19 @@ validTask:function validate(req) {
     
     return schema.validate(req);
 },
-checkProjectDueDate: function (){
-    // dueDate = moment(dueDate,'MMMM Do YYYY').format('MMMM Do YYYY');
-  
+checkProjectDueDate: function (duedate,current){
+   let due = moment('October 5th 2020','MMMM Do YYYY').fromNow();
+    // let newdate=moment(new Date(newdata)).format();
+    // let duedate=moment(new Date(current)).format();
+    console.log([duedate,current])
+    let check= moment(duedate,'MMMM Do YYYY').isAfter(moment(current,'MMMM Do YYYY'))
+   
+    
     // return dueDate;
-    console.log('running')
+    // console.log('running')
     // const getThisProject= Project.findById(req.body.projectId).select('dueDate')
     // console.log(getThisProject)
-    return
+    return check
   }
 }
 
