@@ -8,6 +8,7 @@
 //that the project was submitted successfully
 
 //team form submit
+//axios getemployees runs to populate option fields
 //user selects team members and clicks create team button
 //logic to see which members are selected and will send
 //selected members to a team array
@@ -18,7 +19,7 @@
 //create tasks form
 // a task field and then options to choose which team
 //user clicks assign task to finish process
-////optional tasks render to see what you have assigned
+////optional tasks render to see what you have assigned(axios get wrapper)
 //so far. Finish Button returns you to dashboard
 
 

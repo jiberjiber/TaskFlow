@@ -6,6 +6,9 @@
 // import Paper from "@material-ui/core/Paper";
 // import styles from "./styles.css"
 
+// move state and axios to pass data as a prop to
+// next form
+
 // class FormWrapper extends Component {
 //  constructor(props) {
 //    super(props);
@@ -19,7 +22,9 @@
 //      <React.Fragment>
 //           <div style={styles.Project} className={classes.container}>
 //          <Paper elevation={1} className={classes.paper}>
-           
+//            <ProgressBar>
+//                <ProjectForm/>
+//            </ProgressBar>
 //          </Paper>
 //        </div>
 //      </React.Fragment>
