@@ -5,13 +5,13 @@
 
 import { Box, Button, Card, CardContent, CircularProgress, Grid, Step, StepLabel, Stepper } from '@material-ui/core';
 import React, { useState } from 'react';
-import ProgressBar from '../components/forms/ProgressBar'
+import TestProgressBar from '../components/forms/TestProgressBar'
 export default function CreateNewProject() {
     return (
         <Card>
             <CardContent>
              
-              <ProgressBar/>
+              <TestProgressBar/>
                 
             </CardContent>
         </Card>
