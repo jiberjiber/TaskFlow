@@ -105,7 +105,7 @@ async function convert(x){
                 <CardContent>
                     <form >
                         <div className="form-group">
-                            <label>Title for your Project Scope</label>
+                            <label><h5>Title for your Scope(s)</h5></label>
                             <input
                                 onChange={handleFormChange}
                                 name="title"
@@ -114,22 +114,23 @@ async function convert(x){
                         </div>
                 
                         <div className="form-group date" data-provide="datepicker">
-                            <label>Due Date for Scope</label>
+                            {/* <label>Due Date for Scope(s)</label> */}
                             
                         </div>
-                        <label for="start">Start date:</label>
+                        <label for="start">Scope Completion date :</label>
                         <input onChange={handleDate} type="date" id="start" name="trip-start"
        value=''
        min="2020-01-01" max="2040-12-31"></input>
                         <div>
-                        <label htmlFor="choice">Choose a Project to add scope:</label>
+                        <label htmlFor="choice">Choose the project which this scope belongs:</label>
                 <select onChange={handleSelect} className="myDropDown">
                 <option>{'Your Projects'}</option>
                         {choice && choice.map((x,i) =>(
                             <option key={i} value={x._id} >{x.title}</option>
                         ))}
                 </select>
-                <h5>`      Due`{ScopeForm.dueDate && ScopeForm.dueDate }</h5>
+               
+                <h5>{ScopeForm.dueDate &&<h4>Due Date:{ScopeForm.dueDate}</h4>}</h5>
                         </div>
                         <button onClick={onFormSubmit} className="btn btn-primary">Add Scope</button>
                     </form>

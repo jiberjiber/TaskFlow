@@ -15,13 +15,26 @@ router.post("/add", [auth, manager], validateTeamData(), validate, async (req, r
       name: data.name,
       owner: `${firstName} ${lastName}`,
       ownerId: _id,
-      members: data.members,
-      assignedProjects: data.assignedProjects,
+      assignedScope: data.assignedProjects,
       company: company._id,
     });
+    let id= await newTeam.returnid()
     await newTeam.save();
-    console.log(newTeam);
-    res.send(newTeam);
+    let teamArray=req.body.members
+
+    teamArray.map(async (x)=>{
+     await Team.findByIdAndUpdate(id,
+        {$push:{"members":x}},{new: true}
+        )
+
+    })
+    const getThisTeam= await Team.findById(id).populate('members').select().sort('dateCreated');
+
+    
+    console.log(getThisTeam);
+    res.send(getThisTeam);
+
+
   } catch (err) {
     res.status(400);
     return res.send(err.message);
