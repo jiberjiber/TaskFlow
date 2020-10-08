@@ -8,15 +8,15 @@ import TeamOverview from "./pages/TeamOverview";
 import Admin from "./pages/Admin";
 import CreateNew from "./pages/CreateNew"
 import ProjectInfo from "./pages/ProjectInfo";
-import projectsArray from "./projectsArray";
 import Error from "./pages/Error";
 import EmployeeOverview from "./pages/EmployeeOverview";
 import "./App.css";
-import { Container, Grid, ThemeProvider, useMediaQuery, createMuiTheme } from "@material-ui/core";
+import { Grid, ThemeProvider, useMediaQuery, createMuiTheme } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import PasswordRecovery from "./pages/PasswordRecovery";
 import ForgotPassword from "./pages/ForgotPassword";
+import ScopeCard from './pages/ScopeCard';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -43,8 +43,6 @@ function App() {
 		[prefersDarkMode]
 	);
 
-	const theme = useTheme();
-
 	const classes = useStyles();
 
 	const getToken = () => {
@@ -68,7 +66,7 @@ function App() {
 	const getProjects = () => {
 			Axios.get("/api/project")
 				.then((response) => {
-					console.log(response.data);
+					//console.log(response.data);
 					setProjects(response.data);
 				})
 				.catch((err) => {
@@ -81,7 +79,9 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
-		if (window.location.pathname !== "/login") {
+		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/") {
+			console.log('nothing')
+		} else {
 			decodeToken();
 		}
 		// eslint-disable-next-line
@@ -141,7 +141,11 @@ function App() {
 				</Route>
 				<Route exact path="/project/:id">
 					<Dashboard user={user} />
-					<ProjectInfo />
+					<ProjectInfo projects={projects} />
+				</Route>
+				<Route exact path="/scope/:id">
+					<Dashboard user={user} />
+					<ScopeCard projects={projects} />
 				</Route>
 			</BrowserRouter>
 		);
