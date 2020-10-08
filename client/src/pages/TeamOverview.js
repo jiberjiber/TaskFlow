@@ -82,7 +82,7 @@ export default function TeamOverview(props) {
 			getProjects(props.projects[0]._id);
 		}
 	},[props]);
-
+	
 	return (
 		<div className={classes.root}>
 			<AppBar position="static">
@@ -101,8 +101,8 @@ export default function TeamOverview(props) {
 			{props.projects.length>0 && props.projects.map((project, index) => (
 				<TabPanel value={value} index={index} key={project._id}>
 					<Grid container spacing={3}>
-						{scopes.map((item) => (
-								<TeamCard title={item.scopeName} content={item.dueDate} key={item._id}/>
+						{scopes.map((item, index) => (
+								<TeamCard key={item._id} scope={item}/>
 						))}
 						{project.scope.length<1 && 
 							<Typography>This project has no scopes!</Typography>
