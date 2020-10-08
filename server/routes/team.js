@@ -53,7 +53,7 @@ router.get("/:id", [auth], async (req, res) => {
   res.send(oneTeam);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", [auth, manager], async (req, res) => {
   try {
     const teamId = req.params.id;
     const newData = req.body.members;
@@ -81,7 +81,7 @@ router.put("/:id", async (req, res) => {
 });
 
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", [auth, manager], async (req, res) => {
   try {
     await Team.findByIdAndRemove({ _id: req.params.id }, (err) => {
       err
