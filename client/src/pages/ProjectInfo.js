@@ -99,9 +99,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProjectInfo(props) {
 	const { id } = useParams();
 
-	// eslint-disable-next-line
 	const [value, setValue] = useState(0);
-	const [project, setProject] = useState({});
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
@@ -162,7 +160,7 @@ export default function ProjectInfo(props) {
 				<Box>
 					<AppBar position="static">
 						<Tabs
-							value="value"
+							value={value}
 							onChange={handleChange}
 							aria-label="project-scope-tabs"
 						>
