@@ -12,10 +12,12 @@ import {
 	TableCell,
 	TableRow,
 	TableHead,
+	Fab,
 } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
 import IconButton from "@material-ui/core/IconButton";
+import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -239,8 +241,11 @@ export default function ProjectInfo(props) {
 								<Typography variant="h3">Scope: {scope.scopeName}</Typography>
 							</Grid>
 							<Grid item>
+								<Tooltip title="Add Task" component="button" key={"create"} component="a" href="/create">
+									<IconButton><AddIcon color="primary" /></IconButton>
+								</Tooltip>
 								<Tooltip
-									title="Delete"
+									title="Delete Scope"
 									component="button"
 									name={scope._id}
 									onClick={deleteScope}
@@ -306,6 +311,18 @@ export default function ProjectInfo(props) {
 						</Table>
 					</div>
 				))}
+				<br />
+				<br />
+				<Grid className={classes.m25}>
+				<Grid item xs style={{ textAlign: "center" }}>
+					<Typography variant="h4">Add Scope</Typography>
+					<Tooltip title="Add Scope" component="button" key={"create"} component="a" href="/create">
+						<Fab color="primary" className={classes.fab}>
+							<AddIcon />
+						</Fab>
+					</Tooltip>
+				</Grid>
+			</Grid>
 		</Container>
 	);
 }
