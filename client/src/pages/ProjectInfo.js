@@ -11,12 +11,36 @@ import {
 	Grid,
 	Divider,
 	makeStyles,
+	withStyles,
 	AppBar,
 	Tabs,
+	TableContainer,
+	Table,
+	TableCell,
+	TableRow,
+	TableHead,
 } from "@material-ui/core";
 import Tab from "@material-ui/core/Tab";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
+
+const StyledTableCell = withStyles((theme) => ({
+	head: {
+		backgroundColor: theme.palette.common.black,
+		color: theme.palette.common.white,
+	},
+	body: {
+		fontSize: 14,
+	},
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+	root: {
+		"&:nth-of-type(odd)": {
+			backgroundColor: theme.palette.action.hover,
+		},
+	},
+}))(TableRow);
 
 function CircularProgressWithLabel(props) {
 	return (
@@ -42,42 +66,8 @@ function CircularProgressWithLabel(props) {
 	);
 }
 
-function TabPanel(props) {
-	const { children, value, index, ...other } = props;
-
-	return (
-		<div
-			role="tabpanel"
-			hidden={value !== index}
-			id={`simple-tabpanel-${index}`}
-			aria-labelledby={`simple-tab-${index}`}
-			{...other}
-		>
-			{value === index && (
-				<Box p={3}>
-					<Typography>{children}</Typography>
-				</Box>
-			)}
-		</div>
-	);
-}
-
-TabPanel.propTypes = {
-	children: PropTypes.node,
-	index: PropTypes.any.isRequired,
-	value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-	return {
-		id: `simple-tab-${index}`,
-		"aria-controls": `simple-tabpanel-${index}`,
-	};
-}
-
 const useStyles = makeStyles((theme) => ({
 	headerDisplay: {
-		width: "fit-content",
 		"& h2": {
 			margin: "10px",
 		},
@@ -94,30 +84,59 @@ const useStyles = makeStyles((theme) => ({
 	m50: {
 		margin: "50px",
 	},
+	tablePadding: {
+		margin: "20px",
+	},
 }));
 
 export default function ProjectInfo(props) {
 	const { id } = useParams();
-
+	const [currentProject, setCurrentProject] = useState({});
 	const [value, setValue] = useState(0);
+	const [progress, setProgress] = useState(0);
+	let project = {};
+
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
 
 	const classes = useStyles();
 
-	useEffect(()=> {
-		Axios.get('/api/project/' + id)
-		.then(response => {
-			console.log(response.data);
-		})
-		.catch(err => {
-			console.log(err);
+	useEffect(() => {
+		props.projects.map((item) => {
+			if (item._id === id) {
+				//console.log(item);
+				project = item;
+				setCurrentProject(item);
+			}
 		});
-	},[])
+
+		console.log("project object", project);
+		if (project.title) {
+			setProgress(calculateProgress());
+		}
+	}, [props]);
 
 	// Do calcs to find progress
-	let progress = 60;
+	const calculateProgress = () => {
+		let tasks = [];
+		project.scope.map((item) => {
+			//console.log(item);
+			item.task.map((task) => {
+				tasks.push(task);
+			});
+		});
+		//console.log(tasks);
+		let total = tasks.length;
+		let complete = 0;
+		tasks.map((item) => {
+			if (item.isComplete == true) {
+				complete++;
+			}
+		});
+		//console.log('percent', (complete/total)*100);
+		return (complete / total) * 100;
+	};
 
 	return (
 		<Container>
@@ -127,59 +146,114 @@ export default function ProjectInfo(props) {
 				justify="center"
 				className={classes.headerDisplay}
 			>
-				<Typography variant="h2">Project Title</Typography>
+				<Grid item>
+					<Typography variant="h2">{currentProject.title}</Typography>
+				</Grid>
 				<Divider orientation="vertical" flexItem />
-				<Grid container direction="column" justify="space-around" alignItems="center">
-					<Typography variant="body1">In Progress</Typography>
-					<CircularProgressWithLabel value={progress} />
+				<Grid item>
+					<Grid
+						container
+						direction="column"
+						justify="center"
+						alignItems="center"
+					>
+						<Grid item>
+							<Typography variant="h5">
+								{currentProject.isComplete ? "Complete" : "In Progress"}
+							</Typography>
+						</Grid>
+						<Grid item>
+							<CircularProgressWithLabel value={progress} />
+						</Grid>
+					</Grid>
 				</Grid>
 			</Grid>
-			<Grid
-				container
-				alignItems="flex-start"
-				justify="space-evenly"
-				className={classes.mainDisplayGrid}
-			>
-				<List>
-					<ListItem>
-						<ListItemText primary="Project ID" secondary={`ID ${id}`} />
-					</ListItem>
-					<ListItem>
-						<ListItemText primary="Project Owner" secondary="Mike" />
-					</ListItem>
-					<ListItem>
-						<ListItemText
-							primary="Description"
-							secondary="This is about a management software"
-						/>
-					</ListItem>
-					<ListItem>
-						<ListItemText primary="Due Date" secondary="October 10, 2020" />
-					</ListItem>
-				</List>
-				<Box>
-					<AppBar position="static">
-						<Tabs
-							value={value}
-							onChange={handleChange}
-							aria-label="project-scope-tabs"
-						>
-							<Tab label="Front-End" {...a11yProps(0)} />
-							<Tab label="Back-End" {...a11yProps(1)} />
-							<Tab label="QA/Testing" {...a11yProps(2)} />
-						</Tabs>
-					</AppBar>
-					<TabPanel value="bungus" index={0}>
-						Front End Tasks
-					</TabPanel>
-					<TabPanel value="value" index={1}>
-						Back End Tasks
-					</TabPanel>
-					<TabPanel value="value" index={2}>
-						QA/Testing Tasks
-					</TabPanel>
-				</Box>
-			</Grid>
+			<br />
+			<br />
+			<Table>
+				<TableHead>
+					<TableRow>
+						<StyledTableCell>
+							<Typography color="textPrimary">Description</Typography>
+						</StyledTableCell>
+						<StyledTableCell>
+							<Typography color="textPrimary">Owner</Typography>
+						</StyledTableCell>
+						<StyledTableCell>
+							<Typography color="textPrimary">Due Date</Typography>
+						</StyledTableCell>
+						<StyledTableCell>
+							<Typography color="textPrimary">ID</Typography>
+						</StyledTableCell>
+					</TableRow>
+					<StyledTableRow>
+						<TableCell>
+							<Typography color="textPrimary">
+								{currentProject.description}
+							</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography color="textPrimary">
+								{currentProject.creator}
+							</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography color="textPrimary">
+								{currentProject.dueDate}
+							</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography color="textPrimary">{currentProject._id}</Typography>
+						</TableCell>
+					</StyledTableRow>
+				</TableHead>
+			</Table>
+			{currentProject.scope &&
+				currentProject.scope.map((scope) => (
+					<div key={scope._id}>
+						<br />
+						<br />
+						<Typography variant="h3">Scope: {scope.scopeName}</Typography>
+						<Table>
+							<TableHead>
+								<TableRow>
+									<StyledTableCell>
+										<Typography color="textPrimary">Task Name</Typography>
+									</StyledTableCell>
+									<StyledTableCell>
+										<Typography color="textPrimary">Description</Typography>
+									</StyledTableCell>
+									<StyledTableCell>
+										<Typography color="textPrimary">Status</Typography>
+									</StyledTableCell>
+									<StyledTableCell>
+										<Typography color="textPrimary">ID</Typography>
+									</StyledTableCell>
+								</TableRow>
+								{scope.task.map((task) => (
+									<StyledTableRow key={task._id}>
+										<TableCell>
+											<Typography color="textPrimary">{task.task}</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography color="textPrimary">
+												{task.description}
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography color="textPrimary">
+												{task.isComplete ? "Complete" : "In Progress"}
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography color="textPrimary">{task._id}</Typography>
+										</TableCell>
+									</StyledTableRow>
+								))}
+							</TableHead>
+						</Table>
+					</div>
+				))}
 		</Container>
 	);
 }
