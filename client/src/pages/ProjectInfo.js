@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import {
 	Container,
 	Box,
-	List,
-	ListItem,
-	ListItemText,
 	Typography,
 	Grid,
 	Divider,
 	makeStyles,
 	withStyles,
-	AppBar,
-	Tabs,
-	TableContainer,
 	Table,
 	TableCell,
 	TableRow,
 	TableHead,
 } from "@material-ui/core";
-import Tab from "@material-ui/core/Tab";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -92,13 +87,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ProjectInfo(props) {
 	const { id } = useParams();
 	const [currentProject, setCurrentProject] = useState({});
-	const [value, setValue] = useState(0);
 	const [progress, setProgress] = useState(0);
 	let project = {};
-
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
 
 	const classes = useStyles();
 
@@ -111,7 +101,7 @@ export default function ProjectInfo(props) {
 			}
 		});
 
-		console.log("project object", project);
+		//console.log("project object", project);
 		if (project.title) {
 			setProgress(calculateProgress());
 		}
@@ -130,12 +120,38 @@ export default function ProjectInfo(props) {
 		let total = tasks.length;
 		let complete = 0;
 		tasks.map((item) => {
-			if (item.isComplete == true) {
+			if (item.isComplete === true) {
 				complete++;
 			}
 		});
 		//console.log('percent', (complete/total)*100);
 		return (complete / total) * 100;
+	};
+
+	const deleteScope = (event) => {
+		const target = event.currentTarget.name;
+		console.log("scope delete called", target);
+		Axios.delete(`/api/project/scope/one/${target}`)
+			.then(response => {
+				console.log(response);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+		window.location.reload();
+	};
+
+	const deleteTask = (event) => {
+		const target = event.currentTarget.name;
+		console.log("task delete called", target);
+		Axios.delete(`/api/project/scope/task/one/${target}`)
+			.then(response => {
+				console.log(response);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+		window.location.reload();
 	};
 
 	return (
@@ -213,7 +229,28 @@ export default function ProjectInfo(props) {
 					<div key={scope._id}>
 						<br />
 						<br />
-						<Typography variant="h3">Scope: {scope.scopeName}</Typography>
+						<Grid
+							container
+							direction="row"
+							justify="space-between"
+							alignItems="flex-end"
+						>
+							<Grid item>
+								<Typography variant="h3">Scope: {scope.scopeName}</Typography>
+							</Grid>
+							<Grid item>
+								<Tooltip
+									title="Delete"
+									component="button"
+									name={scope._id}
+									onClick={deleteScope}
+								>
+									<IconButton>
+										<DeleteIcon color="secondary" />
+									</IconButton>
+								</Tooltip>
+							</Grid>
+						</Grid>
 						<Table>
 							<TableHead>
 								<TableRow>
@@ -228,6 +265,9 @@ export default function ProjectInfo(props) {
 									</StyledTableCell>
 									<StyledTableCell>
 										<Typography color="textPrimary">ID</Typography>
+									</StyledTableCell>
+									<StyledTableCell align="right">
+										<Typography color="textPrimary">Actions</Typography>
 									</StyledTableCell>
 								</TableRow>
 								{scope.task.map((task) => (
@@ -247,6 +287,18 @@ export default function ProjectInfo(props) {
 										</TableCell>
 										<TableCell>
 											<Typography color="textPrimary">{task._id}</Typography>
+										</TableCell>
+										<TableCell align="right">
+											<Tooltip
+												title="Delete"
+												component="button"
+												name={task._id}
+												onClick={deleteTask}
+											>
+												<IconButton>
+													<DeleteIcon color="secondary" />
+												</IconButton>
+											</Tooltip>
 										</TableCell>
 									</StyledTableRow>
 								))}
