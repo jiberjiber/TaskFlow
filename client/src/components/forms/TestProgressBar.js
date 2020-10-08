@@ -1,7 +1,3 @@
-//this file handles rendering the progression of 
-//making a new project ( by filling out 3 forms)
-//it renders next and back buttons as well as a
-//cancel button to return to the dashboard
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
@@ -9,8 +5,11 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import ProjectForm from "./ProjectForm";
-import TeamForm from "./TeamForm";
+import ProjectForm from "./testProjectForm";
+import TeamForm from "./TestTeamForm";
+import ScopeForm from "./TestScopeForm";
+import TaskForm from './TestTaskForm'
+import { Card, CardContent,Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['ProjectForm', 'TeamForm', 'Create and Assign Tasks'];
+  return ['ProjectForm','Scope Form','Task Form',  'Create & assign Personel to Teams', 'Assign Scopes To Teams'];
 }
 
 function getStepContent(stepIndex) {
@@ -34,8 +33,12 @@ function getStepContent(stepIndex) {
     case 0:
       return (<ProjectForm/>);
     case 1:
-      return (<TeamForm/>);
+      return (<ScopeForm/>);
     case 2:
+      return (<TaskForm/>);
+    case 3:
+      return (<TeamForm/>);
+    case 4:
       return 'Create and Assign Teams';
     default:
       return 'Unknown stepIndex';
@@ -60,6 +63,7 @@ export default function HorizontalLabelPositionBelowStepper() {
   };
 
   return (
+    <Container>
     <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
@@ -93,5 +97,6 @@ export default function HorizontalLabelPositionBelowStepper() {
         )}
       </div>
     </div>
+    </Container>
   );
 }

@@ -3,6 +3,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
+import { useParams } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -36,9 +37,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function SignIn() {
+export default function PasswordRecovery() {
+	const { token } = useParams();
 	const classes = useStyles();
-
 	const [form, setForm] = useState();
 
 	const handleFormChange = (event) => {
@@ -48,16 +49,12 @@ export default function SignIn() {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		//console.log('Form input:', form);
-		Axios.post(`/api/employee/login`, form)
-			.then((response) => {
-				localStorage.setItem('token', response.data);
-				window.location = "/";
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-		
+		console.log('Form input:', form);
+		if(form.password1 !== form.password2){
+			console.log('passwords dont match!');
+		} else {
+			console.log('passwords match!');
+		}
 	}
 
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -81,18 +78,18 @@ export default function SignIn() {
 					<LockOutlinedIcon />
 				</Avatar>
 				<Typography component="h1" variant="h5">
-					Sign in
+					Password Recovery
 				</Typography>
-				<form className={classes.form} noValidate onSubmit={handleSubmit}>
+				<form className={classes.form} onSubmit={handleSubmit}>
 					<TextField
 						variant="outlined"
 						margin="normal"
 						required
 						fullWidth
-						id="email"
-						label="Email Address"
-						name="email"
-						autoComplete="email"
+						id="password1"
+						label="New Password"
+						type="password"
+						name="password1"
 						onChange={handleFormChange}
 						autoFocus
 					/>
@@ -101,11 +98,10 @@ export default function SignIn() {
 						margin="normal"
 						required
 						fullWidth
-						name="password"
-						label="Password"
+						name="password2"
+						label="Confirm New Password"
 						type="password"
-						id="password"
-						autoComplete="current-password"
+						id="password2"
 						onChange={handleFormChange}
 					/>
 					{/* <FormControlLabel
@@ -119,20 +115,8 @@ export default function SignIn() {
 						color="primary"
 						className={classes.submit}
 					>
-						Sign In
+						Save new password
 					</Button>
-					<Grid container>
-						<Grid item xs>
-							<Link href="#" variant="body2">
-								Forgot password?
-							</Link>
-						</Grid>
-						<Grid item>
-							<Link href="#" variant="body2">
-								{"Contact us to set up an account"}
-							</Link>
-						</Grid>
-					</Grid>
 				</form>
 			</div>
 			<Box mt={8}>
