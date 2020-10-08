@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Axios from 'axios';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
@@ -58,6 +58,19 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function Admin(props) {
 	const classes = useStyles();
+
+	const deleteProject = (event) => {
+		const target = event.currentTarget.value;
+		console.log('project delete called', target);
+		Axios.delete(`/api/project/${target}`)
+			.then(response => {
+				console.log(response);
+				window.location.reload();
+			})
+			.catch(err => {
+				console.log(err);
+			})
+	}
 
 	return (
 		<div className={classes.root}>
@@ -120,7 +133,7 @@ export default function Admin(props) {
 												<SettingsIcon color="action" />
 											</IconButton>
 										</Tooltip>
-										<Tooltip title="Delete" component="a" href={"/project/" + project._id + "/delete"}>
+										<Tooltip title="Delete" component="button" value={project._id} name={project._id} onClick={deleteProject}>
 											<IconButton>
 												<DeleteIcon color="secondary" />
 											</IconButton>
