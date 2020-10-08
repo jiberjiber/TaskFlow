@@ -15,6 +15,8 @@ import "./App.css";
 import { Container, Grid, ThemeProvider, useMediaQuery, createMuiTheme } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import PasswordRecovery from "./pages/PasswordRecovery";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -64,15 +66,14 @@ function App() {
 	};
 
 	const getProjects = () => {
-		setTimeout(() => {
 			Axios.get("/api/project")
 				.then((response) => {
+					console.log(response.data);
 					setProjects(response.data);
 				})
 				.catch((err) => {
 					console.log(err);
 				});
-		},2000);
 	}
 
 	useEffect(() => {
@@ -90,6 +91,8 @@ function App() {
 		return (
 			<BrowserRouter>
 				<Route exact path="/login" render={(props) => <SignIn {...props} />} />
+				<Route exact path="/forgotpassword" render={(props) => <ForgotPassword {...props} />} />
+				<Route exact path="/passwordrecovery/:token" render={(props) => <PasswordRecovery {...props} />} />
 				<Route exact path="/">
 					{user.isManager && (
 						<div>
