@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
 		position: "fixed",
-		left: "3.5%",
+		left: "73px",
 		top: "64px",
 		right: "0px",
 	},
