@@ -45,7 +45,7 @@ router.get('/',[auth,manager],async (req,res)=>{
     const { _id }=await req.employee;
 
 // const savedProjects= await Project.find({authorId:_id}).populate('scope').select().sort('dateCreated');
-const savedProjects= await Project.find({authorId:_id}).select().sort('dateCreated');
+const savedProjects= await Project.find({authorId:_id}).populate('scope').populate({ path: 'scope', populate: 'task'}).select().sort('dateCreated');
 if(!savedProjects.length) return res.status(400).send('no projects saved yet');
 
 let data=savedProjects

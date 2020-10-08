@@ -15,6 +15,7 @@ const companyRoutes = require("./company");
 // const auth= require('./auth')
 const employeeRoutes = require("./employee");
 const teamRoutes = require("./team");
+const emailRoute=require('./email');
 
 
 
@@ -29,7 +30,7 @@ router.use("/api/project/scope/task", task);
 router.use("/api/employee", employeeRoutes);
 router.use("/api/company", companyRoutes);
 router.use("/api/team", teamRoutes);
-
+router.use('/api/email',emailRoute)
 
 
 // If no API routes are hit, send the React app
