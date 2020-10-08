@@ -8,7 +8,7 @@ import { Card, CardContent, Container } from '@material-ui/core'
 //for a new member that is creating a company to be manager of
 const Registration = () => {
     const [RegisterForm, setRegisterForm] = useState({
-        isManager: "",//employee data will start with the current person logged in
+        isManager: true,//employee data will start with the current person logged in
         firstName: "",
         lastName: "",
         username: "",
@@ -26,12 +26,18 @@ const Registration = () => {
         setRegisterForm({ ...RegisterForm, [name]: value });
 
     }
+   
+    const onRadioChange = (e) => {
+        console.log((e.target.value));
+        RegisterForm.isManager=e.target.value
+
+    }
 
     const onFormSubmit = (event) => {
         event.preventDefault()
         console.log(RegisterForm)
         //check to see 
-        if (setRegisterForm.isManager == true) {
+        if (RegisterForm.isManager == true) {
             //this is the create post for a new company
             axios.post('/api/:create', {
                 employees: {//create first employee
@@ -54,7 +60,7 @@ const Registration = () => {
                 });
         }
 
-        else if (setRegisterForm.isManager == false) {
+        else if (RegisterForm.isManager == false) {
             //if just an employee then send employee values
             axios.post('/api/employee', {
                 //employee data will start with the current person logged in
@@ -96,8 +102,9 @@ const Registration = () => {
         <Card styles={{ marginLeft: 100 }}>
             <CardContent>
                 <form >
+                    <h2>Fill in all fields to Create Account</h2>
                     <div className="form-group">
-                        <label>Enter your First Name:</label>
+                        <label>First Name</label>
                         <input
                             onChange={handleFormChange}
                             name="firstName"
@@ -105,7 +112,7 @@ const Registration = () => {
                             className="form-control" />
                     </div>
                     <div className="form-group">
-                        <label>Enter your Last Name:</label>
+                        <label>Last Name</label>
                         <input
                             onChange={handleFormChange}
                             name="lastName"
@@ -113,8 +120,8 @@ const Registration = () => {
                             className="form-control" />
                     </div>
                     <div className="form-group">
-                        <label>Create a username:</label>
-                        <small className="form-text text-muted">This </small>
+                        <label>username</label>
+                        <small className="form-text text-muted">This name will be a way for other team members to identify you</small>
                         <input
                             onChange={handleFormChange}
                             name="username"
@@ -122,19 +129,41 @@ const Registration = () => {
                             className="form-control" />
                     </div>
                     <div className="form-group">
-                        <select>
-                            <label>What are You?</label>
-                            <option
-                                onChange={handleFormChange}
-                                name="isManager"
-                                value={RegisterForm.isManager = true}>
-                                a Manager</option>
-                            <option
-                                onChange={handleFormChange}
-                                name="isManager"
-                                value={RegisterForm.isManager = false}>
-                                an Employee</option>
-                        </select>
+
+                        <label for={RegisterForm.isManager}>Select your Role:</label>
+                        <br/>
+                            <input type="radio" onChange={onRadioChange} value={true} name="isManager" /> Manager
+                            <input type="radio" onChange={onRadioChange} value={false} name="isManager" /> Employee
+                    </div>
+                    <div className="form-group">
+                        <label>Email</label>
+                        <input
+                            onChange={handleFormChange}
+                            name="email"
+                            value={RegisterForm.email}
+                            className="form-control" />
+                    </div>
+                    <div className="form-group">
+                        <label>Password</label>
+                        <input
+                            onChange={handleFormChange}
+                            className="form-control" />
+                    </div>
+                    <div className="form-group">
+                        <label>Confirm Password</label>
+                        <input
+                            onChange={handleFormChange}
+                            name="password"
+                            value={RegisterForm.password}
+                            className="form-control" />
+                    </div>
+                    <div className="form-group">
+                        <label>Enter your Company Name</label>
+                        <input
+                            onChange={handleFormChange}
+                            name="name"
+                            value={RegisterForm.name}
+                            className="form-control" />
                     </div>
                     <button onClick={onFormSubmit} className="btn btn-primary">Submit</button>
                 </form>
