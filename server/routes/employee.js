@@ -15,18 +15,13 @@ const isManager = require("../middleware/managerAuth");
 const { Project } = require("../models/project.js");
 const { Scope } = require("../models/scope.js");
 const { Task } = require("../models/task.js");
-const { v4: uuidv4 } = require("uuid");
-// const { sendPwResetEmail } = require("../services/emailService");
 const { sendWelcomeEmail } = require("../services/emailService");
-require("dotenv").config();
-
 
 //Register new employee
 router.post("/register", validateSignupData(), validate, async (req, res) => {
   try {
-    // console.log(req.body)
     const data = await req.body;
-    // if (!data.company) res.status(400).send("Company is required");
+    if (!data.company) res.status(400).send("Company is required");
     const getEmployee = await Employee.findOne({ email: req.body.email });
     if (getEmployee) {
       return res
@@ -42,9 +37,8 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
         password: data.password,
         company: data.company,
         team: data.team,
-        confirmed: data.confirmed
+        confirmed: data.confirmed,
       });
-      // await employee.save();
 
       let employeeId = await employee.returnid();
 
@@ -68,101 +62,38 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
           isManager: employee.isManager,
           company: employee.company,
           members: employee.members,
-          message: "Account created. Please check your email for confirmation."
+          message: "Account created. Please check your email for confirmation.",
         });
       }
 
       sendWelcomeEmail(employee);
-      // sendConfirmationEmail(employee);
-      // sendPwResetEmail(employee);
     }
   } catch (err) {
     console.log(err);
     res.status(400).send(err);
   }
 });
-
-//User confirmation 
-// router.get("/confirmation/:token", async (req, res) => {
-// //   try {
-// //     const { employee: { _id }} = jwt.verify(req.params.token, process.env.SECRET);
-// // await Employee.update({ _id: employee._id }, { $set:{comfirmed: true }} )
-// //     // {_id:projectId},{$set:{scope:newArray}
-// //   } catch (err) {
-// //     console.log("Confirmed update was not successful");
-// //     res.send(err);
-// //   }
-// //   return res.redirect("/login");
-
-// try {
-//   const { token } = req.body
-// }
-// });
-
-// router.get("/confirmation/:token", async (req, res) => {
-//   const { token } = req.body;
-//   if(token) {
-    
-//   } else {
-//     return res.json({error: "Something went wrong"})
-//   }
-// })
-//pw reset 
-// router.post("/passwordrecovery/:id", async (req, res) => {
-//   const { password, userId } = req.body;
-//   if(userId && password) {
-//     const findUser = await Employee.findOne({ _id: userId }).select();
-//     if(findUser) {
-//       await Employee.update({ _id: userId }, { $set:{password: password }} )
-//     }
-// // //     // {_id:projectId},{$set:{scope:newArray}
-// // //     // {_id:projectId},{$set:{scope:newArray}
-//   } else {
-//     return res.json({error: "Something went wrong"})
-//   }
-// })
-
 //User login
 router.post("/login", async (req, res) => {
-  const checkUser = await Employee.findOne({ email: req.body.email });
-  console.log(req.body, checkUser);
+  try {
+    const checkUser = await Employee.findOne({ email: req.body.email });
 
-  if (!checkUser) return res.status(400).send("User is not registered.");
+    if (!checkUser) return res.status(400).send("User is not registered.");
 
-  //Check to see if user has confirmed their email
-  // if (!checkUser.confirmed) return res.status(400).send("Please confirm your email to login.");
-
-  const validPassword = await bcrypt.compare(
-    req.body.password,
-    checkUser.password
-  );
-  if (!validPassword) return res.status(400).send("Invalid email or password.");
-  const token = await checkUser.generateToken();
-  console.log(token);
-  res.send(token)
-  // sendPwResetEmail(employee);
-//TODO: signin form not sending msg, just 400 status. fix
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      checkUser.password
+    );
+    if (!validPassword)
+      return res.status(400).send("Invalid email or password.");
+    const token = await checkUser.generateToken();
+    res.send(token);
+    //TODO: signin form not sending msg, just 400 status. fix
+  } catch (err) {
+    res.status(403).send(err);
+    console.log(err);
+  }
 });
-
-
-// //Forgot password 
-// router.post("/forgotpassword", async (req, res) => {
-//   const getThisUser = await Employee.find({email: req.body.email}).select();
-//   if(!getThisUser){
-//     return res.status(400).send("User with this email not found.");
-//   } else {
-//     const id = uuidv4();
-//     const resetRequest = { 
-//       id, 
-//       email: getThisUser.email
-//     };
-    
-//   }
-
-
-//   // const thisUser = users.find(user => user.email === email);
-//   // return thisUser;
-// })
 
 //Get all users
 router.get("/", [auth, manager], async (req, res) => {
@@ -206,7 +137,6 @@ router.delete("/delete/:id", [auth, manager], async (req, res) => {
   const userToDelete = await Employee.findById(req.params.id);
   const userId = userToDelete._id;
   try {
-
     if (!userToDelete) return res.status(400).send("This user does not exist.");
     if (userToDelete.isManager) {
       await Task.deleteMany({ authorId: userId }, (err) => {
