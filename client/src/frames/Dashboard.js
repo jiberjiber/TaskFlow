@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -28,7 +28,9 @@ import {
 	ThemeProvider,
 	createMuiTheme,
 	useMediaQuery,
+	Typography,
 } from "@material-ui/core";
+import Axios from "axios";
 
 const drawerWidth = 240;
 
@@ -98,6 +100,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DashBoard(props) {
+	const [open, setOpen] = useState(false);
+	const [company, setCompany] = useState({});
 	const classes = useStyles();
 
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -113,7 +117,6 @@ export default function DashBoard(props) {
 	);
 
 	const theme = useTheme();
-	const [open, setOpen] = React.useState(false);
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -128,6 +131,20 @@ export default function DashBoard(props) {
 		window.location = "/login";
 	};
 
+	const getCompany = (company) => {
+		Axios.get(`/api/company/${company}`)
+			.then((response) => {
+				setCompany(response.data[0]);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	useEffect(() => {
+		getCompany(props.user.company);
+	},[props])
+
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<div className={classes.root}>
@@ -139,7 +156,12 @@ export default function DashBoard(props) {
 					})}
 				>
 					<Toolbar>
-						<Grid justify="space-between" container>
+						<Grid
+							container
+							direction="row"
+							justify="space-between"
+							alignItems="center"
+						>
 							<Grid item>
 								<IconButton
 									color="inherit"
@@ -153,7 +175,9 @@ export default function DashBoard(props) {
 									<MenuIcon />
 								</IconButton>
 							</Grid>
-							
+							<Grid item>
+								<Typography variant="h4">{company.name}</Typography>
+							</Grid>
 							<Grid item>
 								<Button
 									className={classes.appBarRight}
