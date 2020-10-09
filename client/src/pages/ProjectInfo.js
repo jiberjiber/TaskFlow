@@ -95,6 +95,7 @@ export default function ProjectInfo(props) {
 	const classes = useStyles();
 
 	useEffect(() => {
+		// eslint-disable-next-line
 		props.projects.map((item) => {
 			if (item._id === id) {
 				//console.log(item);

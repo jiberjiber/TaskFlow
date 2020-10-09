@@ -19,7 +19,9 @@ export default function ScopeCard(props) {
 	const { id } = useParams();
 
 	useEffect(() => {
+		// eslint-disable-next-line
 		props.projects.map((project) => {
+			// eslint-disable-next-line
 			project.scope.map((scope) => {
 				if (scope._id === id) {
 					setScope(scope);

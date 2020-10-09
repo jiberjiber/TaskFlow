@@ -40,6 +40,7 @@ export default function SignIn() {
 	const classes = useStyles();
 	const [alert, setAlert] = useState(false);
 	const [form, setForm] = useState();
+	// eslint-disable-next-line
 	const [errorMsg, setErrorMsg] = useState("");
 
 	const handleFormChange = (event) => {
