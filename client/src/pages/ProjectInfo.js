@@ -13,13 +13,15 @@ import {
 	TableRow,
 	TableHead,
 	Fab,
+	Tooltip,
+	IconButton,
+	CircularProgress
 } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
-import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Tooltip from "@material-ui/core/Tooltip";
+import {
+	Add,
+	Delete,
+} from '@material-ui/icons';
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -248,7 +250,7 @@ export default function ProjectInfo(props) {
 							</Grid>
 							<Grid item>
 								<Tooltip title="Add Task" key={"create"} component="a" href="/create">
-									<IconButton><AddIcon color="primary" /></IconButton>
+									<IconButton><Add color="primary" /></IconButton>
 								</Tooltip>
 								<Tooltip
 									title="Delete Scope"
@@ -257,7 +259,7 @@ export default function ProjectInfo(props) {
 									onClick={deleteScope}
 								>
 									<IconButton>
-										<DeleteIcon color="secondary" />
+										<Delete color="secondary" />
 									</IconButton>
 								</Tooltip>
 							</Grid>
@@ -307,7 +309,7 @@ export default function ProjectInfo(props) {
 												onClick={deleteTask}
 											>
 												<IconButton>
-													<DeleteIcon color="secondary" />
+													<Delete color="secondary" />
 												</IconButton>
 											</Tooltip>
 										</TableCell>
@@ -324,7 +326,7 @@ export default function ProjectInfo(props) {
 					<Typography variant="h4">Add Scope</Typography>
 					<Tooltip title="Add Scope" key={"create"} component="a" href="/create">
 						<Fab color="primary" className={classes.fab}>
-							<AddIcon />
+							<Add />
 						</Fab>
 					</Tooltip>
 				</Grid>
