@@ -9,6 +9,7 @@ import ProjectForm from "./testProjectForm";
 import TeamForm from "./TestTeamForm";
 import ScopeForm from "./TestScopeForm";
 import TaskForm from './TestTaskForm'
+import AssignTeam from './TestAssigned'
 import { Card, CardContent,Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +40,8 @@ function getStepContent(stepIndex) {
     case 3:
       return (<TeamForm/>);
     case 4:
+      return (<AssignTeam/>);
+    case 5:
       return 'Create and Assign Teams';
     default:
       return 'Unknown stepIndex';

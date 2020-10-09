@@ -21,7 +21,7 @@ const TeamForm = props => {
     useEffect(() => {
         axios.get("/api/employee")
         .then(result => {
-            console.log(result.data[0].employees)
+            console.log(result.data[0])
             setChoice(result.data[0].employees)
             
         }
@@ -135,14 +135,6 @@ const TeamForm = props => {
             </form>
             </Card>
 
-                {/* <select className="custom-select multiple">
-                    <label>Please select team members</label>
-                    <option onClick={selectMultiple}>Open this select menu</option>
-                    <option selected onClick={selectMultiple} value="1">One</option>
-                    <option selected onClick={selectMultiple} value="2">Two</option>
-                    <option selected onClick={selectMultiple} value="3">Three</option>
-                    <option selected onClick={selectMultiple} value={TeamForm.members}></option>
-                </select> */}
                 <button onClick={onFormSubmit} className="btn btn-primary">Create Team!</button>
             </form>
             <ol >
