@@ -65,11 +65,11 @@ export default function Admin(props) {
 		console.log('project delete called', target);
 		Axios.delete(`/api/project/${target}`)
 			.then(response => {
-				console.log(response);
+				console.log('delete response', response);
 				window.location.reload();
 			})
 			.catch(err => {
-				console.log(err);
+				console.log('error', err);
 			})
 	}
 	
