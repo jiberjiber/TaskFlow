@@ -49,7 +49,8 @@
     "nodemailer": "^6.4.13",
     "nodemailer-sendgrid": "^1.0.3",
     "path": "^0.12.7",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
