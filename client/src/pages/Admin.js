@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Axios from 'axios';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
-import { Divider, Fab } from "@material-ui/core";
+import { CircularProgress, Divider, Fab } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -58,24 +58,18 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function Admin(props) {
 	const classes = useStyles();
-	const [value, setValue] = React.useState(0);
 
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
-
-	const createProject = () => {
-		Axios.post('/api/project', {
-			title: " management sofware",
-			description: "This is business",
-			dueDate: "November 25 2020"
-		})
-		.then((response) => {
-			console.log(response);
-		})
-		.catch(err => {
-			console.log(err);
-		});
+	const deleteProject = (event) => {
+		const target = event.currentTarget.value;
+		console.log('project delete called', target);
+		Axios.delete(`/api/project/${target}`)
+			.then(response => {
+				console.log(response);
+				window.location.reload();
+			})
+			.catch(err => {
+				console.log(err);
+			})
 	}
 
 	return (
@@ -91,66 +85,76 @@ export default function Admin(props) {
 				</Grid>
 			</Grid>
 			<Divider />
-			<Container className={classes.mt25}>
-				<Table aria-label="projects-table">
-					<TableHead>
-						<TableRow>
-							<StyledTableCell>
-								<Typography color="textPrimary">Project ID</Typography>
-							</StyledTableCell>
-							<StyledTableCell>
-								<Typography color="textPrimary">Project Name</Typography>
-							</StyledTableCell>
-							<StyledTableCell>
-								<Typography color="textPrimary">Teams</Typography>
-							</StyledTableCell>
-							<StyledTableCell>
-								<Typography color="textPrimary">Due Date</Typography>
-							</StyledTableCell>
-							<StyledTableCell>
-								<Typography color="textPrimary">Actions</Typography>
-							</StyledTableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{props.projects.map((project) => (
-							<StyledTableRow key={project.id}>
+			{props.projects.length ? (
+				<Container className={classes.mt25}>
+					<Table aria-label="projects-table">
+						<TableHead>
+							<TableRow>
 								<StyledTableCell>
-									<Typography color="textPrimary">{project.id}</Typography>
+									<Typography color="textPrimary">Project Name</Typography>
 								</StyledTableCell>
 								<StyledTableCell>
-									<Typography color="textPrimary">{project.title}</Typography>
+									<Typography color="textPrimary">Due Date</Typography>
 								</StyledTableCell>
 								<StyledTableCell>
-									<Typography color="textPrimary">
-										{project.teams.map((team) => team.title + ", ")}
-									</Typography>
+									<Typography color="textPrimary">Status</Typography>
 								</StyledTableCell>
 								<StyledTableCell>
-									<Typography color="textPrimary">Jan 1, 1970</Typography>
+									<Typography color="textPrimary">Project Manager</Typography>
 								</StyledTableCell>
 								<StyledTableCell>
-									<Tooltip title="Open Project" component="a" href={"/project/" + project.id}>
-										<IconButton>
-											<LaunchIcon color="action" />
-										</IconButton>
-									</Tooltip>
-									<Tooltip title="Manage" component="a" href={"/project/" + project.id + "/manage"}>
-										<IconButton>
-											<SettingsIcon color="action" />
-										</IconButton>
-									</Tooltip>
-									<Tooltip title="Delete" component="a" href={"/project/" + project.id + "/delete"}>
-										<IconButton>
-											<DeleteIcon color="secondary" />
-										</IconButton>
-									</Tooltip>
+									<Typography color="textPrimary">Actions</Typography>
 								</StyledTableCell>
-							</StyledTableRow>
-						))}
-					</TableBody>
-				</Table>
-			</Container>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{props.projects.map((project) => (
+								<StyledTableRow key={project._id}>
+									<StyledTableCell>
+										<Typography color="textPrimary">{project.title}</Typography>
+									</StyledTableCell>
+									<StyledTableCell>
+										<Typography color="textPrimary">{project.dueDate}</Typography>
+									</StyledTableCell>
+									<StyledTableCell>
+										<Typography color="textPrimary">{project.isComplete && "Complete" || "In Progress"}</Typography>
+									</StyledTableCell>
+									<StyledTableCell>
+										<Typography color="textPrimary">{project.creator}</Typography>
+									</StyledTableCell>
+									<StyledTableCell>
+										<Tooltip title="Open Project" component="a" href={"/project/" + project._id}>
+											<IconButton>
+												<LaunchIcon color="action" />
+											</IconButton>
+										</Tooltip>
+										<Tooltip title="Manage" component="a" href={"/project/" + project._id + "/manage"}>
+											<IconButton>
+												<SettingsIcon color="action" />
+											</IconButton>
+										</Tooltip>
+										<Tooltip title="Delete" component="button" value={project._id} name={project._id} onClick={deleteProject}>
+											<IconButton>
+												<DeleteIcon color="secondary" />
+											</IconButton>
+										</Tooltip>
+									</StyledTableCell>
+								</StyledTableRow>
+							))}
+						</TableBody>
+					</Table>
+				</Container>
+			) : (
+					<Grid 
+						container 
+						spacing={0} 
+						direction="column"
+						alignItems="center"
+						justify="center"
+					>
+						<CircularProgress />
+					</Grid>
+				)}
 		</div>
 	);
 }

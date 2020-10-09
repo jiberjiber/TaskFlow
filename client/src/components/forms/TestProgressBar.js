@@ -6,9 +6,10 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ProjectForm from "./testProjectForm";
-import TeamForm from "./TeamForm";
+import TeamForm from "./TestTeamForm";
 import ScopeForm from "./TestScopeForm";
 import TaskForm from './TestTaskForm'
+import AssignTeam from './TestAssigned'
 import { Card, CardContent,Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['ProjectForm','Scope Form','Task Form',  'TeamForm', 'Create and Assign Tasks'];
+  return ['ProjectForm','Scope Form','Task Form',  'Create & assign Personel to Teams', 'Assign Scopes To Teams'];
 }
 
 function getStepContent(stepIndex) {
@@ -37,6 +38,10 @@ function getStepContent(stepIndex) {
     case 2:
       return (<TaskForm/>);
     case 3:
+      return (<TeamForm/>);
+    case 4:
+      return (<AssignTeam/>);
+    case 5:
       return 'Create and Assign Teams';
     default:
       return 'Unknown stepIndex';

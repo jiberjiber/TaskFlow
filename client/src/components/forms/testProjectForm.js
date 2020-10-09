@@ -79,7 +79,7 @@ const ProjectForm = () => {
                 <CardContent>
                     <form >
                         <div className="form-group">
-                            <label>Title of Project</label>
+                            <label><h5>Title of Project</h5></label>
                             <input
                                 onChange={handleFormChange}
                                 name="title"
@@ -87,7 +87,7 @@ const ProjectForm = () => {
                                 className="form-control"/>
                         </div>
                         <div className="form-group">
-                            <label>Project Objective</label>
+                            <label><h5>Project Objective</h5></label>
                             <small className="form-text text-muted">Please give a brief description of the goal of your project</small>
                             <input
                                 onChange={handleFormChange}
@@ -99,14 +99,14 @@ const ProjectForm = () => {
                         
                         <div className="form-group date" data-provide="datepicker">
                         <div className="form-group date" data-provide="datepicker">
-                            <label>Due Date for Scope</label>
+                            <label>Overall Due Date for your Project</label>
                             
                         </div>
-                        <label for="start">Start date:</label>
+                        <label for="start">Completion date :</label>
                         <input onChange={handleDate} type="date" id="start" name="trip-start"
        value=''
        min="2020-01-01" max="2040-12-31"></input>
-       <h5>`      Due`{ProjectForm.dueDate && ProjectForm.dueDate }</h5>
+       <h5>{ProjectForm.dueDate &&<h4> Due Date:{ProjectForm.dueDate}</h4> }</h5>
                         </div>
                         <button onClick={onFormSubmit} className="btn btn-primary">Submit Project</button>
                     </form>

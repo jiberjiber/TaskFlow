@@ -111,7 +111,7 @@ async function convert(x){
                 <CardContent>
                     <form >
                         <div className="form-group">
-                            <label>Title for your Project Scope</label>
+                            <label><h5>Title for Task</h5></label>
                             <input
                                 onChange={handleFormChange}
                                 name="title"
@@ -119,8 +119,8 @@ async function convert(x){
                                 className="form-control" />
                         </div>
                         <div className="form-group">
-                            <label>Project Objective</label>
-                            <small className="form-text text-muted">Please give a brief description of the goal of your project</small>
+                            <label><h5>Describe the Task in hand</h5></label>
+                            <small className="form-text text-muted">Please give a brief description of the goal of this task in other to complete the project</small>
                             <input
                                 onChange={handleFormChange}
                                 name="description"
@@ -133,12 +133,12 @@ async function convert(x){
                             <label>Due Date for Task</label>
                             
                         </div>
-                        <label for="start">Start date:</label>
+                        <label for="start">Task Completion Date :</label>
                         <input onChange={handleDate} type="date" id="start" name="trip-start"
        value=''
        min="2020-01-01" max="2040-12-31"></input>
                         <div>
-                        <label htmlFor="choice">Choose a Project to add scope:</label>
+                        <label htmlFor="choice">Choose the Scope to which this task belongs:</label>
                 <select onChange={handleSelect} className="myDropDown">
                 <option>{'Select your Scope'}</option>
                         {choice && choice.map((x,i) =>(

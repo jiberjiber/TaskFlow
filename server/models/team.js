@@ -36,7 +36,10 @@ const TeamSchema = new Schema({
     default: Date.now,
   },
 });
-
+TeamSchema.methods.returnid = function(){
+      
+  return this._id
+}
 //Model
 const Team = mongoose.model("Team", TeamSchema);
 
