@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import React, { useState } from "react";
 import Axios from 'axios';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -71,12 +72,13 @@ export default function Admin(props) {
 				console.log(err);
 			})
 	}
-
+	
 	return (
 		<div className={classes.root}>
 			<Grid className={classes.m25}>
 				<Grid item xs style={{ textAlign: "center" }}>
 					<Typography variant="h4">New Project</Typography>
+					{/* eslint-disable-next-line*/}
 					<Tooltip title="Add" component="button" key={"create"} component="a" href="/create">
 						<Fab color="primary" className={classes.fab}>
 							<AddIcon />
@@ -117,7 +119,7 @@ export default function Admin(props) {
 										<Typography color="textPrimary">{project.dueDate}</Typography>
 									</StyledTableCell>
 									<StyledTableCell>
-										<Typography color="textPrimary">{project.isComplete && "Complete" || "In Progress"}</Typography>
+										<Typography color="textPrimary">{project.isComplete ? ("Complete") : ("In Progress")}</Typography>
 									</StyledTableCell>
 									<StyledTableCell>
 										<Typography color="textPrimary">{project.creator}</Typography>

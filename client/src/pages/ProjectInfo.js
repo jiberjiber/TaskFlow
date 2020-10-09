@@ -99,6 +99,7 @@ export default function ProjectInfo(props) {
 		props.projects.map((item) => {
 			if (item._id === id) {
 				//console.log(item);
+				// eslint-disable-next-line
 				project = item;
 				setCurrentProject(item);
 			}
@@ -112,9 +113,12 @@ export default function ProjectInfo(props) {
 
 	// Do calcs to find progress
 	const calculateProgress = () => {
+		// eslint-disable-next-line
 		let tasks = [];
+		// eslint-disable-next-line
 		project.scope.map((item) => {
 			//console.log(item);
+			// eslint-disable-next-line
 			item.task.map((task) => {
 				tasks.push(task);
 			});
@@ -122,6 +126,7 @@ export default function ProjectInfo(props) {
 		//console.log(tasks);
 		let total = tasks.length;
 		let complete = 0;
+		// eslint-disable-next-line
 		tasks.map((item) => {
 			if (item.isComplete === true) {
 				complete++;
@@ -242,7 +247,7 @@ export default function ProjectInfo(props) {
 								<Typography variant="h3">Scope: {scope.scopeName}</Typography>
 							</Grid>
 							<Grid item>
-								<Tooltip title="Add Task" component="button" key={"create"} component="a" href="/create">
+								<Tooltip title="Add Task" key={"create"} component="a" href="/create">
 									<IconButton><AddIcon color="primary" /></IconButton>
 								</Tooltip>
 								<Tooltip
@@ -317,7 +322,7 @@ export default function ProjectInfo(props) {
 				<Grid className={classes.m25}>
 				<Grid item xs style={{ textAlign: "center" }}>
 					<Typography variant="h4">Add Scope</Typography>
-					<Tooltip title="Add Scope" component="button" key={"create"} component="a" href="/create">
+					<Tooltip title="Add Scope" key={"create"} component="a" href="/create">
 						<Fab color="primary" className={classes.fab}>
 							<AddIcon />
 						</Fab>

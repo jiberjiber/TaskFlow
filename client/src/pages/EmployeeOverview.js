@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -56,8 +57,6 @@ const StyledTableRow = withStyles((theme) => ({
 export default function EmployeeOverview(props) {
 	const classes = useStyles();
 
-	const [tasks, setTasks] = useState([]);
-
 	const getTeams = (props) => {
 		if(props.user._id){
 			Axios.get('/api/team')
@@ -81,9 +80,10 @@ export default function EmployeeOverview(props) {
 				console.log(err);
 			});
 	}
-
+	
 	useEffect(()=>{
 		getTeams(props);
+		// eslint-disable-next-line
 	},[props]);
 
 	return (
