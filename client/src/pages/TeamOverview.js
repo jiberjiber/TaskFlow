@@ -102,7 +102,7 @@ export default function TeamOverview(props) {
 				<TabPanel value={value} index={index} key={project._id}>
 					<Grid container spacing={3}>
 						{scopes.map((item, index) => (
-								<TeamCard key={item._id} scope={item}/>
+								<TeamCard key={item._id} scope={item} index={index}/>
 						))}
 						{project.scope.length<1 && 
 							<Typography>This project has no scopes!</Typography>

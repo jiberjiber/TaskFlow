@@ -108,6 +108,17 @@ export default function ForgotPassword() {
 						>
 							Submit email
 						</Button>
+						<Grid 
+							container
+							alignItems="center"
+							justify="center"
+						>
+							<Grid item xs>
+								<Link href="/login" variant="body2">
+									Return to Sign In
+								</Link>
+							</Grid>
+						</Grid>
 					</form>
 				</div>
 				<Box mt={8}>
