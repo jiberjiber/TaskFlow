@@ -32,7 +32,7 @@ export default function ScopeCard(props) {
 
 	const handleChange = (event) => {
 		setForm({ ...form, [event.target.name]: event.target.checked });
-		console.log("new state", form);
+		//console.log("new state", form);
 	};
 
 	//console.log(scope);

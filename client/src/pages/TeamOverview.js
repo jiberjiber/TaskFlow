@@ -8,7 +8,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import TeamCard from "../components/TeamCard";
+import ScopeCard from "../components/ScopeCard";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -102,7 +102,7 @@ export default function TeamOverview(props) {
 				<TabPanel value={value} index={index} key={project._id}>
 					<Grid container spacing={3}>
 						{scopes.map((item, index) => (
-								<TeamCard key={item._id} scope={item}/>
+								<ScopeCard key={item._id} scope={item}/>
 						))}
 						{project.scope.length<1 && 
 							<Typography>This project has no scopes!</Typography>
