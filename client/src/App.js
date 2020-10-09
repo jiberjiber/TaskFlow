@@ -2,26 +2,31 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import jwtDecode from "jwt-decode";
 import { BrowserRouter, Route } from "react-router-dom";
-import SignIn from "./pages/SignIn";
 import Dashboard from "./frames/Dashboard";
+import SignIn from "./pages/SignIn";
 import TeamOverview from "./pages/TeamOverview";
 import Admin from "./pages/Admin";
-import CreateNew from "./pages/CreateNew"
+import CreateNew from "./pages/CreateNew";
 import ProjectInfo from "./pages/ProjectInfo";
 import Error from "./pages/Error";
 import EmployeeOverview from "./pages/EmployeeOverview";
-import "./App.css";
-import { Grid, ThemeProvider, useMediaQuery, createMuiTheme } from "@material-ui/core";
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core/styles';
 import PasswordRecovery from "./pages/PasswordRecovery";
 import ForgotPassword from "./pages/ForgotPassword";
-import ScopePage from './pages/ScopePage';
+import ScopePage from "./pages/ScopePage";
+import {
+	Grid,
+	ThemeProvider,
+	useMediaQuery,
+	createMuiTheme,
+	CircularProgress,
+	makeStyles,
+} from "@material-ui/core";
+import "./App.css";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		display: 'flex',
-		'& > * + *': {
+		display: "flex",
+		"& > * + *": {
 			marginLeft: theme.spacing(2),
 		},
 	},
@@ -55,7 +60,7 @@ function App() {
 			const jwt = localStorage.getItem("token");
 			const decoded = jwtDecode(jwt);
 			setUser(decoded);
-			if(decoded.isManager){
+			if (decoded.isManager) {
 				getProjects();
 			}
 		} catch (error) {
@@ -67,22 +72,26 @@ function App() {
 	};
 
 	const getProjects = () => {
-			Axios.get("/api/project")
-				.then((response) => {
-					//console.log(response.data);
-					setProjects(response.data);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-	}
+		Axios.get("/api/project")
+			.then((response) => {
+				//console.log(response.data);
+				setProjects(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	useEffect(() => {
 		// Get current user token from localstorage
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
-		if (window.location.pathname === "/login" || window.location.pathname === "/forgotpassword" || window.location.pathname === "/passwordrecovery/") {
+		if (
+			window.location.pathname === "/login" ||
+			window.location.pathname === "/forgotpassword" ||
+			window.location.pathname === "/passwordrecovery/"
+		) {
 			//console.log('nothing')
 		} else {
 			decodeToken();
@@ -94,8 +103,16 @@ function App() {
 		return (
 			<BrowserRouter>
 				<Route exact path="/login" render={(props) => <SignIn {...props} />} />
-				<Route exact path="/forgotpassword" render={(props) => <ForgotPassword {...props} />} />
-				<Route exact path="/passwordrecovery/:token" render={(props) => <PasswordRecovery {...props} />} />
+				<Route
+					exact
+					path="/forgotpassword"
+					render={(props) => <ForgotPassword {...props} />}
+				/>
+				<Route
+					exact
+					path="/passwordrecovery/:token"
+					render={(props) => <PasswordRecovery {...props} />}
+				/>
 				<Route exact path="/">
 					{user.isManager && (
 						<div>
@@ -156,19 +173,20 @@ function App() {
 		return (
 			<ThemeProvider theme={darkTheme}>
 				<div className={classes.root}>
-					<Grid container spacing={0} direction="column"
+					<Grid
+						container
+						spacing={0}
+						direction="column"
 						alignItems="center"
 						justify="center"
-						style={{ minHeight: '100vh' }}>
+						style={{ minHeight: "100vh" }}
+					>
 						<CircularProgress />
 					</Grid>
 				</div>
 			</ThemeProvider>
 		);
 	}
-
-
-
 }
 
 export default App;
