@@ -20,6 +20,7 @@ import {
 const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
+		paddingLeft: '75px',
 	},
 	appBarBG: {
 		backgroundColor: "#333333",
@@ -95,7 +96,7 @@ export default function EmployeeOverview(props) {
 					alignItems="flex-start"
 				>
 					{teams.map((team) => (
-						<Grid item xs={12} sm={6} key={team._id}>
+						<Grid item xs={12} sm={6} style={{paddingBottom: "50px"}} key={team._id}>
 							<Typography variant="h3">{team.name}</Typography>
 							<Grid
 								container
@@ -132,7 +133,7 @@ export default function EmployeeOverview(props) {
 												</TableHead>
 												<TableBody>
 													{scope.task.map((task) => (
-														<TableRow key={task._id}>
+														<TableRow key={task}>
 															<TableCell>
 																<FormGroup>
 																	<FormControlLabel
