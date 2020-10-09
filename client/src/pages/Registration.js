@@ -18,6 +18,18 @@ const Registration = () => {
         url: "",
 
     })
+    getMembers();
+   
+    function getMembers() {
+        axios.get('/api/company')
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        }
+
 
 
     function handleFormChange(e) {
@@ -35,9 +47,9 @@ const Registration = () => {
 
     const onFormSubmit = (event) => {
         event.preventDefault()
-        console.log(RegisterForm)
+        //console.log(RegisterForm)
         //check to see 
-        if (RegisterForm.isManager == true) {
+        if (RegisterForm.isManager === true) {
             //this is the create post for a new company
             axios.post('/api/:create', {
                 employees: {//create first employee
@@ -60,7 +72,7 @@ const Registration = () => {
                 });
         }
 
-        else if (RegisterForm.isManager == false) {
+        else if (RegisterForm.isManager === false) {
             //if just an employee then send employee values
             axios.post('/api/employee', {
                 //employee data will start with the current person logged in
@@ -99,10 +111,15 @@ const Registration = () => {
 
 
     return (
+        <Container>
         <Card styles={{ marginLeft: 100 }}>
             <CardContent>
+            <div className="jumbotron">
+        <h1 className="display-4">Welcome to TaskFlow!</h1>
+        <p className="lead">Get started with smoother project management by providing your details below.</p>
+      
                 <form >
-                    <h2>Fill in all fields to Create Account</h2>
+                   
                     <div className="form-group">
                         <label>First Name</label>
                         <input
@@ -120,20 +137,11 @@ const Registration = () => {
                             className="form-control" />
                     </div>
                     <div className="form-group">
-                        <label>username</label>
-                        <small className="form-text text-muted">This name will be a way for other team members to identify you</small>
-                        <input
-                            onChange={handleFormChange}
-                            name="username"
-                            value={RegisterForm.username}
-                            className="form-control" />
-                    </div>
-                    <div className="form-group">
-
-                        <label for={RegisterForm.isManager}>Select your Role:</label>
+                        <label>Select your Role:</label>
                         <br/>
-                            <input type="radio" onChange={onRadioChange} value={true} name="isManager" /> Manager
-                            <input type="radio" onChange={onRadioChange} value={false} name="isManager" /> Employee
+                            <input style={{marginRight:"8px"}} type="radio" onChange={onRadioChange} value={true} name="isManager" /> Manager
+                            <br/>
+                            <input style={{marginRight:"8px"}} type="radio" onChange={onRadioChange} value={false} name="isManager" /> Employee
                     </div>
                     <div className="form-group">
                         <label>Email</label>
@@ -167,10 +175,10 @@ const Registration = () => {
                     </div>
                     <button onClick={onFormSubmit} className="btn btn-primary">Submit</button>
                 </form>
-
+                </div>
             </CardContent>
         </Card>
-
+        </Container>
     )
 }
 
