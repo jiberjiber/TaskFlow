@@ -3,6 +3,7 @@ import Axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { BrowserRouter, Route } from "react-router-dom";
 import SignIn from "./pages/SignIn";
+import Registration from "./pages/Registration";
 import Dashboard from "./frames/Dashboard";
 import "./App.css";
 import TeamOverview from "./pages/TeamOverview";
@@ -43,7 +44,11 @@ function App() {
 		Axios.defaults.headers.common['x-auth-token'] = getToken();
 
 		// Get user  (decode token)
-		if (window.location.pathname !== '/login') {
+		
+		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword"|| window.location.pathname == "/register") {
+			console.log('nothing')
+		} 
+		else {
 			decodeToken();
 		}
 	}, []);
@@ -61,6 +66,9 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Route exact path="/login" render={(props) => <SignIn {...props} />} />
+			<Route exact path="/register">
+				<Registration/>
+			</Route>
 			<Route exact path="/">
 				<Dashboard user={user} />
 				<TeamOverview projects={projects} />
