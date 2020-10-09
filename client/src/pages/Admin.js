@@ -1,22 +1,29 @@
 // eslint-disable-next-line
 import React, { useState } from "react";
 import Axios from 'axios';
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import { CircularProgress, Divider, Fab } from "@material-ui/core";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Container from "@material-ui/core/Container";
-import SettingsIcon from '@material-ui/icons/Settings';
-import LaunchIcon from '@material-ui/icons/Launch';
+import { 
+	withStyles, 
+	makeStyles,
+	Grid,
+	IconButton,
+	Tooltip,
+	Container,
+	Table,
+	TableHead,
+	TableBody,
+	TableRow,
+	TableCell,
+	Typography,
+	CircularProgress,
+	Divider,
+	Fab,
+} from "@material-ui/core";
+import {
+	Add,
+	Delete,
+	Settings,
+	Launch
+} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -81,7 +88,7 @@ export default function Admin(props) {
 					{/* eslint-disable-next-line*/}
 					<Tooltip title="Add" component="button" key={"create"} component="a" href="/create">
 						<Fab color="primary" className={classes.fab}>
-							<AddIcon />
+							<Add />
 						</Fab>
 					</Tooltip>
 				</Grid>
@@ -127,17 +134,17 @@ export default function Admin(props) {
 									<StyledTableCell>
 										<Tooltip title="Open Project" component="a" href={"/project/" + project._id}>
 											<IconButton>
-												<LaunchIcon color="action" />
+												<Launch color="action" />
 											</IconButton>
 										</Tooltip>
 										<Tooltip title="Manage" component="a" href={"/project/" + project._id + "/manage"}>
 											<IconButton>
-												<SettingsIcon color="action" />
+												<Settings color="action" />
 											</IconButton>
 										</Tooltip>
 										<Tooltip title="Delete" component="button" value={project._id} name={project._id} onClick={deleteProject}>
 											<IconButton>
-												<DeleteIcon color="secondary" />
+												<Delete color="secondary" />
 											</IconButton>
 										</Tooltip>
 									</StyledTableCell>
