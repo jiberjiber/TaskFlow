@@ -18,3 +18,17 @@ code {
   max-height: 30px;
   overflow-y: scroll;
   }
+
+  .select{
+    height: 75px;
+    margin-bottom: 40px;
+    overflow-y: scroll;
+    }
+
+    .thisButton{
+     margin-bottom: 20px;
+    }
+
+    .feedback{
+      color:green;
+    }
