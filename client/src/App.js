@@ -13,7 +13,7 @@ import EmployeeOverview from "./pages/EmployeeOverview";
 import "./App.css";
 import { Grid, ThemeProvider, useMediaQuery, createMuiTheme } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import PasswordRecovery from "./pages/PasswordRecovery";
 import ForgotPassword from "./pages/ForgotPassword";
 import ScopeCard from './pages/ScopeCard';
@@ -79,7 +79,7 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
-		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/") {
+		if (window.location.pathname === "/login" || window.location.pathname === "/forgotpassword" || window.location.pathname === "/passwordrecovery/") {
 			console.log('nothing')
 		} else {
 			decodeToken();
