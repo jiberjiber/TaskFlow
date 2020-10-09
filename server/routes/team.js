@@ -83,7 +83,7 @@ router.get("/:id", [auth], async (req, res) => {
   res.send(oneTeam);
 });
 
-router.put("/:id", [auth, manager], async (req, res) => {
+router.put("/:id", [auth], async (req, res) => {
   try {
     const teamId = req.params.id;
     const newData = req.body.members;
