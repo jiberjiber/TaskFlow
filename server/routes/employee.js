@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const { Employee, Company, Team } = require("../models");
+const { Employee, Company } = require("../models");
 const {
   validateSignupData,
   validate,
@@ -15,20 +15,20 @@ const isManager = require("../middleware/managerAuth");
 const { Project } = require("../models/project.js");
 const { Scope } = require("../models/scope.js");
 const { Task } = require("../models/task.js");
+const { sendWelcomeEmail } = require("../services/emailService");
 
 //Register new employee
 router.post("/register", validateSignupData(), validate, async (req, res) => {
   try {
-    // console.log(req.body)
     const data = await req.body;
-    // if (!data.company) res.status(400).send("Company is required");
+    if (!data.company) res.status(400).send("Company is required");
     const getEmployee = await Employee.findOne({ email: req.body.email });
     if (getEmployee) {
       return res
         .status(400)
         .json({ email: "This email already exists. Please sign in instead." });
     } else {
-      const employee = new Employee({
+      const employee = await new Employee({
         firstName: data.firstName,
         lastName: data.lastName,
         username: data.username,
@@ -37,8 +37,8 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
         password: data.password,
         company: data.company,
         team: data.team,
+        confirmed: data.confirmed,
       });
-      // await employee.save();
 
       let employeeId = await employee.returnid();
 
@@ -62,29 +62,37 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
           isManager: employee.isManager,
           company: employee.company,
           members: employee.members,
+          message: "Account created. Please check your email for confirmation.",
         });
       }
+
+      sendWelcomeEmail(employee);
     }
   } catch (err) {
     console.log(err);
     res.status(400).send(err);
   }
 });
-
 //User login
 router.post("/login", async (req, res) => {
-  const checkUser = await Employee.findOne({ email: req.body.email });
-  console.log(req.body, checkUser);
+  try {
+    const checkUser = await Employee.findOne({ email: req.body.email });
 
-  if (!checkUser) return res.status(400).send("User is not registered.");
-  const validPassword = await bcrypt.compare(
-    req.body.password,
-    checkUser.password
-  );
-  if (!validPassword) return res.status(400).send("Invalid email or password.");
-  const token = await checkUser.generateToken();
-  res.send(token);
-  console.log(token);
+    if (!checkUser) return res.status(400).send("User is not registered.");
+
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      checkUser.password
+    );
+    if (!validPassword)
+      return res.status(400).send("Invalid email or password.");
+    const token = await checkUser.generateToken();
+    res.send(token);
+    //TODO: signin form not sending msg, just 400 status. fix
+  } catch (err) {
+    res.status(403).send(err);
+    console.log(err);
+  }
 });
 
 //Get all users
@@ -105,7 +113,6 @@ router.get("/", [auth, manager], async (req, res) => {
       employee.username,
       employee.isManager,
       employee.email,
-      employee.projectsCreated,
       employee.company,
       employee.team;
 
@@ -124,14 +131,12 @@ router.get("/:id", [auth, manager], async (req, res) => {
   res.send(getOneEmployee);
 });
 
-//TODO:
 //Delete a user
 router.delete("/delete/:id", [auth, manager], async (req, res) => {
-  const { _id, firstName, lastName } = req.employee;
+  // const { _id, firstName, lastName } = req.employee;
   const userToDelete = await Employee.findById(req.params.id);
   const userId = userToDelete._id;
   try {
-
     if (!userToDelete) return res.status(400).send("This user does not exist.");
     if (userToDelete.isManager) {
       await Task.deleteMany({ authorId: userId }, (err) => {
