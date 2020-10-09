@@ -215,17 +215,19 @@ if (findScope){
 })
 
 router.post('/toteam',[auth,manager], async (req,res)=>{
-
+console.log('running')
     const getTeam= await Team.findById(req.body.teamId).select()
     if (!getTeam) return res.status(400).send(`this team doesn't exist`)
 
     const findScope= await Scope.find({_id:req.body.scopeId}).select();
     if (!findScope) return res.status(400).send(`this scope doesn't exist`)
   
-    const include= await Team.find({assignedScoped:{$in:req.body.scopeId}}).select('_id')
-    if(include==req.body.teamId) return res.status(400).send(`this has already been added`)
+    const include= await Team.findById(req.body.teamId).select('assignedScope -_id')
+   const check= await include.assignedScope.includes(req.body.scopeId)
+    if(check === true) return res.status(400).send(`this team has already been added`)
     const assignedScope= await Team.findByIdAndUpdate(req.body.teamId,{$push:{"assignedScope":req.body.scopeId}},{new: true})
     res.send(`scope added to ${getTeam.name}`)
+   
 })
 
 module.exports = router;
