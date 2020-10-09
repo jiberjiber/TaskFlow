@@ -16,7 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import PasswordRecovery from "./pages/PasswordRecovery";
 import ForgotPassword from "./pages/ForgotPassword";
-import ScopeCard from './pages/ScopeCard';
+import ScopePage from './pages/ScopePage';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -80,7 +80,7 @@ function App() {
 
 		// Get user  (decode token)
 		if (window.location.pathname === "/login" || window.location.pathname === "/forgotpassword" || window.location.pathname === "/passwordrecovery/") {
-			console.log('nothing')
+			//console.log('nothing')
 		} else {
 			decodeToken();
 		}
@@ -145,7 +145,7 @@ function App() {
 				</Route>
 				<Route exact path="/scope/:id">
 					<Dashboard user={user} />
-					<ScopeCard projects={projects} />
+					<ScopePage projects={projects} />
 				</Route>
 			</BrowserRouter>
 		);
