@@ -53,8 +53,11 @@ function App() {
 		//try catch to prevent app from crashing if there is not token saved
 		try {
 			const jwt = localStorage.getItem("token");
-			setUser(jwtDecode(jwt));
-			getProjects();
+			const decoded = jwtDecode(jwt);
+			setUser(decoded);
+			if(decoded.isManager){
+				getProjects();
+			}
 		} catch (error) {
 			//if error reroute to login page
 			//could use the same practice:
