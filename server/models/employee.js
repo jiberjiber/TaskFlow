@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { string } = require("joi");
 
 const Schema = mongoose.Schema;
 
@@ -38,16 +37,14 @@ const employeeSchema = new Schema({
     required: true,
     trim: true
   },
+  confirmed: {
+    type: Boolean,
+    default: false
+  },
   pwResetLink: {
     data: String,
     default: ""
   },
-  projectsCreated: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Project"
-    },
-  ],
   team: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Team"
