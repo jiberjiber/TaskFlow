@@ -1,35 +1,39 @@
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
-// eslint-disable-next-line
-import MailIcon from "@material-ui/icons/Mail";
-import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
-import SupervisorAccountOutlinedIcon from "@material-ui/icons/SupervisorAccountOutlined";
-import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
-import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
-// eslint-disable-next-line
-import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import {
+	makeStyles,
+	useTheme,
+	Drawer,
+	AppBar,
+	Toolbar,
+	List,
+	CssBaseline,
+	Divider,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	Button,
+	IconButton,
 	Grid,
 	ThemeProvider,
 	createMuiTheme,
 	useMediaQuery,
 	Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
+import {
+	ChevronLeft,
+	ChevronRight,
+	Menu,
+	DashboardOutlined,
+	SupervisorAccountOutlined,
+	ExitToAppOutlined,
+	// eslint-disable-next-line
+	Mail,
+	// eslint-disable-next-line
+	SettingsOutlined,
+	// eslint-disable-next-line
+	DeleteOutlineOutlined
+} from '@material-ui/icons';
 import Axios from "axios";
 
 const drawerWidth = 240;
@@ -142,7 +146,9 @@ export default function DashBoard(props) {
 	};
 
 	useEffect(() => {
-		getCompany(props.user.company);
+		if(props.user.isManager){
+			getCompany(props.user.company);
+		}
 	},[props])
 
 	return (
@@ -172,7 +178,7 @@ export default function DashBoard(props) {
 										[classes.hide]: open,
 									})}
 								>
-									<MenuIcon />
+									<Menu />
 								</IconButton>
 							</Grid>
 							<Grid item>
@@ -184,7 +190,7 @@ export default function DashBoard(props) {
 									color="inherit"
 									onClick={handleLogout}
 								>
-									Logout <ExitToAppOutlinedIcon />
+									Logout <ExitToAppOutlined />
 								</Button>
 							</Grid>
 						</Grid>
@@ -206,9 +212,9 @@ export default function DashBoard(props) {
 					<div className={classes.toolbar}>
 						<IconButton onClick={handleDrawerClose}>
 							{theme.direction === "rtl" ? (
-								<ChevronRightIcon />
+								<ChevronRight />
 							) : (
-								<ChevronLeftIcon />
+								<ChevronLeft />
 							)}
 						</IconButton>
 					</div>
@@ -216,14 +222,14 @@ export default function DashBoard(props) {
 					<List>
 						<ListItem button key={"dashboard"} component="a" href="/">
 							<ListItemIcon name="teams">
-								<DashboardOutlinedIcon />
+								<DashboardOutlined />
 							</ListItemIcon>
 							<ListItemText primary={"Dashboard"} />
 						</ListItem>
 						{props.user.isManager && (
 							<ListItem button key={"admin"} component="a" href="/admin">
 								<ListItemIcon>
-									<SupervisorAccountOutlinedIcon />
+									<SupervisorAccountOutlined />
 								</ListItemIcon>
 								<ListItemText primary={"Admin"} />
 							</ListItem>
@@ -241,16 +247,16 @@ export default function DashBoard(props) {
 								<DeleteOutlineOutlinedIcon />
 							</ListItemIcon>
 							<ListItemText primary={"Trash"} />
-						</ListItem> */}
+						</ListItem>
 					</List>
-					{/* <Divider /> */}
+					<Divider />
 					<List>
 						<ListItem button key={"settings"} component="a" href="/settings">
 							<ListItemIcon>
 								<SettingsOutlinedIcon />
 							</ListItemIcon>
 							<ListItemText primary={"Settings"} />
-						</ListItem>
+						</ListItem> */}
 					</List>
 				</Drawer>
 				<main className={classes.content}>
