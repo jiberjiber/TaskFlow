@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import jwtDecode from "jwt-decode";
@@ -92,16 +93,9 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
-<<<<<<< HEAD
-		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword"|| window.location.pathname == "/register") {
-			console.log('nothing')
-		} 
-		else {
-=======
 		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/") {
 			console.log('nothing')
 		} else {
->>>>>>> 60ab1b9793bc44ed00e68b68abbbf7e11b7b4097
 			decodeToken();
 		}
 		// eslint-disable-next-line
@@ -185,44 +179,6 @@ function App() {
 		);
 	} else {
 		return (
-<<<<<<< HEAD
-			// <ThemeProvider theme={darkTheme}>
-			// 	<div className={classes.root}>
-			// 		<Grid container spacing={0} direction="column"
-			// 			alignItems="center"
-			// 			justify="center"
-			// 			style={{ minHeight: '100vh' }}>
-			// 			<CircularProgress />
-			// 		</Grid>
-			// 	</div>
-			// </ThemeProvider>
-		
-	
-		<BrowserRouter>
-			<Route exact path="/login" render={(props) => <SignIn {...props} />} />
-			<Route exact path="/register">
-				<Registration/>
-			</Route>
-			<Route exact path="/">
-				<Dashboard user={user} />
-				<TeamOverview projects={projects} />
-			</Route>
-			<Route exact path="/admin">
-				<Dashboard user={user} />
-				<Admin />
-			</Route>
-			<Route exact path="/create">
-				<Dashboard user={user}/>
-				<CreateNew/>
-			</Route>
-			<Route exact path="/project/:id">
-				<Dashboard user={user} />
-				<ProjectInfo />
-			</Route>
-		</BrowserRouter>
-		)};
-
-=======
 			<ThemeProvider theme={darkTheme}>
 				<div className={classes.root}>
 					<Grid
@@ -239,7 +195,6 @@ function App() {
 			</ThemeProvider>
 		);
 	}
->>>>>>> 60ab1b9793bc44ed00e68b68abbbf7e11b7b4097
 }
 
 export default App;
