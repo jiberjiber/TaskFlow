@@ -50,6 +50,7 @@ function Alert(props) {
 
 export default function TeamAdmin(props) {
 	const [company, setCompany] = useState({});
+	const [teams, setTeams] = useState([]);
 	const [open, setOpen] = useState(false);
 	const [status, setStatus] = useState("");
 	const [severity, setSeverity] = useState("info");
@@ -60,7 +61,7 @@ export default function TeamAdmin(props) {
 	const getCompany = (company) => {
 		Axios.get(`/api/company/${company}`)
 			.then((response) => {
-				console.log("company ", response);
+				console.log("company ", response.data);
 				setCompany(response.data[0]);
 			})
 			.catch((err) => {
@@ -68,8 +69,20 @@ export default function TeamAdmin(props) {
 			});
 	};
 
+	const getTeams = (company) => {
+		Axios.get(`/api/team/allteams/${company}`)
+			.then(response => {
+				console.log('teams company api thing',response);
+				setTeams(response.data);
+			})
+			.catch(err => {
+				console.log('err', err);
+			})
+	}
+
 	useEffect(() => {
 		getCompany(props.user.company);
+		getTeams(props.user.company);
 	}, [open]);
 
 	const deleteUser = (event) => {
@@ -89,6 +102,19 @@ export default function TeamAdmin(props) {
 				console.log(err);
 			});
 	};
+
+	const deleteTeam = (event) => {
+		const target = event.currentTarget.name;
+		console.log('team delete', target);
+		Axios.delete(`/api/team/delete/${target}`)
+			.then(response => {
+				console.log('deleted team response', response);
+				window.location.reload();
+			})
+			.catch(err => {
+				console.log('error', err);
+			});
+	}
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
@@ -111,7 +137,7 @@ export default function TeamAdmin(props) {
 						<Grid
 							container
 							direction="column"
-							justify="center"
+							justify="flex-start"
 							alignItems="center"
 						>
 							<Grid item xs style={{ textAlign: "center" }}>
@@ -122,12 +148,46 @@ export default function TeamAdmin(props) {
 									key={"create"}
 									component="a"
 									href="/admin/teams/addteam"
-									disabled
 								>
 									<Fab color="primary" className={classes.fab}>
 										<Add />
 									</Fab>
 								</Tooltip>
+							</Grid>
+							<Grid item>
+								{company.employees ? (
+									<List
+									subheader={
+										<ListSubheader color="inherit">Employees</ListSubheader>
+									}
+									className={classes.empList}
+								>
+									{teams.map((item) => (
+										<ListItem button key={item._id}>
+											<ListItemText
+												primary={item.name}
+											/>
+											<ListItemSecondaryAction>
+					
+													<Tooltip
+														title="Delete"
+														component="button"
+														value={item._id}
+														name={item._id}
+														onClick={deleteTeam}
+													>
+														<IconButton>
+															<Delete color="secondary" />
+														</IconButton>
+													</Tooltip>
+
+											</ListItemSecondaryAction>
+										</ListItem>
+									))}
+								</List>
+								):(
+									<h1>Test</h1>
+								)}
 							</Grid>
 						</Grid>
 					</Grid>
@@ -146,7 +206,7 @@ export default function TeamAdmin(props) {
 									component="button"
 									key={"create"}
 									component="a"
-									href="/admin//teams/addemployee"
+									href="/admin/teams/addemployee"
 								>
 									<Fab color="primary" className={classes.fab}>
 										<Add />

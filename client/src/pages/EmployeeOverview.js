@@ -59,7 +59,6 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function EmployeeOverview(props) {
 	const [teams, setTeams] = useState([]);
-	const [form, setForm] = useState({});
 	const classes = useStyles();
 
 	console.log("props", props);
@@ -108,7 +107,7 @@ export default function EmployeeOverview(props) {
 							item
 							xs={12}
 							sm={6}
-							style={{ paddingBottom: "50px" }}
+							style={{ paddingLeft: "25px", paddingRight: "25px" }}
 							key={team._id}
 						>
 							<Typography variant="h3">{team.name}</Typography>
