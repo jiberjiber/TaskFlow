@@ -191,7 +191,7 @@ const onFormUpdate = (event) => {
                 })
                 .catch(function (error) {
                     console.log(error.response);
-                    setErrors(error.response.data.errors[0].name);
+                    setErrors('error');
                     handleClick();
                 });
             

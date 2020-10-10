@@ -16,46 +16,31 @@ router.post(
     try {
       const data = req.body;
       const { _id, firstName, lastName } = req.employee;
-      const company = await Company.findOne({
-        employees: { $in: _id },
-      }).select();
+      const company = await Company.findOne({ employees: { $in: _id } }).select();
       const newTeam = new Team({
         name: data.name,
         owner: `${firstName} ${lastName}`,
         ownerId: _id,
         assignedScope: data.assignedScope,
         company: company._id,
-        members: data.members,
       });
-      let teamId = await newTeam.returnid();
+      let id= await newTeam.returnid()
       await newTeam.save();
-      let teamArray = req.body.members;
-
-      teamArray.map(async (x) => {
-        await Team.findByIdAndUpdate(
-          teamId,
-          { $push: { members: x } },
-          { new: true }
-        );
-      });
-      if (teamId) {
-        const teamCompany = await Company.findByIdAndUpdate(
-          req.body.company,
-          { $push: { teams: teamId } },
-          { new: true }
-        );
-        await teamCompany.save();
-
-        const getThisTeam = await Team.findById(teamId)
-          .populate("members")
-          .select()
-          .sort("dateCreated")
-          .populate({ path: "assignedScope", populate: "task" })
-          .select();
-
-        console.log(getThisTeam);
-        res.send(getThisTeam);
-      }
+      let teamArray=req.body.members
+  
+      teamArray.map(async (x)=>{
+       await Team.findByIdAndUpdate(id,
+          {$push:{"members":x}},{new: true}
+          )
+  
+      })
+      const getThisTeam= await Team.findById(id).populate('members').select().sort('dateCreated');
+  
+      
+      console.log(getThisTeam);
+      res.send(getThisTeam);
+  
+  
     } catch (err) {
       res.status(400);
       return res.send(err.message);
