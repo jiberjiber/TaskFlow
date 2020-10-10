@@ -81,7 +81,7 @@ function App() {
 	const getProjects = () => {
 		Axios.get("/api/project")
 			.then((response) => {
-				//console.log(response.data);
+				// console.log('project api response',response.data);
 				setProjects(response.data);
 			})
 			.catch((err) => {
@@ -95,9 +95,28 @@ function App() {
 
 		// Get user  (decode token)
 		if (window.location.pathname == "/" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/" || window.location.pathname == "/register") {
-			console.log('nothing')
+			console.log(`%c\n\n 
+			████████╗ █████╗ ███████╗██╗  ██╗███████╗██╗      ██████╗ ██╗    ██╗
+			╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝██╔════╝██║     ██╔═══██╗██║    ██║
+			   ██║   ███████║███████╗█████╔╝ █████╗  ██║     ██║   ██║██║ █╗ ██║
+			   ██║   ██╔══██║╚════██║██╔═██╗ ██╔══╝  ██║     ██║   ██║██║███╗██║
+			   ██║   ██║  ██║███████║██║  ██╗██║     ███████╗╚██████╔╝╚███╔███╔╝
+			   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝ ╚═════╝  ╚══╝╚══╝ 
+																				
+			   
+			 A project management suite.\n\n  `, "font-family:monospace;color:#1976d2;font-size:12px;");
 		} else {
 			decodeToken();
+			console.log(`%c\n\n 
+			████████╗ █████╗ ███████╗██╗  ██╗███████╗██╗      ██████╗ ██╗    ██╗
+			╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝██╔════╝██║     ██╔═══██╗██║    ██║
+			   ██║   ███████║███████╗█████╔╝ █████╗  ██║     ██║   ██║██║ █╗ ██║
+			   ██║   ██╔══██║╚════██║██╔═██╗ ██╔══╝  ██║     ██║   ██║██║███╗██║
+			   ██║   ██║  ██║███████║██║  ██╗██║     ███████╗╚██████╔╝╚███╔███╔╝
+			   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝ ╚═════╝  ╚══╝╚══╝ 
+																				
+			   
+			 A project management suite.\n\n  `, "font-family:monospace;color:#1976d2;font-size:12px;");
 		}
 		// eslint-disable-next-line
 	}, []);
