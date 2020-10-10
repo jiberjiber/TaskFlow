@@ -12,6 +12,7 @@ import {
 	TableRow,
 	TableBody
 } from "@material-ui/core";
+import Axios from 'axios';
 
 export default function ScopeCard(props) {
 	const [scope, setScope] = useState({});
@@ -31,8 +32,14 @@ export default function ScopeCard(props) {
 	}, [props, id]);
 
 	const handleChange = (event) => {
-		setForm({ ...form, [event.target.name]: event.target.checked });
-		//console.log("new state", form);
+		Axios.put(`/api/project/scope/task/status/${event.currentTarget.name}`)
+			.then(response => {
+				console.log('task complete API', response);
+				window.location.reload();
+			})
+			.catch(err => {
+				console.log('error', err);
+			});
 	};
 
 	//console.log(scope);
