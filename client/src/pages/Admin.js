@@ -156,7 +156,6 @@ export default function Admin(props) {
 			) : (
 					<Grid 
 						container 
-						spacing={0} 
 						direction="column"
 						alignItems="center"
 						justify="center"
