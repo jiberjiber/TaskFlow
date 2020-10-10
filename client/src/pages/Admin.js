@@ -1,8 +1,8 @@
 // eslint-disable-next-line
-import React, { useState } from "react";
-import Axios from 'axios';
-import { 
-	withStyles, 
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
+import {
+	withStyles,
 	makeStyles,
 	Grid,
 	IconButton,
@@ -17,13 +17,10 @@ import {
 	CircularProgress,
 	Divider,
 	Fab,
+	Snackbar,
 } from "@material-ui/core";
-import {
-	Add,
-	Delete,
-	Settings,
-	Launch
-} from '@material-ui/icons';
+import { Add, Delete, Settings, Launch } from "@material-ui/icons";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -46,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+function Alert(props) {
+	return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const StyledTableCell = withStyles((theme) => ({
 	head: {
 		backgroundColor: theme.palette.common.black,
@@ -65,28 +66,56 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 export default function Admin(props) {
+	const [projects, setProjects] = useState([]);
+	const [open, setOpen] = useState(false);
+	const [status, setStatus] = useState("");
+	const [severity, setSeverity] = useState("info");
 	const classes = useStyles();
 
 	const deleteProject = (event) => {
 		const target = event.currentTarget.value;
-		console.log('project delete called', target);
+		console.log("project delete", target);
 		Axios.delete(`/api/project/${target}`)
-			.then(response => {
-				console.log('delete response', response);
+			.then((response) => {
+				console.log("delete response", response);
+				setStatus("Successfully deleted project!");
+				setSeverity("success");
+				setOpen(true);
 				window.location.reload();
 			})
-			.catch(err => {
-				console.log('error', err);
-			})
-	}
-	
+			.catch((err) => {
+				console.log("error", err);
+				setStatus("An error has occurred, please retry.");
+				setSeverity("error");
+				setOpen(true);
+			});
+	};
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+	};
+
+	useEffect(() => {
+		setProjects(props.projects);
+	},[open, props.projects]);
+
 	return (
 		<div className={classes.root}>
 			<Grid className={classes.m25}>
 				<Grid item xs style={{ textAlign: "center" }}>
 					<Typography variant="h4">New Project</Typography>
 					{/* eslint-disable-next-line*/}
-					<Tooltip title="Add" component="button" key={"create"} component="a" href="/create">
+					<Tooltip
+						title="Add"
+						component="button"
+						key={"create"}
+						component="a"
+						href="/create"
+					>
 						<Fab color="primary" className={classes.fab}>
 							<Add />
 						</Fab>
@@ -117,32 +146,52 @@ export default function Admin(props) {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{props.projects.map((project) => (
+							{projects.map((project) => (
 								<StyledTableRow key={project._id}>
 									<StyledTableCell>
 										<Typography color="textPrimary">{project.title}</Typography>
 									</StyledTableCell>
 									<StyledTableCell>
-										<Typography color="textPrimary">{project.dueDate}</Typography>
+										<Typography color="textPrimary">
+											{project.dueDate}
+										</Typography>
 									</StyledTableCell>
 									<StyledTableCell>
-										<Typography color="textPrimary">{project.isComplete ? ("Complete") : ("In Progress")}</Typography>
+										<Typography color="textPrimary">
+											{project.isComplete ? "Complete" : "In Progress"}
+										</Typography>
 									</StyledTableCell>
 									<StyledTableCell>
-										<Typography color="textPrimary">{project.creator}</Typography>
+										<Typography color="textPrimary">
+											{project.creator}
+										</Typography>
 									</StyledTableCell>
 									<StyledTableCell>
-										<Tooltip title="Open Project" component="a" href={"/project/" + project._id}>
+										<Tooltip
+											title="Open Project"
+											component="a"
+											href={"/project/" + project._id}
+										>
 											<IconButton>
 												<Launch color="action" />
 											</IconButton>
 										</Tooltip>
-										<Tooltip title="Manage" component="a" href={"/project/" + project._id + "/manage"}>
+										<Tooltip
+											title="Manage"
+											component="a"
+											href={"/project/" + project._id + "/manage"}
+										>
 											<IconButton>
 												<Settings color="action" />
 											</IconButton>
 										</Tooltip>
-										<Tooltip title="Delete" component="button" value={project._id} name={project._id} onClick={deleteProject}>
+										<Tooltip
+											title="Delete"
+											component="button"
+											value={project._id}
+											name={project._id}
+											onClick={deleteProject}
+										>
 											<IconButton>
 												<Delete color="secondary" />
 											</IconButton>
@@ -154,15 +203,15 @@ export default function Admin(props) {
 					</Table>
 				</Container>
 			) : (
-					<Grid 
-						container 
-						direction="column"
-						alignItems="center"
-						justify="center"
-					>
-						<CircularProgress />
-					</Grid>
-				)}
+				<Grid container direction="column" alignItems="center" justify="center">
+					<CircularProgress />
+				</Grid>
+			)}
+			<Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+				<Alert onClose={handleClose} severity={severity}>
+					{status}
+				</Alert>
+			</Snackbar>
 		</div>
 	);
 }
