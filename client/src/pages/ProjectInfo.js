@@ -12,12 +12,16 @@ import {
 	TableCell,
 	TableRow,
 	TableHead,
+	Fab,
+	Tooltip,
+	IconButton,
+	CircularProgress
 } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Tooltip from "@material-ui/core/Tooltip";
+import {
+	Add,
+	Delete,
+} from '@material-ui/icons';
 
 const StyledTableCell = withStyles((theme) => ({
 	head: {
@@ -93,9 +97,11 @@ export default function ProjectInfo(props) {
 	const classes = useStyles();
 
 	useEffect(() => {
+		// eslint-disable-next-line
 		props.projects.map((item) => {
 			if (item._id === id) {
 				//console.log(item);
+				// eslint-disable-next-line
 				project = item;
 				setCurrentProject(item);
 			}
@@ -109,9 +115,12 @@ export default function ProjectInfo(props) {
 
 	// Do calcs to find progress
 	const calculateProgress = () => {
+		// eslint-disable-next-line
 		let tasks = [];
+		// eslint-disable-next-line
 		project.scope.map((item) => {
 			//console.log(item);
+			// eslint-disable-next-line
 			item.task.map((task) => {
 				tasks.push(task);
 			});
@@ -119,6 +128,7 @@ export default function ProjectInfo(props) {
 		//console.log(tasks);
 		let total = tasks.length;
 		let complete = 0;
+		// eslint-disable-next-line
 		tasks.map((item) => {
 			if (item.isComplete === true) {
 				complete++;
@@ -239,14 +249,17 @@ export default function ProjectInfo(props) {
 								<Typography variant="h3">Scope: {scope.scopeName}</Typography>
 							</Grid>
 							<Grid item>
+								<Tooltip title="Add Task" key={"create"} component="a" href="/create">
+									<IconButton><Add color="primary" /></IconButton>
+								</Tooltip>
 								<Tooltip
-									title="Delete"
+									title="Delete Scope"
 									component="button"
 									name={scope._id}
 									onClick={deleteScope}
 								>
 									<IconButton>
-										<DeleteIcon color="secondary" />
+										<Delete color="secondary" />
 									</IconButton>
 								</Tooltip>
 							</Grid>
@@ -296,7 +309,7 @@ export default function ProjectInfo(props) {
 												onClick={deleteTask}
 											>
 												<IconButton>
-													<DeleteIcon color="secondary" />
+													<Delete color="secondary" />
 												</IconButton>
 											</Tooltip>
 										</TableCell>
@@ -306,6 +319,18 @@ export default function ProjectInfo(props) {
 						</Table>
 					</div>
 				))}
+				<br />
+				<br />
+				<Grid className={classes.m25}>
+				<Grid item xs style={{ textAlign: "center" }}>
+					<Typography variant="h4">Add Scope</Typography>
+					<Tooltip title="Add Scope" key={"create"} component="a" href="/create">
+						<Fab color="primary" className={classes.fab}>
+							<Add />
+						</Fab>
+					</Tooltip>
+				</Grid>
+			</Grid>
 		</Container>
 	);
 }

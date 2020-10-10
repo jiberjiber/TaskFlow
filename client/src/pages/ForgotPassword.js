@@ -1,22 +1,20 @@
 import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 import { useParams } from "react-router-dom";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+import {
+	Avatar,
+	Button,
+	CssBaseline,
+	TextField,
+	Box,
+	Typography,
+	Container,
+	makeStyles,
+	createMuiTheme,
+	ThemeProvider,
+	useMediaQuery,
+} from '@material-ui/core';
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Copyright from "../components/Copyright";
-import Axios from "axios";
-import { Snackbar } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -38,14 +36,19 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+<<<<<<< HEAD
 function Alert(props) {
-	return <MuiAlert elevation={6} variant="filled" {...props} />;
+	return //<MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+=======
+>>>>>>> 60ab1b9793bc44ed00e68b68abbbf7e11b7b4097
 export default function ForgotPassword() {
+	// eslint-disable-next-line
 	const { token } = useParams();
 	const classes = useStyles();
 	const [form, setForm] = useState();
+	// eslint-disable-next-line
 	let sent = false;
 
 	const handleFormChange = (event) => {
@@ -113,7 +116,6 @@ export default function ForgotPassword() {
 				<Box mt={8}>
 					<Copyright />
 				</Box>
-				{sent && <Alert>Email has been sent!</Alert>}
 			</Container>
 		</ThemeProvider>
 	);
