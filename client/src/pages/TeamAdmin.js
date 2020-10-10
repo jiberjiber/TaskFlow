@@ -19,7 +19,7 @@ import {
 	Snackbar,
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import { Add, Delete, CheckBox, BuildSharp } from "@material-ui/icons";
+import { Add, Delete, BuildSharp } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
