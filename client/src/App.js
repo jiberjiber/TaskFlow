@@ -16,6 +16,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ScopePage from "./pages/ScopePage";
 import TeamAdmin from "./pages/TeamAdmin";
 import AddEmployee from "./components/AddEmployee";
+import AddTeam from "./components/AddTeam";
 import {
 	Grid,
 	ThemeProvider,
@@ -123,7 +124,7 @@ function App() {
 					<Route
 						exact
 						path="/register"
-						render={<Registration/>}
+						render={(props) => <Registration {...props} />}
 					/>
 					<Route exact path="/">
 						{user.isManager && (
@@ -167,11 +168,25 @@ function App() {
 							</div>
 						)}
 					</Route>
-					<Route exact path="/admin//teams/addemployee">
+					<Route exact path="/admin/teams/addemployee">
 						{user.isManager && (
 							<div>
 								<Dashboard user={user} theme={theme} />
 								<AddEmployee user={user} projects={projects} />
+							</div>
+						)}
+						{!user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<Error />
+							</div>
+						)}
+					</Route>
+					<Route exact path="/admin/teams/addteam">
+						{user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<AddTeam user={user} projects={projects} />
 							</div>
 						)}
 						{!user.isManager && (
