@@ -151,6 +151,7 @@ const onFormUpdate = (event) => {
                 handleSucces()
             })
             .catch(function (error) {
+                // console.log(error.response)
                 setErrors(error.response.data);
                 handleClick()
             });
@@ -225,6 +226,7 @@ function loop(){
                    handleSucces()
                 })
                 .catch(function (error) {
+                    console.log(error.response.data)
                     setErrors(error.response.data);
                     handleClick();
                 });

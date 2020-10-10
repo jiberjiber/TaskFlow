@@ -17,11 +17,11 @@ router.post('/',[auth,manager], async (req,res)=>{
     const {error}= validation.validScope(req.body);
     if(error) return res.status(400).send('missing input or input field requirements not met')
     
-   //checkdudates
+   //checkduEdates
   const thisProject= await Project.findById(req.body.projectId).select('dueDate -_id')
   
-//   const check=await validation.checkProjectDueDate(req.body.dueDate,thisProject.dueDate)
-//     if(check) return res.status(403).send('scope due date should be within the project timeframe')
+  const check=await validation.checkProjectDueDate(req.body.dueDate,thisProject.dueDate)
+    if(check) return res.status(403).send('scope due date should be within the project timeframe')
     const { _id}=req.employee;
     const newScope=new Scope({
 scopeName:req.body.scopeName,
@@ -94,7 +94,7 @@ router.get('/:id',async (req,res)=>{
 
 //this gets you all the scopes with project id - this returns all scopes
 //for this project
-router.get('/one/:id',async (req,res)=>{
+router.get('/one/:id',[auth],async (req,res)=>{
 
     const getThisScope= await Scope.find({_id:{$in:req.params.id}}).populate('task').select().sort('dateCreated');
     // const getThisScope= await Scope.find({_id:{$in:req.params.id}}).select();
@@ -115,12 +115,16 @@ if (data){
     res.send(array)
 })
 
-router.put('/one/:id',async(req,res)=>{    
+router.put('/one/:id',[auth,manager],async(req,res)=>{    
 try{
 
     const {error}= validation.validScope(req.body);
     if(error) return res.status(400).send('missing input or input field requirements not met')
     //checking if scope exist
+    const thisProject= await Project.findById(req.body.projectId).select('dueDate -_id')
+  
+  
+    
     const checkThisScope= await Scope.find({_id:{$in:req.params.id}}).select()
     if (!checkThisScope.length>0) return res.status(400).send('The Scope with this id is not found')
     
@@ -159,7 +163,7 @@ if (myData){
 })
 
 /// route to delete the Scope schema and all the child elements(task)
-router.delete('/one/:id',async (req,res)=>{
+router.delete('/one/:id',[auth,manager],async (req,res)=>{
         //this gets me one scope (id)
     const findScope= await Scope.findById(req.params.id).select();
 //this gets me an array of tasks (children of scopes)
@@ -231,6 +235,15 @@ router.post('/toteam',[auth,manager], async (req,res)=>{
     const assignedScope= await Team.findByIdAndUpdate(req.body.teamId,{$push:{"assignedScope":req.body.scopeId}},{new: true})
     res.send(`scope added to ${getTeam.name}`)
    
+})
+
+
+router.put('/status/:id',[auth],async (req,res)=>{
+    let status= await Scope.findById(req.params.id).select('isComplete -_id')
+    let result=await !status.isComplete
+    let update=await Scope.findByIdAndUpdate(req.params.id,{isComplete:result},{new:true})
+    console.log(status)
+    res.send(update.isComplete)
 })
 
 module.exports = router;
