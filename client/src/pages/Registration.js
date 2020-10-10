@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Card, CardContent, Container } from '@material-ui/core'
+import ProjectForm from '../components/forms/testProjectForm';
 
 //for a new member that is creating a company to be manager of
 const Registration = () => {
@@ -18,13 +19,17 @@ const Registration = () => {
         url: "",
 
     })
-    getMembers();
+    // getCompanyInfo();
    
-    function getMembers() {
+    function getCompanyInfo() {
         axios.get('/api/company')
           .then(function (response) {
-            console.log(response);
-          })
+            console.log(response)
+            response.map(data){
+
+            };
+        // if( ProjectForm.name == )
+        //   })
           .catch(function (error) {
             console.log(error);
           });
