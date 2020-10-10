@@ -83,7 +83,15 @@ export default function EmployeeOverview(props) {
 	}, [props]);
 
 	const handleChange = (event) => {
-		setForm({ ...form, [event.target.name]: event.target.checked });
+		
+		Axios.put(`/api/project/scope/task/status/${event.currentTarget.name}`)
+			.then(response => {
+				//console.log('task complete API', response);
+				window.location.reload();
+			})
+			.catch(err => {
+				console.log('error', err);
+			});
 	};
 
 	return (

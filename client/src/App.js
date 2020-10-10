@@ -93,7 +93,7 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
-		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/"||window.location.pathname == "/register") {
+		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/" || window.location.pathname == "/register") {
 			console.log('nothing')
 		} else {
 			decodeToken();

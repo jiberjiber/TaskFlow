@@ -121,7 +121,8 @@ export default function TeamAdmin(props) {
 									component="button"
 									key={"create"}
 									component="a"
-									href="/create"
+									href="/admin/teams/addteam"
+									disabled
 								>
 									<Fab color="primary" className={classes.fab}>
 										<Add />
