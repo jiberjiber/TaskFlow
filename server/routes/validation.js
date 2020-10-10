@@ -11,7 +11,7 @@ module.exports={
     const schema =Joi.object({
         title:Joi.string().min(5).max(50).required(),
         description:Joi.string().min(5).max(255).required(),
-        dueDate:Joi.string().min(11).required()
+        dueDate:Joi.string().min(1).required()
     });
 
     return schema.validate(req);
