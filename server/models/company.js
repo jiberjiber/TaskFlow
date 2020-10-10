@@ -23,6 +23,12 @@ const CompanySchema = new Schema({
       ref: "Employee",
     },
   ],
+  teams: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Team",
+    },
+  ],
   url: {
     type: String
   },
