@@ -13,6 +13,7 @@ import EmployeeOverview from "./pages/EmployeeOverview";
 import PasswordRecovery from "./pages/PasswordRecovery";
 import ForgotPassword from "./pages/ForgotPassword";
 import ScopePage from "./pages/ScopePage";
+import TeamAdmin from "./pages/TeamAdmin";
 import {
 	Grid,
 	ThemeProvider,
@@ -141,11 +142,11 @@ function App() {
 						</div>
 					)}
 				</Route>
-				<Route exact path="/admin/new">
+				<Route exact path="/admin/teams">
 					{user.isManager && (
 						<div>
 							<Dashboard user={user} />
-							<CreateNew />
+							<TeamAdmin user={user} projects={projects} />
 						</div>
 					)}
 					{!user.isManager && (
