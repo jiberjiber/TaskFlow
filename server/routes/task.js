@@ -10,8 +10,9 @@ const router = express.Router();
 const time= require("./timestamp");
 
 router.post('/',[auth,manager], async (req,res)=>{
-    const {error}= validation.validTask(req.body);
-    if(error) return res.status(400).send('missing input or input field requirements not met')
+    const {error}=await validation.validTask(req.body);
+    console.log(error)
+    if(error!==undefined) return res.status(400).send('missing input or input field requirements not met')
 
     const { _id}=req.employee;
 const newTask=new Task({
@@ -100,7 +101,7 @@ res.send(array)
 router.put('/one/:id', async (req,res)=>{
     try{
         const {error}= validation.validTask(req.body);
-        if(error) return res.status(400).send('missing input or input field requirements not met')
+        if(error!==undefined) return res.status(400).send('missing input or input field requirements not met')
     const checkThisTask= await Task.find({_id:{$in:req.params.id}}).select();
 
     if (!checkThisTask.length>0) return res.status(400).send('The Task with this id is not found');

@@ -70,23 +70,34 @@ router.put("/:id", async (req, res) => {
   try {
     const teamId = req.params.id;
     const newData = req.body.members;
-    const getMember = await Team.findOne({members:{$in: newData}}).select();
-    if (getMember) return res.status(400).send("One or more user is already in the team");
+    if(req.body.name.length==0) return  res.status(400).send("Missing Name for team");
+    // const getMember = await Team.findOne({members:{$in: newData}}).select();
+    // if (getMember) return res.status(400).send("One or more user is already in the team");
     if (!teamId) return res.status(400).send("Please provide a valid team Id");
     if (newData.length == 0)
       return res.status(400).send("No members to display.");
-    newData.map(async (info) => {
-      await Team.findByIdAndUpdate(
-        { _id: teamId },
-        { $push: { members: info } },
-        { safe: true, upsert: true, new: true }
-      );
-      const newTeam = await Team.findById(teamId)
+    // newData.map(async (info) => {
+    //   await Team.findByIdAndUpdate(
+    //     { _id: teamId },
+    //     { $push: { members: info } },
+    //     { safe: true, upsert: true, new: true }
+    //   );
+      
+    // });
+    await Team.findByIdAndUpdate(
+      { _id: teamId },
+      {$set:{members:newData}},
+    );
+    await Team.findByIdAndUpdate(
+      { _id: teamId },
+      {name:req.body.name},
+    );
+    
+    const newTeam = await Team.findById(teamId)
         .populate("members")
         .select()
         .sort("firstName");
       res.send(newTeam);
-    });
   } catch (err) {
     console.log(err);
     res.status(400).send(err);
