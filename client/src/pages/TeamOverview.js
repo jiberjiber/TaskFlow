@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Axios from 'axios';
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-import TeamCard from "../components/TeamCard";
+import {
+	makeStyles,
+	AppBar,
+	Tabs,
+	Tab,
+	Typography,
+	Box,
+	Grid,
+	Link,
+} from '@material-ui/core';
+import ScopeCard from "../components/ScopeCard";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -93,23 +96,40 @@ export default function TeamOverview(props) {
 					variant="scrollable"
 					scrollButtons="auto"
 				>
-					{props.projects.length>0 && props.projects.map((item, index) => (
-						<Tab label={item.title} name={item._id} {...a11yProps(index)} key={item._id} />
-					))}
+					{props.projects.length ? (
+						props.projects.map((item, index) => (
+							<Tab label={item.title} name={item._id} {...a11yProps(index)} key={item._id} />
+						))
+					) : (
+						<Tab label="No projects to show!" />
+					)}
 				</Tabs>
 			</AppBar>
-			{props.projects.length>0 && props.projects.map((project, index) => (
+			{props.projects.length ? (props.projects.map((project, index) => (
 				<TabPanel value={value} index={index} key={project._id}>
 					<Grid container spacing={3}>
 						{scopes.map((item, index) => (
-								<TeamCard key={item._id} scope={item}/>
+								<ScopeCard key={item._id} scope={item}/>
 						))}
 						{project.scope.length<1 && 
 							<Typography>This project has no scopes!</Typography>
 						}
 					</Grid>
 				</TabPanel>
-			))}
+			))):(
+				<TabPanel value={0} index={0}>
+					<Grid
+						container
+						direction="row"
+						justify="center"
+						alignItems="center"
+					>
+						<Grid item xs={12}>
+							<Typography variant="h3">No projects to show, go to the {<Link href="/admin">admin page</Link>} to create one.</Typography>
+						</Grid>
+					</Grid>
+				</TabPanel>
+			)}
 		</div>
 	);
 }
