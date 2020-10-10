@@ -16,7 +16,6 @@ import Axios from 'axios';
 
 export default function ScopeCard(props) {
 	const [scope, setScope] = useState({});
-	const [form, setForm] = useState({});
 	const { id } = useParams();
 
 	useEffect(() => {
