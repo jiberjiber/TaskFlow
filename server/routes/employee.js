@@ -16,6 +16,7 @@ const { Project } = require("../models/project.js");
 const { Scope } = require("../models/scope.js");
 const { Task } = require("../models/task.js");
 const { sendWelcomeEmail } = require("../services/emailService");
+require("dotenv").config();
 
 //Register new employee
 router.post("/register", validateSignupData(), validate, async (req, res) => {
@@ -73,6 +74,7 @@ router.post("/register", validateSignupData(), validate, async (req, res) => {
     res.status(400).send(err);
   }
 });
+
 //User login
 router.post("/login", async (req, res) => {
   try {
@@ -88,7 +90,6 @@ router.post("/login", async (req, res) => {
       return res.status(400).send("Invalid email or password.");
     const token = await checkUser.generateToken();
     res.send(token);
-    //TODO: signin form not sending msg, just 400 status. fix
   } catch (err) {
     res.status(403).send(err);
     console.log(err);
