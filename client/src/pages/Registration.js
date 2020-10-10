@@ -121,6 +121,15 @@ const Registration = () => {
                             className="form-control" />
                     </div>
                     <div className="form-group">
+                        <label>Username</label>
+                        <small>This will be another way users to identify you.</small>
+                        <input
+                            onChange={handleFormChange}
+                            name="username"
+                            value={RegisterForm.username}
+                            className="form-control" />
+                    </div>
+                    <div className="form-group">
                         <label>Are You a Manager?</label>
                         <br/>
                             <input style={{marginRight:"8px"}} type="radio" onChange={onRadioChange} value={true} name="isManager" /> Yes
