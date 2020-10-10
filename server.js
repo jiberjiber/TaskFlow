@@ -31,12 +31,14 @@ if (mongoDataBase === "production") {
 	app.use(express.static("client/build"));
 }
 
-//Routes
-app.use(routes);
-
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
+
+//Routes
+app.use(routes);
+
+
 
 //Connect to Mongo DB
 //crossing out mongo so we can use our local db when testing
