@@ -186,7 +186,9 @@ export default function TeamAdmin(props) {
 									))}
 								</List>
 								):(
-									<h1>Test</h1>
+									<Grid item xs>
+										<CircularProgress />
+									</Grid>
 								)}
 							</Grid>
 						</Grid>
