@@ -19,7 +19,9 @@ export default function ScopeCard(props) {
 	const { id } = useParams();
 
 	useEffect(() => {
+		// eslint-disable-next-line
 		props.projects.map((project) => {
+			// eslint-disable-next-line
 			project.scope.map((scope) => {
 				if (scope._id === id) {
 					setScope(scope);
@@ -30,7 +32,7 @@ export default function ScopeCard(props) {
 
 	const handleChange = (event) => {
 		setForm({ ...form, [event.target.name]: event.target.checked });
-		console.log("new state", form);
+		//console.log("new state", form);
 	};
 
 	//console.log(scope);

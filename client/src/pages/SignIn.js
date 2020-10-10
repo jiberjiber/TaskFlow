@@ -1,20 +1,23 @@
 import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+import {
+	Avatar,
+	Button,
+	CssBaseline,
+	TextField,
+	Box,
+	Typography,
+	Container,
+	makeStyles,
+	createMuiTheme,
+	ThemeProvider,
+	useMediaQuery,
+	Grid,
+	Link,
+} from '@material-ui/core';
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Copyright from '../components/Copyright';
+import Copyright from "../components/Copyright";
+import ErrorDialog from "../components/ErrorDialog";
 import Axios from "axios";
-
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -38,27 +41,37 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
 	const classes = useStyles();
-
+	const [alert, setAlert] = useState(false);
 	const [form, setForm] = useState();
+	// eslint-disable-next-line
+	const [errorMsg, setErrorMsg] = useState("");
 
 	const handleFormChange = (event) => {
 		const { name, value } = event.target;
-		setForm({...form, [name]:value});
-	}
+		setForm({ ...form, [name]: value });
+	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		//console.log('Form input:', form);
 		Axios.post(`/api/employee/login`, form)
 			.then((response) => {
-				localStorage.setItem('token', response.data);
+				localStorage.setItem("token", response.data);
 				window.location = "/";
 			})
 			.catch((err) => {
 				console.log(err);
+				setErrorMsg(err.status);
+				setAlert(true);
 			});
-		
-	}
+	};
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+		setAlert(false);
+	};
 
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
@@ -74,71 +87,68 @@ export default function SignIn() {
 
 	return (
 		<ThemeProvider theme={darkTheme}>
-		<Container component="main" maxWidth="xs" theme={darkTheme}>
-			<CssBaseline />
-			<div className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
-				</Avatar>
-				<Typography component="h1" variant="h5">
-					Sign in
-				</Typography>
-				<form className={classes.form} noValidate onSubmit={handleSubmit}>
-					<TextField
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						id="email"
-						label="Email Address"
-						name="email"
-						autoComplete="email"
-						onChange={handleFormChange}
-						autoFocus
-					/>
-					<TextField
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						name="password"
-						label="Password"
-						type="password"
-						id="password"
-						autoComplete="current-password"
-						onChange={handleFormChange}
-					/>
-					{/* <FormControlLabel
-						control={<Checkbox value="remember" color="primary" />}
-						label="Remember me"
-					/> */}
-					<Button
-						type="submit"
-						fullWidth
-						variant="contained"
-						color="primary"
-						className={classes.submit}
-					>
-						Sign In
-					</Button>
-					<Grid container>
-						<Grid item xs>
-							<Link href="#" variant="body2">
-								Forgot password?
-							</Link>
+			<Container component="main" maxWidth="xs" theme={darkTheme}>
+				<CssBaseline />
+				<div className={classes.paper}>
+					<Avatar className={classes.avatar}>
+						<LockOutlinedIcon />
+					</Avatar>
+					<Typography component="h1" variant="h5">
+						Sign in
+					</Typography>
+					<form className={classes.form} noValidate onSubmit={handleSubmit}>
+						<TextField
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							id="email"
+							label="Email Address"
+							name="email"
+							autoComplete="email"
+							onChange={handleFormChange}
+							autoFocus
+						/>
+						<TextField
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							name="password"
+							label="Password"
+							type="password"
+							id="password"
+							autoComplete="current-password"
+							onChange={handleFormChange}
+						/>
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							color="primary"
+							className={classes.submit}
+						>
+							Sign In
+						</Button>
+						<Grid container>
+							{/* <Grid item xs>
+								<Link href="#" variant="body2">
+									Forgot password?
+								</Link>
+							</Grid> */}
+							<Grid item>
+								<Link href="mailto:rt.terabytes@gmail.com" variant="body2">
+									{"Contact us to set up an account"}
+								</Link>
+							</Grid>
 						</Grid>
-						<Grid item>
-							<Link href="/register" variant="body2">
-								New to TaskHub? Register Here!
-							</Link>
-						</Grid>
-					</Grid>
-				</form>
-			</div>
-			<Box mt={8}>
-				<Copyright />
-			</Box>
-		</Container>
+					</form>
+				</div>
+				<Box mt={8}>
+					<Copyright />
+				</Box>
+			</Container>
+			<ErrorDialog open={alert} handleClose={handleClose} />
 		</ThemeProvider>
 	);
 }
