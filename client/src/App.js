@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import jwtDecode from "jwt-decode";
 import { BrowserRouter, Route } from "react-router-dom";
+import Registration from "./pages/Registration";
 import Dashboard from "./frames/Dashboard";
 import SignIn from "./pages/SignIn";
 import TeamOverview from "./pages/TeamOverview";
@@ -91,12 +92,8 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
-		if (
-			window.location.pathname === "/login" ||
-			window.location.pathname === "/forgotpassword" ||
-			window.location.pathname === "/passwordrecovery/"
-		) {
-			//console.log('nothing')
+		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/") {
+			console.log('nothing')
 		} else {
 			decodeToken();
 		}
