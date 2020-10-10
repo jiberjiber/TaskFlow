@@ -36,13 +36,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-<<<<<<< HEAD
-function Alert(props) {
-	return //<MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-=======
->>>>>>> 60ab1b9793bc44ed00e68b68abbbf7e11b7b4097
 export default function ForgotPassword() {
 	// eslint-disable-next-line
 	const { token } = useParams();
