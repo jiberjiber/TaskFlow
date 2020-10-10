@@ -59,7 +59,6 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function EmployeeOverview(props) {
 	const [teams, setTeams] = useState([]);
-	const [form, setForm] = useState({});
 	const classes = useStyles();
 
 	console.log("props", props);
