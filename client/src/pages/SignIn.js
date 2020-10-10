@@ -128,8 +128,8 @@ export default function SignIn() {
 							</Link>
 						</Grid>
 						<Grid item>
-							<Link href="#" variant="body2">
-								{"Contact us to set up an account"}
+							<Link href="/register" variant="body2">
+								New to TaskHub? Register Here!
 							</Link>
 						</Grid>
 					</Grid>

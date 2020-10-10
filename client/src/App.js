@@ -3,6 +3,7 @@ import Axios from "axios";
 import jwtDecode from "jwt-decode";
 import { BrowserRouter, Route } from "react-router-dom";
 import SignIn from "./pages/SignIn";
+import Registration from "./pages/Registration";
 import Dashboard from "./frames/Dashboard";
 import TeamOverview from "./pages/TeamOverview";
 import Admin from "./pages/Admin";
@@ -79,9 +80,17 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
+<<<<<<< HEAD
+		
+		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword"|| window.location.pathname == "/register") {
+			console.log('nothing')
+		} 
+		else {
+=======
 		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/") {
 			console.log('nothing')
 		} else {
+>>>>>>> 39864b2e3a620f9d8b4dc6d0ac448de8a100c4ba
 			decodeToken();
 		}
 		// eslint-disable-next-line
@@ -164,7 +173,34 @@ function App() {
 		);
 	}
 
+<<<<<<< HEAD
+	return (
+		<BrowserRouter>
+			<Route exact path="/login" render={(props) => <SignIn {...props} />} />
+			<Route exact path="/register">
+				<Registration/>
+			</Route>
+			<Route exact path="/">
+				<Dashboard user={user} />
+				<TeamOverview projects={projects} />
+			</Route>
+			<Route exact path="/admin">
+				<Dashboard user={user} />
+				<Admin projects={projectsArray} />
+			</Route>
+			<Route exact path="/create">
+				<Dashboard user={user}/>
+				<CreateNew/>
+			</Route>
+			<Route exact path="/project/:id">
+				<Dashboard user={user} />
+				<ProjectInfo />
+			</Route>
+		</BrowserRouter>
+	);
+=======
 
+>>>>>>> 39864b2e3a620f9d8b4dc6d0ac448de8a100c4ba
 
 }
 
