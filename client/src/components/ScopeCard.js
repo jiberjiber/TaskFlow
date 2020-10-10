@@ -5,10 +5,10 @@ export default function TeamCard(props) {
 
 	console.log(props);
 	return (
-		<Grid item xs={4}>
+		<Grid item xs={12} sm={4}>
 			<Card>
 				<CardContent>
-					<Typography variant="h3" gutterBottom>
+					<Typography variant="h4" gutterBottom>
 						{props.scope.scopeName}
 					</Typography>
 					<Typography variant="caption">Due Date: {props.scope.dueDate}</Typography>

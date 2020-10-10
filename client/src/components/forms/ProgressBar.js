@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ProjectForm from "./ProjectForm";
 import TeamForm from "./TeamForm";
+import { Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,17 +27,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['ProjectForm', 'TeamForm', 'Create and Assign Tasks'];
+  return ['Scope Form','Task Form',  'Create & assign Personel to Teams', 'Assign Scopes To Teams'];
 }
 
 function getStepContent(stepIndex) {
   switch (stepIndex) {
     case 0:
       return (<ProjectForm/>);
-    case 1:
-      return (<TeamForm/>);
-    case 2:
-      return 'Create and Assign Teams';
+      case 1:
+        return (<ScopeForm/>);
+      case 2:
+        return (<TaskForm/>);
+      case 3:
+        return (<TeamForm/>);
+      case 4:
+        return (<AssignTeam/>);
+      case 5:
+        return 'Create and Assign Teams';
     default:
       return 'Unknown stepIndex';
   }
@@ -46,7 +53,7 @@ export default function HorizontalLabelPositionBelowStepper() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
-//NEXT BUTTON
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -60,6 +67,7 @@ export default function HorizontalLabelPositionBelowStepper() {
   };
 
   return (
+    <Container>
     <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
@@ -93,5 +101,6 @@ export default function HorizontalLabelPositionBelowStepper() {
         )}
       </div>
     </div>
+    </Container>
   );
 }
