@@ -19,7 +19,7 @@ import {
 	createMuiTheme,
 	useMediaQuery,
 	Typography,
-} from '@material-ui/core';
+} from "@material-ui/core";
 import {
 	ChevronLeft,
 	ChevronRight,
@@ -27,13 +27,14 @@ import {
 	DashboardOutlined,
 	SupervisorAccountOutlined,
 	ExitToAppOutlined,
+	Group,
 	// eslint-disable-next-line
 	Mail,
 	// eslint-disable-next-line
 	SettingsOutlined,
 	// eslint-disable-next-line
-	DeleteOutlineOutlined
-} from '@material-ui/icons';
+	DeleteOutlineOutlined,
+} from "@material-ui/icons";
 import Axios from "axios";
 
 const drawerWidth = 240;
@@ -146,10 +147,10 @@ export default function DashBoard(props) {
 	};
 
 	useEffect(() => {
-		if(props.user.isManager){
+		if (props.user.isManager) {
 			getCompany(props.user.company);
 		}
-	},[props])
+	}, [props]);
 
 	return (
 		<ThemeProvider theme={darkTheme}>
@@ -211,11 +212,7 @@ export default function DashBoard(props) {
 				>
 					<div className={classes.toolbar}>
 						<IconButton onClick={handleDrawerClose}>
-							{theme.direction === "rtl" ? (
-								<ChevronRight />
-							) : (
-								<ChevronLeft />
-							)}
+							{theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
 						</IconButton>
 					</div>
 					<Divider />
@@ -226,16 +223,23 @@ export default function DashBoard(props) {
 							</ListItemIcon>
 							<ListItemText primary={"Dashboard"} />
 						</ListItem>
-						{props.user.isManager && (
-							<ListItem button key={"admin"} component="a" href="/admin">
-								<ListItemIcon>
-									<SupervisorAccountOutlined />
-								</ListItemIcon>
-								<ListItemText primary={"Admin"} />
-							</ListItem>
-						)}
-
 						<Divider />
+						{props.user.isManager && (
+							<div>
+								<ListItem button key={"admin"} component="a" href="/admin">
+									<ListItemIcon>
+										<SettingsOutlined />
+									</ListItemIcon>
+									<ListItemText primary={"Projects"} />
+								</ListItem>
+								<ListItem button key={"teamadmin"} component="a" href="/admin/teams">
+									<ListItemIcon>
+										<Group />
+									</ListItemIcon>
+									<ListItemText primary={"User Management"} />
+								</ListItem>
+							</div>
+						)}
 						{/* <ListItem button key={"allmail"} component="a" href="/mail">
 							<ListItemIcon>
 								<MailIcon />
