@@ -45,10 +45,10 @@ const employeeSchema = new Schema({
     data: String,
     default: ""
   },
-  team: {
+  team: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Team"
-  },
+  }],
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Company"
