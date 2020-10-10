@@ -96,7 +96,7 @@ export default function TeamOverview(props) {
 					variant="scrollable"
 					scrollButtons="auto"
 				>
-					{props.projects.length ? (
+					{props.projects.length > 0 ? (
 						props.projects.map((item, index) => (
 							<Tab label={item.title} name={item._id} {...a11yProps(index)} key={item._id} />
 						))
