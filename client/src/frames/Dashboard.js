@@ -109,20 +109,6 @@ export default function DashBoard(props) {
 	const [company, setCompany] = useState({});
 	const classes = useStyles();
 
-	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
-	const darkTheme = React.useMemo(
-		() =>
-			createMuiTheme({
-				palette: {
-					type: prefersDarkMode ? "dark" : "light",
-				},
-			}),
-		[prefersDarkMode]
-	);
-
-	const theme = useTheme();
-
 	const handleDrawerOpen = () => {
 		setOpen(true);
 	};
@@ -153,7 +139,6 @@ export default function DashBoard(props) {
 	}, [props]);
 
 	return (
-		<ThemeProvider theme={darkTheme}>
 			<div className={classes.root}>
 				<CssBaseline />
 				<AppBar
@@ -212,7 +197,7 @@ export default function DashBoard(props) {
 				>
 					<div className={classes.toolbar}>
 						<IconButton onClick={handleDrawerClose}>
-							{theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
+							{props.theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
 						</IconButton>
 					</div>
 					<Divider />
@@ -267,6 +252,5 @@ export default function DashBoard(props) {
 					<div className={classes.toolbar} />
 				</main>
 			</div>
-		</ThemeProvider>
 	);
 }

@@ -21,6 +21,7 @@ import {
 	createMuiTheme,
 	CircularProgress,
 	makeStyles,
+	useTheme,
 } from "@material-ui/core";
 import "./App.css";
 
@@ -48,6 +49,8 @@ function App() {
 			}),
 		[prefersDarkMode]
 	);
+
+	const theme = useTheme();
 
 	const classes = useStyles();
 
@@ -103,71 +106,77 @@ function App() {
 	if (user && projects) {
 		return (
 			<BrowserRouter>
-				<Route exact path="/login" render={(props) => <SignIn {...props} />} />
-				<Route
-					exact
-					path="/forgotpassword"
-					render={(props) => <ForgotPassword {...props} />}
-				/>
-				<Route
-					exact
-					path="/passwordrecovery/:token"
-					render={(props) => <PasswordRecovery {...props} />}
-				/>
-				<Route exact path="/">
-					{user.isManager && (
-						<div>
-							<Dashboard user={user} />
-							<TeamOverview projects={projects} />
-						</div>
-					)}
-					{!user.isManager && (
-						<div>
-							<Dashboard user={user} />
-							<EmployeeOverview projects={projects} user={user} />
-						</div>
-					)}
-				</Route>
-				<Route exact path="/admin">
-					{user.isManager && (
-						<div>
-							<Dashboard user={user} />
-							<Admin user={user} projects={projects} />
-						</div>
-					)}
-					{!user.isManager && (
-						<div>
-							<Dashboard user={user} />
-							<Error />
-						</div>
-					)}
-				</Route>
-				<Route exact path="/admin/teams">
-					{user.isManager && (
-						<div>
-							<Dashboard user={user} />
-							<TeamAdmin user={user} projects={projects} />
-						</div>
-					)}
-					{!user.isManager && (
-						<div>
-							<Dashboard user={user} />
-							<Error />
-						</div>
-					)}
-				</Route>
-				<Route exact path="/create">
-					<Dashboard user={user} />
-					<CreateNew />
-				</Route>
-				<Route exact path="/project/:id">
-					<Dashboard user={user} />
-					<ProjectInfo projects={projects} />
-				</Route>
-				<Route exact path="/scope/:id">
-					<Dashboard user={user} />
-					<ScopePage projects={projects} />
-				</Route>
+				<ThemeProvider theme={darkTheme}>
+					<Route
+						exact
+						path="/login"
+						render={(props) => <SignIn {...props} />}
+					/>
+					<Route
+						exact
+						path="/forgotpassword"
+						render={(props) => <ForgotPassword {...props} />}
+					/>
+					<Route
+						exact
+						path="/passwordrecovery/:token"
+						render={(props) => <PasswordRecovery {...props} />}
+					/>
+					<Route exact path="/">
+						{user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<TeamOverview projects={projects} />
+							</div>
+						)}
+						{!user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<EmployeeOverview projects={projects} user={user} />
+							</div>
+						)}
+					</Route>
+					<Route exact path="/admin">
+						{user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<Admin user={user} projects={projects} />
+							</div>
+						)}
+						{!user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<Error />
+							</div>
+						)}
+					</Route>
+					<Route exact path="/admin/teams">
+						{user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<TeamAdmin user={user} projects={projects} />
+							</div>
+						)}
+						{!user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<Error />
+							</div>
+						)}
+					</Route>
+					<Route exact path="/create">
+						<Dashboard user={user} theme={theme} />
+						<CreateNew />
+					</Route>
+					<Route exact path="/project/:id">
+						<Dashboard user={user} theme={theme} />
+						<ProjectInfo projects={projects} />
+					</Route>
+					<Route exact path="/scope/:id">
+						<Dashboard user={user} theme={theme} />
+						<ScopePage projects={projects} />
+					</Route>
+				</ThemeProvider>
 			</BrowserRouter>
 		);
 	} else {
