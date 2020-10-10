@@ -126,7 +126,7 @@ function App() {
 						path="/register"
 						render={(props) => <Registration {...props} />}
 					/>
-					<Route exact path="/">
+					<Route path="/">
 						{user.isManager && (
 							<div>
 								<Dashboard user={user} theme={theme} />
