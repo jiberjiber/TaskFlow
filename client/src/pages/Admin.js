@@ -111,7 +111,6 @@ export default function Admin(props) {
 					{/* eslint-disable-next-line*/}
 					<Tooltip
 						title="Add"
-						component="button"
 						key={"create"}
 						component="a"
 						href="/create"
@@ -179,7 +178,7 @@ export default function Admin(props) {
 										<Tooltip
 											title="Manage"
 											component="a"
-											href={"/project/" + project._id + "/manage"}
+											href={"/create"}
 										>
 											<IconButton>
 												<Settings color="action" />
