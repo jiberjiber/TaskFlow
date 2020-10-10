@@ -14,13 +14,13 @@ code {
 
 
 .myDropDown{
-  height: 30px;
-  max-height: 30px;
+
+  max-height: 10vh;
   overflow-y: scroll;
   }
 
   .select{
-    height: 75px;
+    max-height: 30vh;
     margin-bottom: 40px;
     overflow-y: scroll;
     }

@@ -28,7 +28,7 @@ validScope:function validate(req) {
 },
 validTask:function validate(req) {
     const schema =Joi.object({
-        task:Joi.string().min(5).max(50).required(),
+        task:Joi.string().min(5).max(75).required(),
         description:Joi.string().min(5).max(255).required(),
         dueDate:Joi.string().min(1).required(),
         scopeId:Joi.string()

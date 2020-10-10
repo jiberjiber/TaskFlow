@@ -215,7 +215,10 @@ if (findScope){
 })
 
 router.post('/toteam',[auth,manager], async (req,res)=>{
-console.log('running')
+        if(req.body.teamId.length<2 || req.body.scopeId.length<2) 
+        return res.status(400).send(`no data provide`)
+
+
     const getTeam= await Team.findById(req.body.teamId).select()
     if (!getTeam) return res.status(400).send(`this team doesn't exist`)
 

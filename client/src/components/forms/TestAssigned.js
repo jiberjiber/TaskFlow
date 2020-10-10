@@ -1,9 +1,25 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardContent, Container, Button } from '@material-ui/core';
+import { Card, CardContent, Container,Box , Button, Typography } from '@material-ui/core';
 import styles from './styles.css'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
 
 
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
+  }));
 //new project form component
 const AssignScope = () => {
 
@@ -17,6 +33,35 @@ const AssignScope = () => {
 
     const  [TeamChoice,setTeamChoice]=useState([])
     const [reset,setReset]=useState(null)
+
+    const [errors, setErrors] = useState('')
+    const [succes, setSuccess] = useState('')
+
+///////feedback states
+
+const classes = useStyles();
+const [open, setOpen] = React.useState(false);
+const [openS, setOpenS] = React.useState(false);
+const handleClick = () => {
+    setOpen(true);
+  };
+  const handleSucces = () => {
+    setOpenS(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenS(false)
+    setOpen(false);
+  };
+
+  /////////////
+
+
+
+
 
     useEffect(() => {
         axios.get("/api/project")
@@ -49,8 +94,7 @@ function getTeam(){
    
 }
     
-    const [errors, setErrors] = useState({})
-    const [formFeedback, setFormFeedback] = useState(false)
+ 
 
     
 
@@ -71,30 +115,30 @@ function getTeam(){
                  scopeId:scopeId
             })
                 .then(function (response) {
-                    console.log('Scope was assigned to team')
-                    console.log(response);
+                    setSuccess('Scope was assigned to team')
+                    handleSucces()
                 })
                 .catch(function (error) {
-                    console.log(error.response.data);
-                 
+                    setErrors(error.response.data);
+                    handleClick();
                 });
             
             
-            setFormFeedback(true)
+           
         
     }
 
 
 
    async function handleSelect(e){
-      console.log(e.currentTarget.value)
+    
         await setScopeId(e.currentTarget.value);
     //    await setScopeName(e.currentTarget.name)
 
     }
 
     function handleTeamSelect(e){
-        console.log(e.target.value)
+       
         let test= TeamId
         if(test==e.target.value){
             setTeamName('')
@@ -113,12 +157,17 @@ function getTeam(){
 
     return (
         <Container>
-        <div styles={styles} className="forms">
+        <Box styles={styles} className="forms">
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {errors}
+        </Alert>
+      </Snackbar>
             <Card styles={{marginLeft: 100}} >
                 <CardContent>
                     <form >
-                        <div>
-                        <label htmlFor="choice">1)Choose the Scope you want to assign:</label>
+                        <Box>
+                        <Typography variant="h6"htmlFor="choice">1)Choose the Scope you want to assign:</Typography>
                 <select onChange={handleSelect} >
                 <option >{'Select your Scope'}</option>
                         {choice && choice.map((x,i) =>(
@@ -129,30 +178,30 @@ function getTeam(){
                             </optgroup>
                         ))}
                 </select>
-                        </div>
+                        </Box>
                         
-                        {scopeId && <p className="feedback">Scope selected</p>}
-                        <div>
-                        <div>
-                        <label htmlFor="choice">2)Choose the Team:</label>
-                        </div>
+                        {scopeId && <Typography variant="h6" className="feedback">Scope selected</Typography>}
+                        <Box>
+                        <Box>
+                        <Typography variant="h6" htmlFor="choice">2)Choose the Team:</Typography>
+                        </Box>
                        
                 <form onChange={handleTeamSelect} className="select">
                         {TeamChoice && TeamChoice.map((x,i) =>(
-                            <div>
+                            <Box>
                             <label key={x._id} forHtml="members">{x.name}</label>
                             <input key={i} type="checkbox" checked={reset} index={i} name={x.name} value={x._id}/>
                                 {/* <option label={x.name} key={i} value={x._id}>{x.name}</option> */}
-                            </div>
+                            </Box>
                         ))}
                 </form>
-                <div className='thisButton'>{TeamId && <Button variant="contained" color="secondary"  >Selected Team: {TeamName}</Button>}</div>
-                        </div>
+                <Box className='thisButton'>{TeamId && <Button variant="contained" color="secondary"  >Selected Team: {TeamName}</Button>}</Box>
+                        </Box>
                         <button onClick={onFormSubmit} className="btn btn-primary">set assignment to team</button>
                     </form>
                 </CardContent>
             </Card>
-        </div>
+        </Box>
         </Container>
     )
 }
