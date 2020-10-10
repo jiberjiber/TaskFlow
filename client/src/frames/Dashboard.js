@@ -119,7 +119,7 @@ export default function DashBoard(props) {
 
 	const handleLogout = () => {
 		localStorage.removeItem("token");
-		window.location = "/login";
+		window.location = "/";
 	};
 
 	const getCompany = (company) => {
@@ -202,7 +202,7 @@ export default function DashBoard(props) {
 					</div>
 					<Divider />
 					<List>
-						<ListItem button key={"dashboard"} component="a" href="/">
+						<ListItem button key={"dashboard"} component="a" href="/home">
 							<ListItemIcon name="teams">
 								<DashboardOutlined />
 							</ListItemIcon>

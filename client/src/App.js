@@ -73,7 +73,7 @@ function App() {
 		} catch (error) {
 			//if error reroute to login page
 			//could use the same practice:
-			window.location = "/login";
+			window.location = "/";
 			// return null
 		}
 	};
@@ -94,7 +94,7 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
-		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/" || window.location.pathname == "/register") {
+		if (window.location.pathname == "/" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/" || window.location.pathname == "/register") {
 			console.log('nothing')
 		} else {
 			decodeToken();
@@ -108,7 +108,7 @@ function App() {
 				<ThemeProvider theme={darkTheme}>
 					<Route
 						exact
-						path="/login"
+						path="/"
 						render={(props) => <SignIn {...props} />}
 					/>
 					<Route
@@ -126,7 +126,7 @@ function App() {
 						path="/register"
 						render={(props) => <Registration {...props} />}
 					/>
-					<Route path="/">
+					<Route exact path="/home">
 						{user.isManager && (
 							<div>
 								<Dashboard user={user} theme={theme} />
