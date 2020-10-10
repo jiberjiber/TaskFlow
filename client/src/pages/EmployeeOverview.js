@@ -107,7 +107,7 @@ export default function EmployeeOverview(props) {
 							item
 							xs={12}
 							sm={6}
-							style={{ paddingBottom: "50px" }}
+							style={{ paddingLeft: "25px", paddingRight: "25px" }}
 							key={team._id}
 						>
 							<Typography variant="h3">{team.name}</Typography>
