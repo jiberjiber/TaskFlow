@@ -56,12 +56,12 @@ export default function TeamAdmin(props) {
 	const [severity, setSeverity] = useState("info");
 	const classes = useStyles();
 
-	console.log(props);
+	//console.log(props);
 
 	const getCompany = (company) => {
 		Axios.get(`/api/company/${company}`)
 			.then((response) => {
-				console.log("company ", response.data);
+				//console.log("company ", response.data);
 				setCompany(response.data[0]);
 			})
 			.catch((err) => {
@@ -72,7 +72,7 @@ export default function TeamAdmin(props) {
 	const getTeams = (company) => {
 		Axios.get(`/api/team/allteams/${company}`)
 			.then(response => {
-				console.log('teams company api thing',response);
+				//console.log('teams company api thing',response);
 				setTeams(response.data);
 			})
 			.catch(err => {

@@ -85,6 +85,8 @@ export default function TeamOverview(props) {
 			getProjects(props.projects[0]._id);
 		}
 	},[props]);
+
+	//console.log('props',props);
 	
 	return (
 		<div className={classes.root}>
@@ -96,7 +98,7 @@ export default function TeamOverview(props) {
 					variant="scrollable"
 					scrollButtons="auto"
 				>
-					{props.projects.length > 0 ? (
+					{props.projects.length ? (
 						props.projects.map((item, index) => (
 							<Tab label={item.title} name={item._id} {...a11yProps(index)} key={item._id} />
 						))

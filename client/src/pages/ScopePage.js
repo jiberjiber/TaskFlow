@@ -33,7 +33,7 @@ export default function ScopeCard(props) {
 	const handleChange = (event) => {
 		Axios.put(`/api/project/scope/task/status/${event.currentTarget.name}`)
 			.then(response => {
-				console.log('task complete API', response);
+				//console.log('task complete API', response);
 				window.location.reload();
 			})
 			.catch(err => {
