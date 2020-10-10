@@ -16,7 +16,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Copyright from "../components/Copyright";
 import Axios from "axios";
 import { Snackbar } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+//import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Alert(props) {
-	return <MuiAlert elevation={6} variant="filled" {...props} />;
+	return //<MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 export default function ForgotPassword() {

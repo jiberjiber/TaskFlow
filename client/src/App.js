@@ -80,17 +80,10 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
-<<<<<<< HEAD
-		
 		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword"|| window.location.pathname == "/register") {
 			console.log('nothing')
 		} 
 		else {
-=======
-		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/") {
-			console.log('nothing')
-		} else {
->>>>>>> 39864b2e3a620f9d8b4dc6d0ac448de8a100c4ba
 			decodeToken();
 		}
 		// eslint-disable-next-line
@@ -160,21 +153,18 @@ function App() {
 		);
 	} else {
 		return (
-			<ThemeProvider theme={darkTheme}>
-				<div className={classes.root}>
-					<Grid container spacing={0} direction="column"
-						alignItems="center"
-						justify="center"
-						style={{ minHeight: '100vh' }}>
-						<CircularProgress />
-					</Grid>
-				</div>
-			</ThemeProvider>
-		);
-	}
-
-<<<<<<< HEAD
-	return (
+			// <ThemeProvider theme={darkTheme}>
+			// 	<div className={classes.root}>
+			// 		<Grid container spacing={0} direction="column"
+			// 			alignItems="center"
+			// 			justify="center"
+			// 			style={{ minHeight: '100vh' }}>
+			// 			<CircularProgress />
+			// 		</Grid>
+			// 	</div>
+			// </ThemeProvider>
+		
+	
 		<BrowserRouter>
 			<Route exact path="/login" render={(props) => <SignIn {...props} />} />
 			<Route exact path="/register">
@@ -186,7 +176,7 @@ function App() {
 			</Route>
 			<Route exact path="/admin">
 				<Dashboard user={user} />
-				<Admin projects={projectsArray} />
+				<Admin />
 			</Route>
 			<Route exact path="/create">
 				<Dashboard user={user}/>
@@ -197,10 +187,7 @@ function App() {
 				<ProjectInfo />
 			</Route>
 		</BrowserRouter>
-	);
-=======
-
->>>>>>> 39864b2e3a620f9d8b4dc6d0ac448de8a100c4ba
+		)};
 
 }
 
