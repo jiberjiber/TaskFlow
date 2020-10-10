@@ -27,24 +27,35 @@ router.post(
         company: company._id,
         members: data.members,
       });
-      let id = await newTeam.returnid();
+      let teamId = await newTeam.returnid();
       await newTeam.save();
       let teamArray = req.body.members;
 
       teamArray.map(async (x) => {
         await Team.findByIdAndUpdate(
-          id,
+          teamId,
           { $push: { members: x } },
           { new: true }
         );
       });
-      const getThisTeam = await Team.findById(id)
-        .populate("members")
-        .select()
-        .sort("dateCreated");
+      if (teamId) {
+        const teamCompany = await Company.findByIdAndUpdate(
+          req.body.company,
+          { $push: { teams: teamId } },
+          { new: true }
+        );
+        await teamCompany.save();
 
-      console.log(getThisTeam);
-      res.send(getThisTeam);
+        const getThisTeam = await Team.findById(teamId)
+          .populate("members")
+          .select()
+          .sort("dateCreated")
+          .populate({ path: "assignedScope", populate: "task" })
+          .select();
+
+        console.log(getThisTeam);
+        res.send(getThisTeam);
+      }
     } catch (err) {
       res.status(400);
       return res.send(err.message);
