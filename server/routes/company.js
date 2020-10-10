@@ -23,6 +23,7 @@ router.post("/:create", validateCompanyData(), validate, async (req, res) => {
         employees: data.employees,
         name: data.name,
         url: data.url,
+        teams: data.teams,
       });
       await newCompany.save();
       res.send(newCompany);
@@ -36,23 +37,26 @@ router.post("/:create", validateCompanyData(), validate, async (req, res) => {
 
 // Get all companies
 router.get("/", async (req, res) => {
-  Company.find({})
+  const getCompanies = await Company.find({})
     .sort("name")
     .populate("employees")
-    .then((companies) => {
-      if (!companies) {
-        return res.status(400).json({ companies: "No companies found." });
-      } else {
-        res.send(companies);
-      }
-    });
+    .select()
+    .populate({ path: "teams", populate: "members" })
+    .select();
+
+  if (!getCompanies)
+    return res.status(400).json({ teams: "No Companies to display." });
+  console.log(getCompanies);
+  res.send(getCompanies);
 });
 
 //Get one company
 router.get("/:id", [auth, manager], async (req, res) => {
   const thisCompany = await Company.find({ _id: req.params.id })
     .populate("employees")
-    .sort("firstName");
+    .sort("firstName")
+    .populate({ path: "teams", populate: "members" })
+    .select();
   if (!thisCompany) {
     return res.status(400).json({ company: "No companies found." });
   } else {

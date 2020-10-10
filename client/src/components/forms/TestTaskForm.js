@@ -1,8 +1,25 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment'
-import { Card, CardContent, Container } from '@material-ui/core';
+import { Card, CardContent, Container, Button, Box, Typography } from '@material-ui/core';
 import styles from './styles.css'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
+  }));
 
 
 //new project form component
@@ -14,7 +31,160 @@ const TaskForm = () => {
         dueDate: ""
 
     })
+    const [scopeId,setScopeId]=useState('')
+    const [choice, setChoice]=useState([])
 
+
+
+    const [errors, setErrors] = useState('')
+    const [succes, setSuccess] = useState('')
+
+///////////////////////
+///editing task states and functionality
+const [Edit,setEdit]=useState(false)
+const [choices, setChoices]=useState([])
+const [TaskIds,setTaskIds]=useState('')
+const [array, setArray]=useState([])
+
+///////feedback states
+
+const classes = useStyles();
+const [open, setOpen] = React.useState(false);
+const [openS, setOpenS] = React.useState(false);
+const handleClick = () => {
+    setOpen(true);
+  };
+  const handleSucces = () => {
+    setOpenS(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenS(false)
+    setOpen(false);
+  };
+
+  /////////////
+
+function getTask(x){
+    axios.get(`/api/project/scope/task/one/${x}`)
+    .then(result => {
+        console.log(result.data)
+    let data={
+    title:result.data[0].task,
+    description:result.data[0].description,
+    dueDate:result.data[0].dueDate
+    }
+    // console.log(data)
+    setTaskForm({...data})
+
+    })
+    .catch(err => console.log(err))
+}
+
+function runAxios(){
+    axios.get("/api/project")
+    .then((result) => {
+        // console.log(result.data)
+        setChoices(result.data)
+        
+    })
+    .catch(err => console.log(err))
+}
+
+useEffect(() => {
+    loop()
+  },[choices]);
+
+
+function handleEdit(){
+    axios.get("/api/project")
+    .then(result => {
+        setChoices(result.data)
+        
+    }
+    )
+    .catch(err => console.log(err))
+  }
+
+  function setediting(){
+    let test=Edit
+
+    if(test==true){
+        setEdit(false)
+        const clearState = {
+            title: "",
+            description:"",
+            dueDate: ""
+        }
+
+        setTaskForm({ ...clearState })
+
+    }else{
+        setEdit(true)
+        runAxios()
+    }
+    
+}
+
+function handleSelectEdit(e){
+    
+    getTask(e.currentTarget.value)
+    setTaskIds(e.currentTarget.value)
+}
+
+const onFormUpdate = (event) => {
+    event.preventDefault()
+    // console.log(ProjectForm)
+
+        axios.put(`/api/project/scope/task/one/${TaskIds}`, {
+            task:TaskForm.title,
+            description:TaskForm.description,
+            dueDate:TaskForm.dueDate
+        })
+            .then(function (response) {
+                runAxios()
+                
+                setSuccess(`Success: "${response.data[0].task}" is now updated`)
+                handleSucces()
+            })
+            .catch(function (error) {
+                setErrors(error.response.data);
+                handleClick()
+            });
+        
+        const clearState = {
+            title: "",
+            description: "",
+            dueDate: ""
+        }
+
+        setTaskForm({ ...clearState })
+
+        // setFormFeedback(true)
+    
+}
+
+function loop(){
+    let myArray= [...array]
+    choices.map((x)=>{
+        if(x.scope.length>0){
+            x.scope.map(y =>{
+               myArray.push(y)
+            })
+        }
+        
+    })
+    setArray(myArray)
+}
+
+
+
+
+//////////////////////////////////////////////////
+////create task functionality
     useEffect(() => {
         axios.get("/api/project")
         .then(result => {
@@ -26,17 +196,13 @@ const TaskForm = () => {
       },[]);
    
 
-    const [scopeId,setScopeId]=useState('')
-    const [choice, setChoice]=useState([])
-
-    const [errors, setErrors] = useState({})
-    const [formFeedback, setFormFeedback] = useState(false)
+   
 
     function handleFormChange(e) {
         //console.log(e.currentTarget.name)
         const { name, value } = e.currentTarget;
         setTaskForm({ ...TaskForm, [name]: value });
-        // setFormFeedback(false)
+        
 
     }
 
@@ -44,14 +210,8 @@ const TaskForm = () => {
 
     const onFormSubmit = (event) => {
         event.preventDefault()
-        console.log(TaskForm)
-        // if (errors) {
-        //     console.log(errors)
-        //     return
-        // }
-        // else {
-            
-            //we will run an axios post request
+       
+    
             axios.post('/api/project/scope/task', {
                  task:TaskForm.title,
                  description:TaskForm.description,
@@ -59,10 +219,14 @@ const TaskForm = () => {
                  scopeId:scopeId
             })
                 .then(function (response) {
-                    console.log(response);
+                    
+                   
+                   setSuccess(`Success: this scope has now ${response.data.task.length} task(s)`)
+                   handleSucces()
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    setErrors(error.response.data);
+                    handleClick();
                 });
             
             const clearState = {
@@ -73,45 +237,69 @@ const TaskForm = () => {
 
             setTaskForm({ ...clearState })
             
-            setFormFeedback(true)
+          
         
     }
 
 
 
     function handleSelect(e){
-        console.log(e.currentTarget.value)
+        
         setScopeId(e.currentTarget.value)
-      // console.log(lib,book)
-    //     axios.put("/api/library/"+lib,{book:book})
-    //   .then(res => toast.success(`${lBook} was saved to ${lName}`))
-    //   .catch(err => toast.error(err.response.data))
+    
         
     }
 
     async function handleDate(e){
-        console.log(e.target.value)
+       
         const value =await e.target.value;
-        // await setTaskForm({ ...TaskForm, dueDate: value });
-        // setFormFeedback(false)
+ 
         convert(value)
     }
-// if(TaskForm.dueDate){
-//     console.log(TaskForm.dueDate)
-// }
+
 async function convert(x){
     let newDate= moment(x,'YYYY-MM-DD').format('MMMM Do YYYY')
     await setTaskForm({ ...TaskForm, dueDate: newDate});
 }
 
+//////////
+
+
     return (
         <Container>
         <div styles={styles} className="forms">
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {errors}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openS} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          {succes}
+        </Alert>
+      </Snackbar>
+      <Box display="flex" justifyContent="flex-end">
+        <Button variant="contained" color="primary" onClick={setediting}>{Edit && `cancel `}Edit</Button>
+        </Box>  
             <Card styles={{marginLeft: 100}} >
                 <CardContent>
                     <form >
+                   {Edit && <div>
+                    <label htmlFor="choice">Choose the task you want to edit:</label>
+                <select onChange={handleSelectEdit} className="myDropDown">
+                <option>{'Select your Scope'}</option>
+                        {array && array.map((x,i) =>(
+                            <optgroup label={x.scopeName} key={i} >
+                            {x.task.map((y,i)=>(
+                                <option label={y.task} key={i} value={y._id}>{y.task}</option>
+                            ))}
+                            </optgroup>
+                        ))}
+                </select>
+                        </div>}
+
                         <div className="form-group">
-                            <label><h5>Title for Task</h5></label>
+                            <label><Typography variant="h6">1) Title for Task</Typography></label>
                             <input
                                 onChange={handleFormChange}
                                 name="title"
@@ -119,7 +307,7 @@ async function convert(x){
                                 className="form-control" />
                         </div>
                         <div className="form-group">
-                            <label><h5>Describe the Task in hand</h5></label>
+                            <label><Typography variant="h6">2) Describe the Task in hand</Typography></label>
                             <small className="form-text text-muted">Please give a brief description of the goal of this task in other to complete the project</small>
                             <input
                                 onChange={handleFormChange}
@@ -130,15 +318,14 @@ async function convert(x){
                         </div>
                 
                         <div className="form-group date" data-provide="datepicker">
-                            <label>Due Date for Task</label>
                             
                         </div>
-                        <label for="start">Task Completion Date :</label>
+                        <Typography variant="h6">3) Task Completion Date :</Typography>
                         <input onChange={handleDate} type="date" id="start" name="trip-start"
        value=''
        min="2020-01-01" max="2040-12-31"></input>
-                        <div>
-                        <label htmlFor="choice">Choose the Scope to which this task belongs:</label>
+                         {!Edit && <div>
+                       <label htmlFor="choice">Choose the Scope to which this task belongs:</label>
                 <select onChange={handleSelect} className="myDropDown">
                 <option>{'Select your Scope'}</option>
                         {choice && choice.map((x,i) =>(
@@ -149,9 +336,10 @@ async function convert(x){
                             </optgroup>
                         ))}
                 </select>
-                <h5>{TaskForm.dueDate && TaskForm.dueDate }</h5>
-                        </div>
-                        <button onClick={onFormSubmit} className="btn btn-primary">Add Tasks to scope</button>
+                </div>}
+                <Typography variant="h6">{TaskForm.dueDate && TaskForm.dueDate }</Typography>
+                {!Edit &&  <button onClick={onFormSubmit} className="btn btn-primary">Add Tasks to scope</button>}
+                        {Edit &&  <button onClick={onFormUpdate} className="btn btn-primary">Update Scope</button>}
                     </form>
                 </CardContent>
             </Card>

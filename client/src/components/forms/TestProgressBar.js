@@ -3,14 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import ProjectForm from "./testProjectForm";
 import TeamForm from "./TestTeamForm";
 import ScopeForm from "./TestScopeForm";
 import TaskForm from './TestTaskForm'
 import AssignTeam from './TestAssigned'
-import { Card, CardContent,Container } from '@material-ui/core';
+import { Card, CardContent,Container, Box,Button, Typography } from '@material-ui/core';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,7 +66,7 @@ export default function HorizontalLabelPositionBelowStepper() {
 
   return (
     <Container>
-    <div className={classes.root}>
+    <Box className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
@@ -75,17 +74,18 @@ export default function HorizontalLabelPositionBelowStepper() {
           </Step>
         ))}
       </Stepper>
-      <div>
+      <Box>
         {activeStep === steps.length ? (
-          <div>
+          <Box>
             <Typography className={classes.instructions}>All steps completed</Typography>
             <Button onClick={handleReset}>Reset</Button>
-          </div>
+          </Box>
         ) : (
-          <div>
+          <Box>
             <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
-            <div>
+            <Box display="flex" justifyContent="center">
               <Button
+              
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 className={classes.backButton}
@@ -95,11 +95,11 @@ export default function HorizontalLabelPositionBelowStepper() {
               <Button variant="contained" color="primary" onClick={handleNext}>
                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
               </Button>
-            </div>
-          </div>
+            </Box>
+          </Box>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
     </Container>
   );
 }

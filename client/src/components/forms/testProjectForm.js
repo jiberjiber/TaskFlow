@@ -1,8 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardContent,Container, Button } from '@material-ui/core';
+import { Card, CardContent,Container, Button, Box, Typography } from '@material-ui/core';
 import moment from 'moment'
 import styles from './styles.css'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+
+///ui feedback
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
+  }));
+
+
 
 
 //new project form component
@@ -19,8 +40,31 @@ const [ProjectForm, setProjectForm] = useState({
     dueDate: ""
 
 })
-const [errors, setErrors] = useState({})
-const [formFeedback, setFormFeedback] = useState(false)
+const [errors, setErrors] = useState('')
+const [succes, setSuccess] = useState('')
+
+///////feedback states
+
+const classes = useStyles();
+const [open, setOpen] = React.useState(false);
+const [openS, setOpenS] = React.useState(false);
+const handleClick = () => {
+    setOpen(true);
+  };
+  const handleSucces = () => {
+    setOpenS(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenS(false)
+    setOpen(false);
+  };
+
+  /////////////
+
 
 
 
@@ -68,8 +112,7 @@ const [formFeedback, setFormFeedback] = useState(false)
 }
 
 function handleSelect(e){
-    console.log(e.currentTarget.value)
-    // setProjectId(e.currentTarget.value)
+  
     handleEdit(e.currentTarget.value)
     setProjectId(e.currentTarget.value)
 }
@@ -85,10 +128,13 @@ const onFormUpdate = (event) => {
              dueDate:ProjectForm.dueDate,
         })
             .then(function (response) {
-                console.log(response);
+                setSuccess(`Success: "${response.data.title}" is now updated`)
+                handleSucces()
             })
             .catch(function (error) {
                 console.log(error);
+                setErrors(error.response.data);
+                handleClick()
             });
         
         const clearState = {
@@ -99,7 +145,7 @@ const onFormUpdate = (event) => {
 
         setProjectForm({ ...clearState })
 
-        setFormFeedback(true)
+      
     
 }
 
@@ -115,7 +161,7 @@ function handleFormChange(e) {
         //console.log(e.currentTarget.name)
         const { name, value } = e.currentTarget;
         setProjectForm({ ...ProjectForm, [name]: value });
-        setFormFeedback(false)
+        
 
     }
 
@@ -131,10 +177,13 @@ function handleFormChange(e) {
                  dueDate:ProjectForm.dueDate,
             })
                 .then(function (response) {
-                    console.log(response);
+                    console.log(response.data);
+                    setSuccess(`Success: you now have ${response.data.length} projects`)
+                    handleSucces()
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    setErrors(error.response.data);
+                    handleClick()
                 });
             
             const clearState = {
@@ -145,7 +194,7 @@ function handleFormChange(e) {
 
             setProjectForm({ ...clearState })
 
-            setFormFeedback(true)
+            
         
     }
 
@@ -162,11 +211,24 @@ function handleFormChange(e) {
     }
     return (
         <Container>
-        <div styles={styles} className="forms" >
-        <Button variant="contained" color="primary" onClick={setediting}>Edit</Button>
+        <Box styles={styles} className="forms" >
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {errors}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openS} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          {succes}
+        </Alert>
+      </Snackbar>
+        <Box display="flex" justifyContent="flex-end">
+        <Button align="right" variant="contained" color="primary" onClick={setediting}>{Edit && `cancel `}Edit</Button>
+        </Box>
+        
             <Card styles={{marginLeft: 100}}>
                 <CardContent>
-                {Edit &&<div>
+                {Edit &&<Box>
                 
                 <label htmlFor="choice">Choose a project to edit:</label>
                 <select onChange={handleSelect} className="myDropDown">
@@ -175,18 +237,18 @@ function handleFormChange(e) {
                             <option key={i} value={x._id} >{x.title}</option>
                         ))}
                 </select>
-                </div>}
+                </Box>}
                     <form >
-                        <div className="form-group">
-                            <label><h5>Title of Project</h5></label>
+                        <Box className="form-group">
+                            <label><Typography variant="h6">1) Title of Project</Typography></label>
                             <input
                                 onChange={handleFormChange}
                                 name="title"
                                 value={ProjectForm.title}
                                 className="form-control"/>
-                        </div>
-                        <div className="form-group">
-                            <label><h5>Project Objective</h5></label>
+                        </Box>
+                        <Box className="form-group">
+                            <label><Typography variant="h6">2) Project Objective</Typography></label>
                             <small className="form-text text-muted">Please give a brief description of the goal of your project</small>
                             <input
                                 onChange={handleFormChange}
@@ -194,28 +256,28 @@ function handleFormChange(e) {
                                 value={ProjectForm.description}
                                 className="form-control"
                                 rows={3}/>
-                        </div>
+                        </Box>
                         
-                        <div className="form-group date" data-provide="datepicker">
-                        <div className="form-group date" data-provide="datepicker">
-                            <label>Overall Due Date for your Project</label>
+                        <Box className="form-group date" data-provide="datepicker">
+                        <Box className="form-group date" data-provide="datepicker">
+                            <Typography variant="h6">3) Project Due Date</Typography>
                             
-                        </div>
+                        </Box>
                         <label for="start">Completion date :</label>
                         <input onChange={handleDate} type="date" id="start" name="trip-start"
        value=''
        min="2020-01-01" max="2040-12-31"></input>
-       <h5>{ProjectForm.dueDate &&<h4> Due Date:{ProjectForm.dueDate}</h4> }</h5>
-                        </div>
-                        <div>
+       <Typography variant="h6">{ProjectForm.dueDate &&<Typography variant="h6"> Due Date:{ProjectForm.dueDate}</Typography> }</Typography>
+                        </Box>
+                        <Box>
                         {!Edit &&  <button onClick={onFormSubmit} className="btn btn-primary">Submit Project</button>} 
                         {Edit &&  <button onClick={onFormUpdate} className="btn btn-primary">Update Project</button>}
-                        </div>
+                        </Box>
                         
                     </form>
                 </CardContent>
             </Card>    
-        </div>
+        </Box>
         </Container>
     )
 }
