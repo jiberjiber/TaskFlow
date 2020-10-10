@@ -61,7 +61,7 @@ export default function EmployeeOverview(props) {
 	const [teams, setTeams] = useState([]);
 	const classes = useStyles();
 
-	console.log("props", props);
+	//console.log("props", props);
 
 	const getTeams = (props) => {
 		if (props.user._id) {
