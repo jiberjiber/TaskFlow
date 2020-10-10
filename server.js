@@ -36,8 +36,14 @@ app.use(routes);
 
 //Connect to Mongo DB
 //crossing out mongo so we can use our local db when testing
+<<<<<<< HEAD
+let mongo;
+// process.env.MONGODB_URI
+mongoose.connect(mongo || "mongodb://localhost/management", {
+=======
 //process.env.MONGODB_URI
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/management", {
+>>>>>>> 46734b9f67b93a53bb3897b19a6cddb2208c680f
     useNewUrlParser: true,
     useFindAndModify: false,
      useUnifiedTopology: true 
