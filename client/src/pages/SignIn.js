@@ -57,7 +57,7 @@ export default function SignIn() {
 		Axios.post(`/api/employee/login`, form)
 			.then((response) => {
 				localStorage.setItem("token", response.data);
-				window.location = "/";
+				window.location = "/home";
 			})
 			.catch((err) => {
 				console.log(err);
