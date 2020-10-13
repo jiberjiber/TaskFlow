@@ -59,10 +59,9 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function EmployeeOverview(props) {
 	const [teams, setTeams] = useState([]);
-	const [form, setForm] = useState({});
 	const classes = useStyles();
 
-	console.log("props", props);
+	//console.log("props", props);
 
 	const getTeams = (props) => {
 		if (props.user._id) {
@@ -83,7 +82,15 @@ export default function EmployeeOverview(props) {
 	}, [props]);
 
 	const handleChange = (event) => {
-		setForm({ ...form, [event.target.name]: event.target.checked });
+		
+		Axios.put(`/api/project/scope/task/status/${event.currentTarget.name}`)
+			.then(response => {
+				//console.log('task complete API', response);
+				window.location.reload();
+			})
+			.catch(err => {
+				console.log('error', err);
+			});
 	};
 
 	return (
@@ -100,7 +107,7 @@ export default function EmployeeOverview(props) {
 							item
 							xs={12}
 							sm={6}
-							style={{ paddingBottom: "50px" }}
+							style={{ paddingLeft: "25px", paddingRight: "25px" }}
 							key={team._id}
 						>
 							<Typography variant="h3">{team.name}</Typography>

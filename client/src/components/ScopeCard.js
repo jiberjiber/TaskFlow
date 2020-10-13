@@ -3,7 +3,7 @@ import { Grid, Card, CardContent, CardActions, Typography, Button } from '@mater
 
 export default function TeamCard(props) {
 
-	console.log(props);
+	//console.log(props);
 	return (
 		<Grid item xs={12} sm={4}>
 			<Card>

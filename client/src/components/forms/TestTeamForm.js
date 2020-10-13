@@ -163,7 +163,7 @@ const onFormUpdate = (event) => {
     useEffect(() => {
         axios.get("/api/employee")
         .then(result => {
-            console.log(result.data[0])
+            //console.log(result.data[0])
             setChoice(result.data[0].employees)
             
         }
@@ -191,7 +191,7 @@ const onFormUpdate = (event) => {
                 })
                 .catch(function (error) {
                     console.log(error.response);
-                    setErrors(error.response.data.errors[0].name);
+                    setErrors('error');
                     handleClick();
                 });
             

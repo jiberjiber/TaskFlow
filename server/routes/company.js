@@ -55,7 +55,6 @@ router.get("/:id", [auth, manager], async (req, res) => {
   const thisCompany = await Company.find({ _id: req.params.id })
     .populate("employees")
     .sort("firstName")
-    .populate({ path: "teams", populate: "members" })
     .select();
   if (!thisCompany) {
     return res.status(400).json({ company: "No companies found." });

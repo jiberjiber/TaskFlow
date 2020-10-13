@@ -85,6 +85,8 @@ export default function TeamOverview(props) {
 			getProjects(props.projects[0]._id);
 		}
 	},[props]);
+
+	//console.log('props',props);
 	
 	return (
 		<div className={classes.root}>

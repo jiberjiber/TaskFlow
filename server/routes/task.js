@@ -14,6 +14,10 @@ router.post('/',[auth,manager], async (req,res)=>{
     console.log(error)
     if(error!==undefined) return res.status(400).send('missing input or input field requirements not met')
 
+    const thisScope= await Scope.findById(req.body.scopeId).select('dueDate -_id')
+    const check=await validation.checkProjectDueDate(req.body.dueDate,thisScope.dueDate)
+    if(check) return res.status(403).send('scope due date should be within the project timeframe')
+
     const { _id}=req.employee;
 const newTask=new Task({
 task:req.body.task,
@@ -98,13 +102,15 @@ res.send(array)
 
 
 
-router.put('/one/:id', async (req,res)=>{
+router.put('/one/:id',[auth,manager], async (req,res)=>{
     try{
         const {error}= validation.validTask(req.body);
         if(error!==undefined) return res.status(400).send('missing input or input field requirements not met')
     const checkThisTask= await Task.find({_id:{$in:req.params.id}}).select();
 
     if (!checkThisTask.length>0) return res.status(400).send('The Task with this id is not found');
+
+   
 
     let data={
 task:req.body.task,
@@ -135,7 +141,7 @@ if (myData){
 
 })
 
-router.delete('/one/:id',async (req,res)=>{
+router.delete('/one/:id',[auth,manager],async (req,res)=>{
  
     const findTask=await Task.findById(req.params.id).select('_id');
     const findScope= await Scope.find({task:{$in:req.params.id}}).select();
@@ -175,5 +181,13 @@ router.delete('/one/:id',async (req,res)=>{
 
 })
 
+
+router.put('/status/:id',[auth],async (req,res)=>{
+    let status= await Task.findById(req.params.id).select('isComplete -_id')
+    let result=await !status.isComplete
+    let update=await Task.findByIdAndUpdate(req.params.id,{isComplete:result},{new:true})
+    console.log(status)
+    res.send(update.isComplete)
+})
 
 module.exports = router;

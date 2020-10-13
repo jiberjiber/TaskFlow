@@ -15,6 +15,8 @@ import PasswordRecovery from "./pages/PasswordRecovery";
 import ForgotPassword from "./pages/ForgotPassword";
 import ScopePage from "./pages/ScopePage";
 import TeamAdmin from "./pages/TeamAdmin";
+import AddEmployee from "./components/AddEmployee";
+import AddTeam from "./components/AddTeam";
 import {
 	Grid,
 	ThemeProvider,
@@ -71,7 +73,7 @@ function App() {
 		} catch (error) {
 			//if error reroute to login page
 			//could use the same practice:
-			window.location = "/login";
+			window.location = "/";
 			// return null
 		}
 	};
@@ -79,7 +81,7 @@ function App() {
 	const getProjects = () => {
 		Axios.get("/api/project")
 			.then((response) => {
-				//console.log(response.data);
+				// console.log('project api response',response.data);
 				setProjects(response.data);
 			})
 			.catch((err) => {
@@ -92,10 +94,29 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
-		if (window.location.pathname == "/login" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/"||window.location.pathname == "/register") {
-			console.log('nothing')
+		if (window.location.pathname == "/" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/" || window.location.pathname == "/register") {
+			console.log(`%c\n\n 
+			████████╗ █████╗ ███████╗██╗  ██╗███████╗██╗      ██████╗ ██╗    ██╗
+			╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝██╔════╝██║     ██╔═══██╗██║    ██║
+			   ██║   ███████║███████╗█████╔╝ █████╗  ██║     ██║   ██║██║ █╗ ██║
+			   ██║   ██╔══██║╚════██║██╔═██╗ ██╔══╝  ██║     ██║   ██║██║███╗██║
+			   ██║   ██║  ██║███████║██║  ██╗██║     ███████╗╚██████╔╝╚███╔███╔╝
+			   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝ ╚═════╝  ╚══╝╚══╝ 
+																				
+			   
+			 A project management suite.\n\n  `, "font-family:monospace;color:#1976d2;font-size:12px;");
 		} else {
 			decodeToken();
+			console.log(`%c\n\n 
+			████████╗ █████╗ ███████╗██╗  ██╗███████╗██╗      ██████╗ ██╗    ██╗
+			╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝██╔════╝██║     ██╔═══██╗██║    ██║
+			   ██║   ███████║███████╗█████╔╝ █████╗  ██║     ██║   ██║██║ █╗ ██║
+			   ██║   ██╔══██║╚════██║██╔═██╗ ██╔══╝  ██║     ██║   ██║██║███╗██║
+			   ██║   ██║  ██║███████║██║  ██╗██║     ███████╗╚██████╔╝╚███╔███╔╝
+			   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝ ╚═════╝  ╚══╝╚══╝ 
+																				
+			   
+			 A project management suite.\n\n  `, "font-family:monospace;color:#1976d2;font-size:12px;");
 		}
 		// eslint-disable-next-line
 	}, []);
@@ -106,7 +127,7 @@ function App() {
 				<ThemeProvider theme={darkTheme}>
 					<Route
 						exact
-						path="/login"
+						path="/"
 						render={(props) => <SignIn {...props} />}
 					/>
 					<Route
@@ -122,9 +143,9 @@ function App() {
 					<Route
 						exact
 						path="/register"
-						render={<Registration/>}
+						render={(props) => <Registration {...props} />}
 					/>
-					<Route exact path="/">
+					<Route exact path="/home">
 						{user.isManager && (
 							<div>
 								<Dashboard user={user} theme={theme} />
@@ -157,6 +178,34 @@ function App() {
 							<div>
 								<Dashboard user={user} theme={theme} />
 								<TeamAdmin user={user} projects={projects} />
+							</div>
+						)}
+						{!user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<Error />
+							</div>
+						)}
+					</Route>
+					<Route exact path="/admin/teams/addemployee">
+						{user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<AddEmployee user={user} projects={projects} />
+							</div>
+						)}
+						{!user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<Error />
+							</div>
+						)}
+					</Route>
+					<Route exact path="/admin/teams/addteam">
+						{user.isManager && (
+							<div>
+								<Dashboard user={user} theme={theme} />
+								<AddTeam user={user} projects={projects} />
 							</div>
 						)}
 						{!user.isManager && (

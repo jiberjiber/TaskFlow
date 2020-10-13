@@ -40,10 +40,4 @@ router.use('/api/email',emailRoute)
 // });
 
 
-
-
-router.use((req, res)=> {
-  res.sendFile(path.join(__dirname, "../../client/public/index.html"));
-});
-
 module.exports = router;

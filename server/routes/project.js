@@ -91,7 +91,7 @@ if (data){
     })
 
 //update one project
-router.put('/:id',async(req,res)=>{
+router.put('/:id',[auth,manager],async(req,res)=>{
     const {error}= validation.validCreateProject(req.body);
     if(error) return res.status(400).send('missing input or input field requirements not met')
 
@@ -122,7 +122,7 @@ try{
 });
 
 // route to delete the project schema and all the child elements(scope+task)
-router.delete('/:id',async (req,res)=>{
+router.delete('/:id',[auth,manager],async (req,res)=>{
     //this gets me one project
 const findProject= await Project.findById(req.params.id).select('_id');
 //this gets me an array of scopes
@@ -175,6 +175,14 @@ if (findProject){
     res.status(400).send(`this project id doesn't exist`)
 }
 
+})
+
+router.put('/status/:id',[auth,manager],async (req,res)=>{
+    let status= await Project.findById(req.params.id).select('isComplete -_id')
+    let result=await !status.isComplete
+    let update=await Project.findByIdAndUpdate(req.params.id,{isComplete:result},{new:true})
+    console.log(status)
+    res.send(update.isComplete)
 })
 
 module.exports = router;
