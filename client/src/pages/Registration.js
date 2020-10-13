@@ -34,12 +34,15 @@ const Registration = () => {
         if (e.target.value === false) {
             alert("Please contact your project manager to receive your login credentials and create your employee account.")
         }
+        else {
+            e.target.value = RegisterForm.isManager
+        }
     }
     function checkPassword() {
       let val1=RegisterForm.password
        let val2=RegisterForm.confirmPassword
         if (val1 === val2){
-            setRegisterForm(RegisterForm.password = value );
+            setRegisterForm(RegisterForm.password = val1 );
         }
         else {
             return (alert("Passwords Do Not Match, Please Re-enter To Submit"))
