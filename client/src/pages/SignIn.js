@@ -130,15 +130,18 @@ export default function SignIn() {
 						>
 							Sign In
 						</Button>
-						<Grid container>
+					 
+						<Grid container >
 							{/* <Grid item xs>
 								<Link href="#" variant="body2">
 									Forgot password?
 								</Link>
 							</Grid> */}
-							<Grid item>
-								<Link href="mailto:rt.terabytes@gmail.com" variant="body2">
-									{"Contact us to set up an account"}
+						
+							<Grid item xs style={{textAlign:"center"}}>
+							
+							<Link href="/register" variant="body2">
+							New to TaskFlow? Get started Here!
 								</Link>
 							</Grid>
 						</Grid>
@@ -146,6 +149,12 @@ export default function SignIn() {
 				</div>
 				<Box mt={8}>
 					<Copyright />
+					<br/>
+					<Grid item xs style={{textAlign:"center"}}>
+								<Link href="mailto:rt.terabytes@gmail.com" variant="body2">
+									{"Contact us for Account Help"}
+								</Link>
+							</Grid>
 				</Box>
 			</Container>
 			<ErrorDialog open={alert} handleClose={handleClose} />
