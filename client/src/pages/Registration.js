@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Card, CardContent, Container } from '@material-ui/core'
+import { Card, CardContent, Container, Typography } from '@material-ui/core'
 
 
 //for a new member that is creating a company to be manager of
@@ -28,12 +28,15 @@ const Registration = () => {
 
     const onRadioChange = (e) => {
         console.log((e.target.value));
+
+        const { name, value } = e.currentTarget;
+        setRegisterForm({ ...RegisterForm, [name]: value });
         //setRegisterForm.isManager = e.target.value
         if (e.target.value === false) {
             alert("Please contact your project manager to receive your login credentials and create your employee account.")
         }
         else {
-            RegisterForm.isManager = e.target.value
+            setRegisterForm({...RegisterForm,isManager}) = e.target.value
         }
     }
     function checkPassword() {
@@ -177,7 +180,7 @@ const Registration = () => {
                         </div>
                         <button onClick={onFormSubmit} className="btn btn-primary">Submit</button>
                     </form>
-                </div>
+                
             </CardContent>
         </Card>
         </Container >
