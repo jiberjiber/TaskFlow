@@ -36,7 +36,7 @@ const Registration = () => {
             alert("Please contact your project manager to receive your login credentials and create your employee account.")
         }
         else {
-            setRegisterForm({...RegisterForm,isManager}) = e.target.value
+            setRegisterForm({...RegisterForm, isManager: true}) 
         }
     }
     function checkPassword() {
