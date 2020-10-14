@@ -1,68 +1,97 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+# TaskFlow
 
-In the project directory, you can run:
+## Description
 
-### `yarn start`
+TaskFlow is a project management application designed with the small company and business owner in mind. It allows the flexibility to be used by retail shops, small start-up companies, volunteer organizations and entrepreneurs. 
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+TaskFlow allows employers or project managers to create and login to an account where they can create projects, scopes, tasks, and teams and assign team members to each project team. A project manger can edit a project, view its progress, and mark its tasks as complete. Team members can create an account, view the teams and scopes to which they have been assigned, and mark tasks complete.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Table of Content
 
-### `yarn test`
+  - [Description](#description)
+  - [User Story](#user-story)
+  - [Application MVP](#application-mvp)
+  - [Application Links](#application-links)
+  - [Technologies Used](#technologies-used)
+  - [Installation](#installation)
+  - [Team Members](#team-members)
+  - [Contributing](#contributing)
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+## User Story
+AS A BUSINESS OWNER I want to be able to create and manage projects for my company and employees. I want a centralized platform for efficient project and team management. I want to be aware of when assignees mark tasks complete and when a project is fully complete.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Application MVP
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+A user who is a manager or employee can create an account, login, and logout.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+A logged-in manager or business owner can create projects, scopes, tasks, and teams with details and due dates.
 
-### `yarn eject`
+A manager can assign employees to teams and project scopes. 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+A manager can view all projects and teams within their company. 
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+A manager can update the details of a created project. 
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+A logged in employee-level user can view teams, scopes, and tasks to which they have been assigned. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+An employee can mark tasks as completed. 
 
-## Learn More
+## Application Links
+Deployed application - http://www.taskflow.center/
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Application demo - [Application Demo](https://drive.google.com/file/d/1Fep6iDPk7kRCSdB_yceK2oBRYWGmCkio/view)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+## Technologies Used
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Axios
 
-### Analyzing the Bundle Size
+bCrypt
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+CSS
 
-### Making a Progressive Web App
+Express
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Express-validator
 
-### Advanced Configuration
+HTML
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+JavaScript
 
-### Deployment
+Joi
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+Jwt
 
-### `yarn build` fails to minify
+MaterialUI
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+MongoDB/Mongoose
+
+Node.js
+
+Nodemailer
+
+React.js
+
+React-Router
+
+
+## Installation
+
+Node.js is required to run this application. If Node.js is not already installed on your machine, [click here](https://nodejs.org/en/) to download it.
+
+All NPM packages necessary to run this application have already been included in the package.json file. To successfully run the application, run `npm install` in both client folder and root directory.
+
+## Contributors
+[Alex Saint Victor](https://github.com/jackilex)
+
+[Evan Boswood](https://github.com/jiberjiber)
+
+[Rachael Adu](https://github.com/rad-a)
+
+[Sabrina Hollett](https://github.com/SabrinaCat)
+
+## Contributing
+To contribute, fork this repository and create a pull request. 
+
