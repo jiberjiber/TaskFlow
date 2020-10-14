@@ -43,6 +43,11 @@ Deployed application - http://www.taskflow.center/
 
 Application demo - [Application Demo](https://drive.google.com/file/d/1Fep6iDPk7kRCSdB_yceK2oBRYWGmCkio/view)
 
+### Demo The application as an Employee
+To use this app as an emoplyee, [login](http://www.taskflow.center/) with the following credentials: 
+Email: not1@gmail.com
+Password: 123456
+
 
 ## Technologies Used
 
