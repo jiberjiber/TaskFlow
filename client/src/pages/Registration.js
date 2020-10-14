@@ -16,9 +16,7 @@ const Registration = () => {
         email: "",
         password: "",
         confirmPassword:"",
-        name: "",
-        
-
+        name: ""
     })
     
     function handleFormChange(e) {
@@ -30,19 +28,19 @@ const Registration = () => {
    
     const onRadioChange = (e) => {
         console.log((e.target.value));
-        RegisterForm.isManager=e.target.value
+        //setRegisterForm.isManager = e.target.value
         if (e.target.value === false) {
             alert("Please contact your project manager to receive your login credentials and create your employee account.")
         }
         else {
-            e.target.value = RegisterForm.isManager
+            RegisterForm.isManager = e.target.value
         }
     }
     function checkPassword() {
       let val1=RegisterForm.password
        let val2=RegisterForm.confirmPassword
         if (val1 === val2){
-            setRegisterForm(RegisterForm.password = val1 );
+            setRegisterForm(RegisterForm.password = val1);
         }
         else {
             return (alert("Passwords Do Not Match, Please Re-enter To Submit"))
@@ -76,7 +74,7 @@ const Registration = () => {
                     console.log("not successful",error);
                 })
             }
-               else {
+               else  {
                    return alert("You must be a manager to create an account")}
         
 
@@ -90,7 +88,7 @@ const Registration = () => {
         email: "",
         password: "",
         confirmPassword:"",
-        company: ""
+        name: ""
     }
 
     setRegisterForm({ ...clearState })
@@ -125,7 +123,8 @@ const Registration = () => {
                     </div>
                     <div className="form-group">
                         <label>Username</label>
-                        <small>This will be another way users to identify you.</small>
+                        <br/>
+                        <small>This will be another way for other users to identify you.</small>
                         <input
                             onChange={handleFormChange}
                             name="username"
@@ -150,6 +149,7 @@ const Registration = () => {
                     <div className="form-group">
                         <label>Password</label>
                         <input
+                            type="password"
                             onChange={handleFormChange}
                             name="password"
                             value={RegisterForm.password}
@@ -158,6 +158,7 @@ const Registration = () => {
                     <div className="form-group">
                         <label>Confirm Password</label>
                         <input
+                            type="password"
                             onChange={handleFormChange}
                             name="confirmPassword"
                             value={RegisterForm.confirmPassword}
