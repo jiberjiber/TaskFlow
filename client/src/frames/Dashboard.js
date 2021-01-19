@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import {
 	makeStyles,
-	useTheme,
 	Drawer,
 	AppBar,
 	Toolbar,
@@ -15,9 +14,6 @@ import {
 	Button,
 	IconButton,
 	Grid,
-	ThemeProvider,
-	createMuiTheme,
-	useMediaQuery,
 	Typography,
 } from "@material-ui/core";
 import {
@@ -25,6 +21,7 @@ import {
 	ChevronRight,
 	Menu,
 	DashboardOutlined,
+	// eslint-disable-next-line
 	SupervisorAccountOutlined,
 	ExitToAppOutlined,
 	Group,

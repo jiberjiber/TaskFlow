@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import { selectFields } from 'express-validator/src/select-fields';
 import React, { useState,useEffect } from 'react';
 import { Card, CardContent,Container, Button, Typography, Box } from '@material-ui/core';
@@ -39,7 +40,7 @@ const [teamId,setTeamId]=useState('')
     const [errors, setErrors] = useState('')
     const [succes, setSuccess] = useState('')
 ///////feedback states
-
+// eslint-disable-next-line
 const classes = useStyles();
 const [open, setOpen] = React.useState(false);
 const [openS, setOpenS] = React.useState(false);
@@ -77,7 +78,8 @@ const handleClick = () => {
             response.data[0].members.map(x=>{
                 nameArray.push(x.firstName);
                 idArray.push(x._id)
-                setReset(false)
+				setReset(false)
+				// eslint-disable-next-line
                 return
             })
 
@@ -102,7 +104,7 @@ const handleClick = () => {
 
   function setediting(){
     let test=Edit
-
+	// eslint-disable-next-line
     if(test==true){
         setEdit(false)
         const clearState = {
@@ -227,18 +229,19 @@ const onFormUpdate = (event) => {
         let test= await myarray.some(x=>{
             return x ===employee
         })
-    
+		// eslint-disable-next-line
         if (test ==false){
             setMembers([...Members,employee])
             setNames([...Names,names])
         }
-
+		// eslint-disable-next-line
         if( test== true){
            let newTest= myarray.filter(x=>{
              return x!==employee
            })
            setMembers([...newTest])
-        }
+		}
+		// eslint-disable-next-line
         if( test== true){
             let newNames= nameArray.filter(x=>{
               return x!==names

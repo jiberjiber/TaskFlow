@@ -94,6 +94,7 @@ function App() {
 		Axios.defaults.headers.common["x-auth-token"] = getToken();
 
 		// Get user  (decode token)
+		// eslint-disable-next-line
 		if (window.location.pathname == "/" || window.location.pathname == "/forgotpassword" || window.location.pathname == "/passwordrecovery/" || window.location.pathname == "/register") {
 			console.log(`%c\n\n 
 			████████╗ █████╗ ███████╗██╗  ██╗███████╗██╗      ██████╗ ██╗    ██╗

@@ -25,22 +25,25 @@ const AssignScope = () => {
 
     const [TeamId, setTeamId] = useState('');
     const [scopeId,setScopeId]=useState('')
-
+	// eslint-disable-next-line
     const [scopeName,setScopeName]=useState('')
     const [TeamName, setTeamName] = useState('');
 
     const [choice, setChoice]=useState([])
 
-    const  [TeamChoice,setTeamChoice]=useState([])
+	const  [TeamChoice,setTeamChoice]=useState([])
+	// eslint-disable-next-line
     const [reset,setReset]=useState(null)
 
-    const [errors, setErrors] = useState('')
-    const [succes, setSuccess] = useState('')
+	const [errors, setErrors] = useState('')
+	// eslint-disable-next-line
+    const [success, setSuccess] = useState('')
 
 ///////feedback states
-
+// eslint-disable-next-line
 const classes = useStyles();
 const [open, setOpen] = React.useState(false);
+// eslint-disable-next-line
 const [openS, setOpenS] = React.useState(false);
 const handleClick = () => {
     setOpen(true);
@@ -82,7 +85,7 @@ const handleClick = () => {
         )
         .catch(err => console.log(err))
       },[]);
-   
+// eslint-disable-next-line   
 function getTeam(){
     axios.get("/api/team")
         .then(result => {
@@ -139,7 +142,8 @@ function getTeam(){
 
     function handleTeamSelect(e){
        
-        let test= TeamId
+		let test = TeamId
+		// eslint-disable-next-line
         if(test==e.target.value){
             setTeamName('')
         setTeamId('')

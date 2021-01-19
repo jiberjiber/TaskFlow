@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Card, CardContent,Container, Button, Box, Typography } from '@material-ui/core';
 import moment from 'moment'
@@ -44,7 +44,7 @@ const [errors, setErrors] = useState('')
 const [succes, setSuccess] = useState('')
 
 ///////feedback states
-
+// eslint-disable-next-line
 const classes = useStyles();
 const [open, setOpen] = React.useState(false);
 const [openS, setOpenS] = React.useState(false);
@@ -91,7 +91,7 @@ const handleClick = () => {
 
  function setediting(){
     let test=Edit
-
+	// eslint-disable-next-line
     if(test==true){
         setEdit(false)
         const clearState = {

@@ -39,7 +39,7 @@ const [choices, setChoices]=useState([])
 const [ScopeIds,setScopeIds]=useState('')
 
 ///////feedback states
-
+// eslint-disable-next-line
 const classes = useStyles();
 const [open, setOpen] = React.useState(false);
 const [openS, setOpenS] = React.useState(false);
@@ -83,7 +83,7 @@ function runAxios(){
     .then(result => setChoices(result.data))
     .catch(err => console.log(err))
 }
-
+// eslint-disable-next-line
 function handleEdit(){
     axios.get("/api/project")
     .then(result => {
@@ -96,7 +96,7 @@ function handleEdit(){
 
   function setediting(){
     let test=Edit
-
+	// eslint-disable-next-line
     if(test==true){
         setEdit(false)
         const clearState = {

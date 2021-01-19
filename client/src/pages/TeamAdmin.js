@@ -83,6 +83,7 @@ export default function TeamAdmin(props) {
 	useEffect(() => {
 		getCompany(props.user.company);
 		getTeams(props.user.company);
+		// eslint-disable-next-line
 	}, [open]);
 
 	const deleteUser = (event) => {
@@ -145,7 +146,9 @@ export default function TeamAdmin(props) {
 								<Tooltip
 									title="Add Team"
 									component="button"
+									// eslint-disable-next-line
 									key={"create"}
+									// eslint-disable-next-line
 									component="a"
 									href="/admin/teams/addteam"
 								>
@@ -207,6 +210,7 @@ export default function TeamAdmin(props) {
 									title="Add Employee"
 									component="button"
 									key={"create"}
+									// eslint-disable-next-line
 									component="a"
 									href="/admin/teams/addemployee"
 								>

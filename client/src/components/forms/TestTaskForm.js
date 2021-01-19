@@ -47,7 +47,7 @@ const [TaskIds,setTaskIds]=useState('')
 const [array, setArray]=useState([])
 
 ///////feedback states
-
+// eslint-disable-next-line
 const classes = useStyles();
 const [open, setOpen] = React.useState(false);
 const [openS, setOpenS] = React.useState(false);
@@ -95,10 +95,11 @@ function runAxios(){
 }
 
 useEffect(() => {
-    loop()
+	loop()
+	// eslint-disable-next-line
   },[choices]);
 
-
+// eslint-disable-next-line
 function handleEdit(){
     axios.get("/api/project")
     .then(result => {
@@ -111,7 +112,7 @@ function handleEdit(){
 
   function setediting(){
     let test=Edit
-
+	// eslint-disable-next-line
     if(test==true){
         setEdit(false)
         const clearState = {
@@ -169,9 +170,12 @@ const onFormUpdate = (event) => {
 }
 
 function loop(){
-    let myArray= [...array]
+	let myArray= [...array]
+	// eslint-disable-next-line
     choices.map((x)=>{
+		// eslint-disable-next-line
         if(x.scope.length>0){
+			// eslint-disable-next-line
             x.scope.map(y =>{
                myArray.push(y)
             })

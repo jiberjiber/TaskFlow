@@ -2,9 +2,8 @@
 //addEmployee is added and sent to the matching company id
 //so get company id from a get user req
 //post employeee addEmployee to that company id
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import {
 	Container,
 	Card,
