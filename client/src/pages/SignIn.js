@@ -138,11 +138,7 @@ export default function SignIn() {
 								</Link>
 							</Grid> */}
 
-							<Grid item xs style={{ textAlign: "center" }}>
-								<Link href="/register" variant="body2">
-									New to TaskFlow? Get started Here!
-								</Link>
-							</Grid>
+							
 						</Grid>
 					</form>
 				</div>
@@ -150,7 +146,7 @@ export default function SignIn() {
 					<Copyright />
 					<br />
 					<Grid item xs style={{ textAlign: "center" }}>
-						<Link href="mailto:rt.terabytes@gmail.com" variant="body2">
+						<Link href="mailto:evan@boswood.net" variant="body2">
 							{"Contact us for Account Help"}
 						</Link>
 					</Grid>
